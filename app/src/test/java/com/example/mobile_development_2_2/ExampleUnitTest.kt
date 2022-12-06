@@ -1,4 +1,4 @@
-package avans.a2.mobile
+package com.example.mobile_development_2_2
 
 import org.junit.Test
 
