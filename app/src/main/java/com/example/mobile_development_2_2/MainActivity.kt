@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
+import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    OSMViewModel().MapScreen(viewModel = OSMViewModel(), modifier = Modifier)
                 }
             }
         }
