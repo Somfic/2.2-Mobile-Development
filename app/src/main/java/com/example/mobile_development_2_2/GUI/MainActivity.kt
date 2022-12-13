@@ -1,4 +1,4 @@
-package com.example.mobile_development_2_2
+package com.example.mobile_development_2_2.GUI
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
