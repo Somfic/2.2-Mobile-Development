@@ -128,8 +128,8 @@ fun BottomNavigationBar() {
             BottomNavigationItem(
                 icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
                 label = { Text(text = item.title) },
-                selectedContentColor = Color.White,
-                unselectedContentColor = Color.White.copy(0.4f),
+                selectedContentColor = Color.White.copy(0.4f),
+                unselectedContentColor = Color.White,
                 alwaysShowLabel = true,
                 selected = false,
                 onClick = {
