@@ -8,7 +8,8 @@ import android.widget.TextView
 import com.example.mobile_development_2_2.R
 
 import com.example.mobile_development_2_2.GUI.Fragments.POIListFragment.placeholder.PlaceholderContent.PlaceholderItem
-import com.example.mobile_development_2_2.GUI.Fragments.POIListFragment.databinding.FragmentPOIListBinding
+//import com.example.mobile_development_2_2.GUI.Fragments.POIListFragment.databinding.FragmentPOIListBinding
+import com.example.mobile_development_2_2.databinding.FragmentPOIListBinding
 
 /**
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].

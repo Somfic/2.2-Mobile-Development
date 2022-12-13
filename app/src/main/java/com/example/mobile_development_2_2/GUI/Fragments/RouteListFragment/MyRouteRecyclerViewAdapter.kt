@@ -8,7 +8,8 @@ import android.widget.TextView
 import com.example.mobile_development_2_2.R
 
 import com.example.mobile_development_2_2.GUI.Fragments.RouteListFragment.placeholder.PlaceholderContent.PlaceholderItem
-import com.example.mobile_development_2_2.GUI.Fragments.RouteListFragment.databinding.FragmentRouteListBinding
+//import com.example.mobile_development_2_2.GUI.Fragments.RouteListFragment.databinding.FragmentRouteListBinding
+import com.example.mobile_development_2_2.databinding.FragmentRouteListBinding
 
 /**
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].
