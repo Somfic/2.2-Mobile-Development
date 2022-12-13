@@ -55,7 +55,11 @@ class MainActivity : ComponentActivity() {
     }
 
     @SuppressLint("MissingSuperCall")
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         val permissionsToRequest = ArrayList<String>()
         var i = 0
         while (i < grantResults.size) {
@@ -66,84 +70,90 @@ class MainActivity : ComponentActivity() {
             ActivityCompat.requestPermissions(
                 this,
                 permissionsToRequest.toTypedArray(),
-                REQUEST_PERMISSIONS_REQUEST_CODE)
-        }
-    }
-}
-
-@Composable
-fun MainScreen(fragment: Fragment) {
-
-    Scaffold(
-        topBar = { TopBar() },
-        bottomBar = { BottomNavigationBar() },
-        content = { padding ->
-            Box(modifier = Modifier.padding(padding)) {
-                var map = MapFragment()
-                map.MapScreen(viewModel = map, modifier = Modifier)
-            }
-        },
-        backgroundColor = colorResource(R.color.white)
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MainScreenPreview() {
-    MainScreen(HomeFragment())
-}
-
-@Composable
-fun TopBar() {
-    val item = NavigationItem.Settings
-    TopAppBar(
-        title = { Text(text = stringResource(R.string.app_name), fontSize = 18.sp) },
-        backgroundColor = colorResource(id = R.color.colorPrimary),
-        contentColor = Color.White,
-        actions = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(painterResource(id = item.icon), contentDescription = item.title)
-            }
-        }
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun TopBarPreview() {
-    TopBar()
-}
-
-@Composable
-fun BottomNavigationBar() {
-    val items = listOf(
-        NavigationItem.Home,
-        NavigationItem.Map,
-        NavigationItem.POIs,
-    )
-    BottomNavigation(
-        backgroundColor = colorResource(id = R.color.colorPrimary),
-        contentColor = Color.White
-    ) {
-        items.forEach { item ->
-            BottomNavigationItem(
-                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
-                label = { Text(text = item.title) },
-                selectedContentColor = Color.White.copy(0.4f),
-                unselectedContentColor = Color.White,
-                alwaysShowLabel = true,
-                selected = false,
-                onClick = {
-
-                }
+                REQUEST_PERMISSIONS_REQUEST_CODE
             )
         }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun BottomNavigationBarPreview() {
-    BottomNavigationBar()
+    @Composable
+    fun MainScreen(fragment: Fragment) {
+
+        Scaffold(
+            topBar = { TopBar() },
+            bottomBar = { BottomNavigationBar() },
+            content = { padding ->
+                Box(modifier = Modifier.padding(padding)) {
+                    var map = MapFragment()
+                    map.MapScreen(viewModel = map, modifier = Modifier)
+                }
+            },
+            backgroundColor = colorResource(R.color.white)
+        )
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun MainScreenPreview() {
+        MainScreen(HomeFragment())
+    }
+
+    @Composable
+    fun TopBar() {
+        val item = NavigationItem.Settings
+        TopAppBar(
+            title = { Text(text = stringResource(R.string.app_name), fontSize = 18.sp) },
+            backgroundColor = colorResource(id = R.color.colorPrimary),
+            contentColor = Color.White,
+            actions = {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(painterResource(id = item.icon), contentDescription = item.title)
+                }
+            }
+        )
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun TopBarPreview() {
+        TopBar()
+    }
+
+    @Composable
+    fun BottomNavigationBar() {
+        val items = listOf(
+            NavigationItem.Home,
+            NavigationItem.Map,
+            NavigationItem.POIs,
+        )
+        BottomNavigation(
+            backgroundColor = colorResource(id = R.color.colorPrimary),
+            contentColor = Color.White
+        ) {
+            items.forEach { item ->
+                BottomNavigationItem(
+                    icon = {
+                        Icon(
+                            painterResource(id = item.icon),
+                            contentDescription = item.title
+                        )
+                    },
+                    label = { Text(text = item.title) },
+                    selectedContentColor = Color.White.copy(0.4f),
+                    unselectedContentColor = Color.White,
+                    alwaysShowLabel = true,
+                    selected = false,
+                    onClick = {
+
+                    }
+                )
+            }
+        }
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun BottomNavigationBarPreview() {
+        BottomNavigationBar()
+    }
 }
 
