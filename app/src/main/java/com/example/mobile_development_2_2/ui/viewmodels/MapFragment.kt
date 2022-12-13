@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,7 +22,7 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 
 
-class MapFragment : ComponentActivity()  {
+class MapFragment{
 
 
     @Composable
@@ -33,12 +34,12 @@ class MapFragment : ComponentActivity()  {
             OSM(
 
                 modifier = modifier,
-                locations =
+                locations = viewmodel
             )
         }
 
     }
-    //TODO DELETE
+    //TODO DELETE And make a list provider
     private fun ViewModelMap() : List<POI>{
         val avans = POI(
             name = "Avans",
@@ -63,8 +64,8 @@ class MapFragment : ComponentActivity()  {
             breda,
             amsterdam,
         )
-        return MutableStateFlow( cities).asStateFlow()
-        
+        return cities
+
     }
 
 
@@ -122,6 +123,13 @@ class MapFragment : ComponentActivity()  {
             },
             modifier = modifier,
         )
+        LaunchedEffect(locations) {
+            poiOverlay.removeAllItems()
+            poiOverlay.addItems(
+                locations.map { POIItem(it) }
+            )
+            mapView.invalidate() // Ensures the map is updated on screen
+        }
 
     }
 }
