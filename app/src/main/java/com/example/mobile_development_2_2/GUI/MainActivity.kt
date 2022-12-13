@@ -3,26 +3,40 @@ package com.example.mobile_development_2_2.GUI
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
+import androidx.fragment.app.Fragment
+import com.example.mobile_development_2_2.GUI.Fragments.HomeFragment.HomeFragment
+import com.example.mobile_development_2_2.GUI.Fragments.POIListFragment.POIListFragment
+import com.example.mobile_development_2_2.GUI.Fragments.RouteListFragment.RouteListFragment
+import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 
 class MainActivity : ComponentActivity() {
+
+    private val homeFragment = HomeFragment()
+    private val routelistFragment = RouteListFragment()
+    private val poiListFragment = POIListFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MobileDevelopment2_2Theme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    MainScreen(homeFragment)
                 }
             }
         }
@@ -30,14 +44,70 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun MainScreen(fragment: Fragment) {
+    Scaffold(
+        topBar = { TopBar() },
+        bottomBar = { BottomNavigationBar() },
+        content = { padding ->
+            Box(modifier = Modifier.padding(padding)) {
+
+
+            }
+        },
+        backgroundColor = colorResource(R.color.white)
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-    MobileDevelopment2_2Theme {
-        Greeting("Android")
+fun MainScreenPreview() {
+    MainScreen(HomeFragment())
+}
+
+@Composable
+fun TopBar() {
+    TopAppBar(
+        title = { Text(text = stringResource(R.string.app_name), fontSize = 18.sp) },
+        backgroundColor = colorResource(id = R.color.colorPrimary),
+        contentColor = Color.White
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TopBarPreview() {
+    TopBar()
+}
+
+@Composable
+fun BottomNavigationBar() {
+    val items = listOf(
+        NavigationItem.Home,
+        NavigationItem.Map,
+        NavigationItem.POIs,
+    )
+    BottomNavigation(
+        backgroundColor = colorResource(id = R.color.colorPrimary),
+        contentColor = Color.White
+    ) {
+        items.forEach { item ->
+            BottomNavigationItem(
+                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
+                label = { Text(text = item.title) },
+                selectedContentColor = Color.White,
+                unselectedContentColor = Color.White.copy(0.4f),
+                alwaysShowLabel = true,
+                selected = false,
+                onClick = {
+
+                }
+            )
+        }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun BottomNavigationBarPreview() {
+    BottomNavigationBar()
 }
