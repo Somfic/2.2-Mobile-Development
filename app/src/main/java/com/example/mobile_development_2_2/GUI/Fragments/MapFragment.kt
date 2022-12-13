@@ -1,60 +1,137 @@
 package com.example.mobile_development_2_2.GUI.Fragments
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.example.mobile_development_2_2.R
+import android.location.Location
+import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
+import com.example.mobile_development_2_2.Map.Route.POI
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.IconOverlay
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.OverlayItem
+import org.osmdroid.views.overlay.Polyline
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MapFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MapFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class MapFragment : ComponentActivity()  {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+    @Composable
+    fun MapScreen(viewModel: MapFragment, modifier: Modifier) {
+        Surface(
+            modifier = modifier.fillMaxSize()
+        ) {
+            val viewmodel = ViewModelMap()
+            OSM(
+
+                modifier = modifier,
+                //locations =
+            )
         }
+
+    }
+    //TODO DELETE
+    private fun ViewModelMap() : StateFlow<List<POI>> {
+        val avans = POI(
+            name = "Avans",
+            location = GeoPoint(51.5856, 4.7925),
+        )
+
+        // TODO: Move to POI repository
+        val breda = POI(
+            name = "Breda",
+            location = GeoPoint(51.5719, 4.7683),
+        )
+
+        // TODO: Move to POI repository
+        val amsterdam = POI(
+            name = "Amsterdam",
+            location = GeoPoint(52.3676, 4.9041),
+        )
+
+        // TODO: Move to POI repository
+        val cities = listOf(
+            avans,
+            breda,
+            amsterdam,
+        )
+        return MutableStateFlow( cities).asStateFlow()
+
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map, container, false)
-    }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MapFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MapFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    @Composable
+    private fun OSM(
+
+        modifier: Modifier = Modifier,
+        locations: List<POI> = listOf()
+    ) {
+        val context = LocalContext.current
+        val mapView = remember {
+            MapView(context)
+        }
+        //FIXME poilayer kan toegevoegd worden als er point of interest zijn
+        val poiOverlay = remember {
+            val listener = object : ItemizedIconOverlay.OnItemGestureListener<POIItem> {
+                override fun onItemSingleTapUp(index: Int, item: POIItem?): Boolean {
+                    println("onItemSingleTapUp")
+                    return true
+                }
+                override fun onItemLongPress(index: Int, item: POIItem?): Boolean {
+                    println("onItemLongPress")
+                    return false
                 }
             }
+            ItemizedIconOverlay(context, mutableListOf<POIItem>(), listener)
+        }
+        val myLocation = remember(mapView) {
+            val location: Location = Location("s")
+
+            IconOverlay( (GeoPoint(51.5856, 4.7925)),
+                ContextCompat.getDrawable(context, org.osmdroid.library.R.drawable.ic_menu_mylocation))
+
+        }
+        val routeOverlay = remember {
+            Polyline()
+        }
+
+
+
+        AndroidView(
+            factory = {
+                mapView.apply {
+                    setTileSource(TileSourceFactory.MAPNIK)
+                    isTilesScaledToDpi = true
+                    controller.setCenter(GeoPoint(51.5856, 4.7925)) // Avans
+                    controller.setZoom(17.0)
+
+                    //mapView.overlays.add(poiOverlay)
+
+
+                    mapView.overlays.add(poiOverlay)
+                    mapView.overlays.add(myLocation)
+                }
+            },
+            modifier = modifier,
+        )
+
     }
 }
+
+
+private class POIItem(
+    val poi: POI //FIXME add poiClass,
+): OverlayItem(poi.name, null, GeoPoint(poi.location.latitude, poi.location.longitude))
+private class CurrentLocation(
+    val location: Location
+): OverlayItem("current location", null, GeoPoint(location.latitude, location.longitude))
