@@ -14,6 +14,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -47,7 +48,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    //MapFragment().MapScreen(viewModel = MapFragment(), modifier = Modifier)
                     MainScreen(homeFragment)
                 }
             }
@@ -73,13 +73,14 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(fragment: Fragment) {
+
     Scaffold(
         topBar = { TopBar() },
         bottomBar = { BottomNavigationBar() },
         content = { padding ->
             Box(modifier = Modifier.padding(padding)) {
-
-
+                var map = MapFragment()
+                map.MapScreen(viewModel = map, modifier = Modifier)
             }
         },
         backgroundColor = colorResource(R.color.white)
