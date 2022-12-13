@@ -6,4 +6,5 @@ sealed class NavigationItem(var route: String, var icon: Int, var title: String)
     object Home : NavigationItem("home", R.drawable.ic_home, "Home")
     object Map : NavigationItem("map", R.drawable.ic_map, "Map")
     object POIs : NavigationItem("POIs", R.drawable.ic_poi, "POIs")
+    object Settings : NavigationItem("settings", R.drawable.ic_settings, "Settings")
 }

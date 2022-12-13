@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -92,10 +94,16 @@ fun MainScreenPreview() {
 
 @Composable
 fun TopBar() {
+    val item = NavigationItem.Settings
     TopAppBar(
         title = { Text(text = stringResource(R.string.app_name), fontSize = 18.sp) },
         backgroundColor = colorResource(id = R.color.colorPrimary),
-        contentColor = Color.White
+        contentColor = Color.White,
+        actions = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(painterResource(id = item.icon), contentDescription = item.title)
+            }
+        }
     )
 }
 
