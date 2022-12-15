@@ -83,11 +83,14 @@ class MainActivity : ComponentActivity() {
             bottomBar = { BottomNavigationBar() },
             content = { padding ->
                 Box(modifier = Modifier.padding(padding)) {
-                    var map = MapFragment()
-                    map.MapScreen(viewModel = map, modifier = Modifier)
+                    var map = POIListFragment()
+                    //map.MapScreen(viewModel = map, modifier = Modifier)
+                    map.POIListScreen(viewModel = map, modifier = Modifier, map.TestRoute())
+
+
                 }
             },
-            backgroundColor = colorResource(R.color.white)
+            backgroundColor = colorResource(R.color.black)
         )
     }
 

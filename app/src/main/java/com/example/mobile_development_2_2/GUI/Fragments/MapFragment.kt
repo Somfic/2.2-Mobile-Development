@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.example.mobile_development_2_2.Map.Route.POI
+import com.example.mobile_development_2_2.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -46,18 +47,27 @@ class MapFragment : ComponentActivity()  {
         val avans = POI(
             name = "Avans",
             location = GeoPoint(51.5856, 4.7925),
+            imgId = R.drawable.img_poi1,
+            streetName = "street1",
+            description = "description of Avans"
         )
 
         // TODO: Move to POI repository
         val breda = POI(
             name = "Breda",
             location = GeoPoint(51.5719, 4.7683),
+            imgId = R.drawable.img_poi2,
+            streetName = "street2",
+            description = "description of Breda"
         )
 
         // TODO: Move to POI repository
         val amsterdam = POI(
             name = "Amsterdam",
             location = GeoPoint(52.3676, 4.9041),
+            imgId = R.drawable.img_poi3,
+            streetName = "street3",
+            description = "description of Amsterdam"
         )
 
         // TODO: Move to POI repository
