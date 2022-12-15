@@ -7,6 +7,10 @@ android {
     namespace 'com.example.mobile_development_2_2'
     compileSdk 32
 
+    lintOptions {
+        abortOnError false
+    }
+
     defaultConfig {
         applicationId "com.example.mobile_development_2_2"
         minSdk 26
