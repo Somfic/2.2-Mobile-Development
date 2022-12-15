@@ -21,7 +21,7 @@ import androidx.core.app.ActivityCompat
 import org.osmdroid.config.Configuration.*
 
 class MainActivity : ComponentActivity() {
-    private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
+    private val RequestCode = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MapFragment().MapScreen(viewModel = MapFragment(), modifier = Modifier)
+                    MapFragment().MapScreen(viewModel = MapFragment(), modifier = Modifier )
                 }
             }
         }
@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
             ActivityCompat.requestPermissions(
                 this,
                 permissionsToRequest.toTypedArray(),
-                REQUEST_PERMISSIONS_REQUEST_CODE)
+                RequestCode)
         }
     }
 }

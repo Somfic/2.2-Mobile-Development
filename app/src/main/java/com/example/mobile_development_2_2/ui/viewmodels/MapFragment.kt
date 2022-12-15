@@ -1,18 +1,27 @@
 package com.example.mobile_development_2_2.ui.viewmodels
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
 import android.location.Location
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Button
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.data.LocationProvider
+import com.google.accompanist.permissions.MultiplePermissionsState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlinx.coroutines.CoroutineScope
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -20,25 +29,50 @@ import org.osmdroid.views.overlay.IconOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
+import kotlin.coroutines.CoroutineContext
 
 
 class MapFragment{
 
-
+    @SuppressLint("PermissionLaunchedDuringComposition")
+    @OptIn(ExperimentalPermissionsApi::class)
     @Composable
     fun MapScreen(viewModel: MapFragment, modifier: Modifier) {
         Surface(
             modifier = modifier.fillMaxSize()
         ) {
             val viewmodel = ViewModelMap()
+            val locationPermissionsState = rememberMultiplePermissionsState(
+                listOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                )
+            )
+
+            if (locationPermissionsState.allPermissionsGranted) {
             OSM(
 
                 modifier = modifier,
-                locations = viewmodel
-            )
+                locations = viewmodel,
+                routePoints = viewmodel.map { it.location }.toMutableList()
+            )}
+            else{
+                noPremmisions(premissions = locationPermissionsState)
+                //locationPermissionsState.launchMultiplePermissionRequest()
+            }
         }
 
     }
+    //TODO DELETE And make other button do the work
+    @OptIn(ExperimentalPermissionsApi::class)
+    @Composable
+    private fun noPremmisions(premissions: MultiplePermissionsState){
+        Button(onClick = { premissions.launchMultiplePermissionRequest() }, ) {
+            Text(text = "Turn On Location")
+        }
+    }
+
+
     //TODO DELETE And make a list provider
     private fun ViewModelMap() : List<POI>{
         val avans = POI(
@@ -73,8 +107,11 @@ class MapFragment{
     private fun OSM(
 
         modifier: Modifier = Modifier,
-        locations: List<POI> = listOf()
+        locations: List<POI> = listOf(),
+        routePoints: MutableList<GeoPoint> = mutableListOf(),
     ) {
+
+
         val context = LocalContext.current
         val mapView = remember {
             MapView(context)
@@ -91,18 +128,41 @@ class MapFragment{
                     return false
                 }
             }
-            ItemizedIconOverlay(context, mutableListOf<POIItem>(), listener)
-        }
-        val myLocation = remember(mapView) {
-            val location: Location = Location("s")
 
-            IconOverlay( (GeoPoint(51.5856, 4.7925)),
-                ContextCompat.getDrawable(context, org.osmdroid.library.R.drawable.ic_menu_mylocation))
-
+            ItemizedIconOverlay(mutableListOf<POIItem>(),ContextCompat.getDrawable(context, org.osmdroid.library.R.drawable.ic_menu_mylocation),listener,context)
         }
-        val routeOverlay = remember {
+
+
+        val currentRoute = remember {
             Polyline()
         }
+        currentRoute.outlinePaint.color = ContextCompat.getColor(context,R.color.purple_200)
+        currentRoute.setPoints(routePoints)
+        //todo Als we willen dat de gelopen route wordt getekend en/of een correctieroute wordt getekend
+//        val walkedRoute = remember {
+//            Polyline()
+//        }
+//        walkedRoute.color = R.color.black
+//        val correctionRoute = remember {
+//            Polyline()
+//        }
+//        correctionRoute.color = R.color.teal_700
+
+
+
+
+
+        val myLocation = remember(mapView) {
+
+            //todo make follow current location
+
+            // location: Location = Location(LocationProvider(context).)
+
+            IconOverlay( (GeoPoint(51.5856, 4.7925)),
+                ContextCompat.getDrawable(context, org.osmdroid.library.R.drawable.person))
+
+        }
+
 
 
 
@@ -119,6 +179,7 @@ class MapFragment{
 
                     mapView.overlays.add(poiOverlay)
                     mapView.overlays.add(myLocation)
+                    mapView.overlays.add(currentRoute)
                 }
             },
             modifier = modifier,
@@ -132,7 +193,10 @@ class MapFragment{
         }
 
     }
+
 }
+
+
 
 
 private class POIItem(
