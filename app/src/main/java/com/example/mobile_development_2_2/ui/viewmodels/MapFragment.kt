@@ -1,6 +1,7 @@
 package com.example.mobile_development_2_2.ui.viewmodels
 
 import android.location.Location
+import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
@@ -11,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import com.google.android.gms.location.GeofencingClient
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -37,7 +40,6 @@ class MapFragment{
                 locations = viewmodel
             )
         }
-
     }
     //TODO DELETE And make a list provider
     private fun ViewModelMap() : List<POI>{
