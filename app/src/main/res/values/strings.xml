@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name" translatable="false">CHLAM</string>
+    <string name="test">This is a test sting in DEFAULT LOCALE</string>
+    <string name="project_name" translatable="false">C.H.L.A.M</string>
+    <string name="home_welcome_to_chlam">Welcome to C.H.L.A.M</string>
+    <string name="poi_points_of_interest">Points of Interest</string>
+    <string name="routes_titles">Routes</string>
+    <string name="routes_points">Points</string>
+    <string name="routes_map">Map</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_colour_blind">Colorblind mode</string>
+    <string name="settings_copyright">Created by A4 in collaboration with A3</string>
 </resources>
