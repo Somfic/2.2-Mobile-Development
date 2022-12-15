@@ -18,7 +18,7 @@
         <receiver android:name=".data.GeofenceBroadcastReceiver"/>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".gui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MobileDevelopment2_2">
