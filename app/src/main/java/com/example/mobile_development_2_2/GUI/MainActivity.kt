@@ -1,5 +1,6 @@
 package com.example.mobile_development_2_2.GUI
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -26,11 +27,14 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.mobile_development_2_2.BuildConfig.DEBUG
 import com.example.mobile_development_2_2.GUI.Fragments.HomeFragment.HomeFragment
-import com.example.mobile_development_2_2.GUI.Fragments.MapFragment
+
 import com.example.mobile_development_2_2.GUI.Fragments.POIListFragment.POIListFragment
 import com.example.mobile_development_2_2.GUI.Fragments.RouteListFragment.RouteListFragment
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
+import com.example.mobile_development_2_2.ui.viewmodels.MapFragment
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import org.osmdroid.config.Configuration.*
 
 class MainActivity : ComponentActivity() {
@@ -118,12 +122,19 @@ class MainActivity : ComponentActivity() {
         TopBar()
     }
 
+    @OptIn(ExperimentalPermissionsApi::class)
     @Composable
     fun BottomNavigationBar() {
         val items = listOf(
             NavigationItem.Home,
             NavigationItem.Map,
             NavigationItem.POIs,
+        )
+        val premissions = rememberMultiplePermissionsState(
+            listOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+            )
         )
         BottomNavigation(
             backgroundColor = colorResource(id = R.color.colorPrimary),
@@ -143,7 +154,9 @@ class MainActivity : ComponentActivity() {
                     alwaysShowLabel = true,
                     selected = false,
                     onClick = {
-
+                        if (item.title.equals("Map")){
+                            premissions.launchMultiplePermissionRequest()
+                        }
                     }
                 )
             }
