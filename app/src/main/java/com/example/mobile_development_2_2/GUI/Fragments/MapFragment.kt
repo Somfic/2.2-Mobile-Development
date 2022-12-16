@@ -32,10 +32,13 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat.requestLocationUpdates
 import androidx.lifecycle.viewModelScope
-import com.example.mobile_development_2_2.Map.Route.POI
+
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.LocationProvider
 import com.example.mobile_development_2_2.data.LocationUseCase
+import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
+import com.example.mobile_development_2_2.map.route.POI
+import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.CurrentLocationRequest
@@ -116,10 +119,11 @@ private fun noPremmisions(modifier: Modifier) {
 
 //TODO DELETE And make a list provider
 private fun getLocations(): List<POI> {
+
     val avans = POI(
         name = "Avans",
         location = GeoPoint(51.5856, 4.7925),
-        imgId = R.drawable.img_poi1,
+        imgId = 1,//R.drawable.img_poi1,
         streetName = "street1",
         description = "description of Avans"
     )
@@ -128,7 +132,7 @@ private fun getLocations(): List<POI> {
     val breda = POI(
         name = "Breda",
         location = GeoPoint(51.5719, 4.7683),
-        imgId = R.drawable.img_poi2,
+        imgId = 1,//R.drawable.img_poi2,
         streetName = "street2",
         description = "description of Breda"
     )
@@ -137,7 +141,7 @@ private fun getLocations(): List<POI> {
     val amsterdam = POI(
         name = "Amsterdam",
         location = GeoPoint(52.3676, 4.9041),
-        imgId = R.drawable.img_poi3,
+        imgId = 1,//R.drawable.img_poi1,
         streetName = "street3",
         description = "description of Amsterdam"
     )

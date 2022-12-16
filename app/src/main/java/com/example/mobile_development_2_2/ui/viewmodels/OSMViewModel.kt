@@ -2,7 +2,7 @@ package com.example.mobile_development_2_2.ui.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.mobile_development_2_2.Map.Route.POI
+
 import com.example.mobile_development_2_2.data.GeoLocation
 import com.example.mobile_development_2_2.data.LocationUseCase
 import kotlinx.coroutines.flow.SharingStarted

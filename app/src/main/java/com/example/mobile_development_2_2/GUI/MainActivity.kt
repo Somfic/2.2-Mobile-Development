@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -26,8 +27,11 @@ import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailFragment
 import com.example.mobile_development_2_2.gui.fragments.poi.POIListFragment
 import com.example.mobile_development_2_2.data.LocationProvider
 import com.example.mobile_development_2_2.data.LocationUseCase
+import com.example.mobile_development_2_2.gui.fragments.MapFragment
+import com.example.mobile_development_2_2.gui.fragments.home.HomeFragment
+import com.example.mobile_development_2_2.gui.fragments.route.RouteListFragment
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
-import com.example.mobile_development_2_2.ui.viewmodels.MapFragment
+
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
