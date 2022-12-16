@@ -1,4 +1,4 @@
-package com.example.mobile_development_2_2.GUI.Fragments.SettingsFragment
+package com.example.mobile_development_2_2.gui.fragments.settings
 
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat

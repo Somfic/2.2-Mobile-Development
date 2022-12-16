@@ -1,4 +1,4 @@
-package com.example.mobile_development_2_2.ui.viewmodels
+package com.example.mobile_development_2_2.gui.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -13,7 +13,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -51,8 +50,6 @@ import org.osmdroid.views.overlay.IconOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
-import java.net.URL
-import kotlin.coroutines.CoroutineContext
 
 
 class MapFragment {
@@ -117,24 +114,32 @@ private fun noPremmisions(modifier: Modifier) {
     }
 }
 
-
 //TODO DELETE And make a list provider
 private fun getLocations(): List<POI> {
     val avans = POI(
         name = "Avans",
         location = GeoPoint(51.5856, 4.7925),
+        imgId = R.drawable.img_poi1,
+        streetName = "street1",
+        description = "description of Avans"
     )
 
     // TODO: Move to POI repository
     val breda = POI(
         name = "Breda",
         location = GeoPoint(51.5719, 4.7683),
+        imgId = R.drawable.img_poi2,
+        streetName = "street2",
+        description = "description of Breda"
     )
 
     // TODO: Move to POI repository
     val amsterdam = POI(
         name = "Amsterdam",
         location = GeoPoint(52.3676, 4.9041),
+        imgId = R.drawable.img_poi3,
+        streetName = "street3",
+        description = "description of Amsterdam"
     )
 
     // TODO: Move to POI repository
@@ -159,7 +164,7 @@ private fun OSM(
 
 
     val context = LocalContext.current
-    val locationProvider = LocationProvider(context)
+    val locationProvider = GPSLocationProvider(context)
 
 
     val mapView = remember {
@@ -181,7 +186,10 @@ private fun OSM(
 
         ItemizedIconOverlay(
             mutableListOf<POIItem>(),
-            ContextCompat.getDrawable(context, org.osmdroid.library.R.drawable.ic_menu_mylocation),
+            ContextCompat.getDrawable(
+                context,
+                org.osmdroid.library.R.drawable.ic_menu_mylocation
+            ),
             listener,
             context
         )

@@ -1,21 +1,16 @@
-package com.example.mobile_development_2_2.GUI
+package com.example.mobile_development_2_2.gui
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
-import android.util.Log.DEBUG
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -25,13 +20,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
-import com.example.mobile_development_2_2.BuildConfig.DEBUG
-import com.example.mobile_development_2_2.GUI.Fragments.HomeFragment.HomeFragment
 
-import com.example.mobile_development_2_2.GUI.Fragments.POIListFragment.POIListFragment
-import com.example.mobile_development_2_2.GUI.Fragments.RouteListFragment.RouteListFragment
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailFragment
+import com.example.mobile_development_2_2.gui.fragments.poi.POIListFragment
 import com.example.mobile_development_2_2.data.LocationProvider
 import com.example.mobile_development_2_2.data.LocationUseCase
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
@@ -58,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen(homeFragment)
+                    MainScreen()
                 }
             }
         }
@@ -86,7 +78,8 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MainScreen(fragment: Fragment) {
+    fun MainScreen() {
+    
         val context = LocalContext.current
         val osmViewModel = remember {
             OSMViewModel(LocationUseCase(LocationProvider(context = context)))
@@ -102,14 +95,14 @@ class MainActivity : ComponentActivity() {
                     map.MapScreen(viewModel = osmViewModel, modifier = Modifier)
                 }
             },
-            backgroundColor = colorResource(R.color.white)
+            backgroundColor = colorResource(R.color.black)
         )
     }
 
     @Preview(showBackground = true)
     @Composable
     fun MainScreenPreview() {
-        MainScreen(HomeFragment())
+        MainScreen()
     }
 
     @Composable
