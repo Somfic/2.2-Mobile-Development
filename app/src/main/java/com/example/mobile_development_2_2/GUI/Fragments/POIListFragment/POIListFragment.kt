@@ -4,6 +4,7 @@ package com.example.mobile_development_2_2.GUI.Fragments.POIListFragment
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Surface
@@ -61,7 +62,10 @@ class POIListFragment : ComponentActivity() {
 
 
         Box(
-            modifier = Modifier.fillMaxWidth().height(150.dp).background(Color(ContextCompat.getColor(LocalContext.current, R.color.lightGrey).dec()), RectangleShape),
+            modifier = Modifier.fillMaxWidth().height(150.dp).background(Color(ContextCompat.getColor(LocalContext.current, R.color.lightGrey).dec()), RectangleShape)
+                .clickable {
+
+                },
             contentAlignment = Alignment.Center)
         {
 

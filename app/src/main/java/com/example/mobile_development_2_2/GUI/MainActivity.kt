@@ -24,7 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import com.example.mobile_development_2_2.BuildConfig.DEBUG
 import com.example.mobile_development_2_2.GUI.Fragments.HomeFragment.HomeFragment
 import com.example.mobile_development_2_2.GUI.Fragments.MapFragment
 import com.example.mobile_development_2_2.GUI.Fragments.POIListFragment.POIListFragment
@@ -48,7 +47,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen(homeFragment)
+                    MainScreen()
                 }
             }
         }
@@ -76,7 +75,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MainScreen(fragment: Fragment) {
+    fun MainScreen() {
 
         Scaffold(
             topBar = { TopBar() },
@@ -97,7 +96,7 @@ class MainActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun MainScreenPreview() {
-        MainScreen(HomeFragment())
+        MainScreen()
     }
 
     @Composable
