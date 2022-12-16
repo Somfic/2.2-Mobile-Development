@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
+import org.osmdroid.util.GeoPoint
 
 class OSMViewModel(trackGPSLocation: LocationUseCase) : ViewModel() {
     var locations = trackGPSLocation().shareIn(
@@ -19,10 +20,11 @@ class OSMViewModel(trackGPSLocation: LocationUseCase) : ViewModel() {
         started = SharingStarted.WhileSubscribed()
     )
     private var job: Job? = null
-    var currentLocation = GeoLocation(null)
+    var currentLocation : GeoLocation? = null
 
     fun start() {
-        if (job?.isActive == true) return
+        if (job?.isActive == true){ currentLocation = null; return}
+        currentLocation = GeoLocation(GeoPoint(51.5719, 4.7683))
         Log.d("location", "start")
         job = viewModelScope.launch {
 

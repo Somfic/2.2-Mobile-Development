@@ -34,6 +34,7 @@ import androidx.core.location.LocationManagerCompat.requestLocationUpdates
 import androidx.lifecycle.viewModelScope
 
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.data.GeoLocation
 import com.example.mobile_development_2_2.data.LocationProvider
 import com.example.mobile_development_2_2.data.LocationUseCase
 import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
@@ -71,19 +72,21 @@ class MapFragment {
                 )
             )
 
-
-
             if (premissions.allPermissionsGranted) {
                 viewModel.start()
-                OSM(
-                    modifier = modifier,
-                    locations = getLocations(),
-                    routePoints = getLocations().map { it.location }.toMutableList(),
-                    currentLocation = viewModel.currentLocation.geoPoint
-                )
-            } else {
-                noPremmisions(modifier)
 
+            }
+            OSM(
+                modifier = modifier,
+                locations = getLocations(),
+                routePoints = getLocations().map { it.location }.toMutableList(),
+                currentLocation = viewModel.currentLocation
+            )
+            if (!premissions.allPermissionsGranted) {
+                Column() {
+
+                    Text(text = "No Location Premission granted", color = Color.Red)
+                }
             }
             Row() {
 
@@ -99,21 +102,6 @@ class MapFragment {
 
             }
         }
-    }
-}
-//TODO DELETE And make other button do the work
-
-@Composable
-private fun noPremmisions(modifier: Modifier) {
-
-    OSM(
-        modifier = modifier,
-        locations = getLocations(),
-        routePoints = getLocations().map { it.location }.toMutableList(),
-    )
-    Column() {
-
-        Text(text = "No Location Premission granted", color = Color.Red)
     }
 }
 
@@ -163,7 +151,7 @@ private fun OSM(
     modifier: Modifier = Modifier,
     locations: List<POI> = listOf(),
     routePoints: MutableList<GeoPoint> = mutableListOf(),
-    currentLocation: GeoPoint? = null,
+    currentLocation: GeoLocation? = null,
 ) {
 
 
@@ -222,11 +210,13 @@ private fun OSM(
         //todo make follow current location
 
         // location: Location = Location(LocationProvider(context).)
-        val thisLocation = currentLocation ?: GeoPoint(0, 0)
-        IconOverlay(
-            thisLocation,
-            ContextCompat.getDrawable(context, org.osmdroid.library.R.drawable.person)
-        )
+
+            val thisLocation = currentLocation?:GeoLocation(null)
+
+            IconOverlay(
+                thisLocation.geoPoint,
+                ContextCompat.getDrawable(context, org.osmdroid.library.R.drawable.person)
+            )
 
     }
 
