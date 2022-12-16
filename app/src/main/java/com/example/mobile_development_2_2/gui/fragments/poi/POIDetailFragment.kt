@@ -22,8 +22,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.example.mobile_development_2_2.Map.Route.POI
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.map.route.POI
 
 class POIDetailFragment : ComponentActivity() {
 

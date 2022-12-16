@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.example.mobile_development_2_2.Map.Route.POI
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.map.route.POI
 import org.osmdroid.util.GeoPoint
 
 /**
