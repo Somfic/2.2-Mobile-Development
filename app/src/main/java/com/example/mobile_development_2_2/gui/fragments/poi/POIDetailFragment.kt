@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.map.route.POI
@@ -57,7 +58,7 @@ class POIDetailFragment : ComponentActivity() {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
+                .height(370.dp)
                 .background(
                     Color(
                         ContextCompat.getColor(
@@ -72,10 +73,10 @@ class POIDetailFragment : ComponentActivity() {
             Image(
                 painter = painterResource(id = poi.imgId),
                 contentDescription = null,
-                contentScale = ContentScale.Fit,
+                contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     //.align(Alignment.Center)
-                    .padding(start = 50.dp, end = 50.dp, top = 25.dp, bottom = 50.dp)
+                    .padding(start = 24.dp, end = 24.dp, top = 12.dp, bottom = 80.dp)
                     .clip(
                         RoundedCornerShape(24.dp)
                     ),
@@ -89,7 +90,9 @@ class POIDetailFragment : ComponentActivity() {
                 modifier = Modifier
                     .width(150.dp)
                     .height(150.dp)
-                    .wrapContentHeight(Alignment.Bottom) // align bottom
+                    .padding(36.dp)
+                    .wrapContentHeight(Alignment.Bottom),
+                fontSize = 30.sp
             )
 
 
@@ -99,6 +102,7 @@ class POIDetailFragment : ComponentActivity() {
                 modifier = Modifier
                     .width(150.dp)
                     .height(150.dp)
+                    .padding(4.dp)
                     .wrapContentHeight(Alignment.Bottom) // align bottom
             )
 
@@ -126,6 +130,7 @@ class POIDetailFragment : ComponentActivity() {
 
             TextField(
                 value = poi.longDescription,
+                readOnly = true,
                 onValueChange = {  },
                 label = { Text(text = "") },
                 colors = TextFieldDefaults.textFieldColors(

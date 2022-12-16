@@ -149,7 +149,7 @@ class Route(
                 location = GeoPoint(52.3676, 4.9041),
                 imgId = R.drawable.img_poi3,
                 streetName = "street3",
-                shortDescription = "description of Amsterdam",
+                shortDescription = "description of Amsterdam 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15",
                 longDescription = "We're no strangers to love\n" +
                         "You know the rules and so do I (do I)\n" +
                         "A full commitment's what I'm thinking of\n" +

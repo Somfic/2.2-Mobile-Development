@@ -81,12 +81,10 @@ class MainActivity : ComponentActivity() {
                     //map.MapScreen(viewModel = map, modifier = Modifier)
 
                     var POIList = POIListFragment()
-                    //POIList.POIListScreen(viewModel = POIList, modifier = Modifier, Route.testRoute())
+                    POIList.POIListScreen(viewModel = POIList, modifier = Modifier, Route.testRoute())
 
                     var POIDetail = POIDetailFragment()
-                    POIDetail.POIDetailScreen(viewModel = POIDetail, modifier = Modifier, poi = Route.testRoute().POIs.get(0))
-
-
+                    //POIDetail.POIDetailScreen(viewModel = POIDetail, modifier = Modifier, poi = Route.testRoute().POIs.get(0))
                 }
             },
             backgroundColor = colorResource(R.color.black)

@@ -102,9 +102,9 @@ class POIListFragment : ComponentActivity() {
             TextField(
                 value = poi.shortDescription,
                 modifier = Modifier
-                    .padding(start = 24.dp, bottom = 24.dp, top = 72.dp)
-                    .width(50.dp)
-                    .offset(x = 190.dp),
+                    .padding(start = 200.dp, bottom = 24.dp, top = 65.dp, end = 24.dp)
+                    .width(50.dp),
+                readOnly = true,
                 onValueChange = {  },
                 label = { Text(text = "") },
                 colors = TextFieldDefaults.textFieldColors(
