@@ -11,9 +11,6 @@ import com.google.android.gms.location.GeofencingRequest
 
 
 class GeofenceHelper(base: Context?) : ContextWrapper(base) {
-
-
-
     private val TAG = "GeofenceHelper"
     private lateinit var pendingIntent: PendingIntent
 
