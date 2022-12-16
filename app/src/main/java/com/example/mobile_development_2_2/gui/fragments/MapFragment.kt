@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
 import com.example.mobile_development_2_2.map.route.POI
+import com.example.mobile_development_2_2.map.route.Route
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -36,7 +37,7 @@ class MapFragment {
         Surface(
             modifier = modifier.fillMaxSize()
         ) {
-            val viewmodel = ViewModelMap()
+            val viewmodel = Route.testRoute().POIs
             val premissions = rememberMultiplePermissionsState(
                 listOf(
                     Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -71,43 +72,7 @@ private fun noPremmisions() {
     }
 }
 
-//TODO DELETE And make a list provider
-private fun ViewModelMap(): List<POI> {
-    val avans = POI(
-        name = "Avans",
-        location = GeoPoint(51.5856, 4.7925),
-        imgId = R.drawable.img_poi1,
-        streetName = "street1",
-        description = "description of Avans"
-    )
 
-    // TODO: Move to POI repository
-    val breda = POI(
-        name = "Breda",
-        location = GeoPoint(51.5719, 4.7683),
-        imgId = R.drawable.img_poi2,
-        streetName = "street2",
-        description = "description of Breda"
-    )
-
-    // TODO: Move to POI repository
-    val amsterdam = POI(
-        name = "Amsterdam",
-        location = GeoPoint(52.3676, 4.9041),
-        imgId = R.drawable.img_poi3,
-        streetName = "street3",
-        description = "description of Amsterdam"
-    )
-
-    // TODO: Move to POI repository
-    val cities = listOf(
-        avans,
-        breda,
-        amsterdam,
-    )
-    return cities
-
-}
 
 
 @Composable

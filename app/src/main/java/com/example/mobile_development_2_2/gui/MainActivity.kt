@@ -23,6 +23,7 @@ import androidx.core.app.ActivityCompat
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailFragment
 import com.example.mobile_development_2_2.gui.fragments.poi.POIListFragment
+import com.example.mobile_development_2_2.map.route.Route
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -80,10 +81,10 @@ class MainActivity : ComponentActivity() {
                     //map.MapScreen(viewModel = map, modifier = Modifier)
 
                     var POIList = POIListFragment()
-                    //POIList.POIListScreen(viewModel = POIList, modifier = Modifier, POIList.TestRoute())
+                    //POIList.POIListScreen(viewModel = POIList, modifier = Modifier, Route.testRoute())
 
                     var POIDetail = POIDetailFragment()
-                    POIDetail.POIDetailScreen(viewModel = POIDetail, modifier = Modifier, poi = POIList.TestRoute().POIs.get(0))
+                    POIDetail.POIDetailScreen(viewModel = POIDetail, modifier = Modifier, poi = Route.testRoute().POIs.get(0))
 
 
                 }

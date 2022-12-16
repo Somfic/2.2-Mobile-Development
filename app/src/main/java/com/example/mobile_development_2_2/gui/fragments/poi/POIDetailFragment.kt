@@ -8,18 +8,19 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.example.mobile_development_2_2.R
@@ -53,40 +54,28 @@ class POIDetailFragment : ComponentActivity() {
     fun MessageRow1(poi: POI) {
 
 
-        Box(
-            modifier = Modifier.fillMaxWidth().fillMaxHeight().background(
-                Color(
-                    ContextCompat.getColor(
-                        LocalContext.current, R.color.lightGrey).dec()), RectangleShape
-            )
-                .clickable {
-
-                },
-            contentAlignment = Alignment.Center)
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(
+                    Color(
+                        ContextCompat.getColor(
+                            LocalContext.current, R.color.lightGrey).dec()), RectangleShape
+                )
+                .padding(12.dp)
+                .clip(RoundedCornerShape(12.dp)),
+            elevation = 10.dp,
+            backgroundColor = Color.White)
         {
-
-            Image(
-                painter = painterResource(id = R.drawable.img_whtsqr),
-                contentDescription = null,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .align(Alignment.Center)
-                    .padding(12.dp)
-                    .clip(
-                        RoundedCornerShape(24.dp)
-                    ),
-                alignment = Alignment.Center,
-                alpha = DefaultAlpha,
-                colorFilter = null)
 
             Image(
                 painter = painterResource(id = poi.imgId),
                 contentDescription = null,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 24.dp, bottom = 24.dp, top = 24.dp)
+                    //.align(Alignment.Center)
+                    .padding(start = 50.dp, end = 50.dp, top = 25.dp, bottom = 50.dp)
                     .clip(
                         RoundedCornerShape(24.dp)
                     ),
@@ -96,18 +85,22 @@ class POIDetailFragment : ComponentActivity() {
 
             Text(
                 text = poi.name,
-                modifier = Modifier.padding(start = 24.dp, bottom = 24.dp, top = 24.dp).align(
-                    Alignment.TopCenter))
+                textAlign = TextAlign.Center, // make text center horizontal
+                modifier = Modifier
+                    .width(150.dp)
+                    .height(150.dp)
+                    .wrapContentHeight(Alignment.Bottom) // align bottom
+            )
+
 
             Text(
                 text = poi.streetName,
-                modifier = Modifier.padding(start = 24.dp, bottom = 24.dp, top = 48.dp).align(
-                    Alignment.TopCenter))
-
-            Text(
-                text = poi.description,
-                modifier = Modifier.padding(start = 24.dp, bottom = 24.dp, top = 72.dp).align(
-                    Alignment.TopCenter))
+                textAlign = TextAlign.Center, // make text center horizontal
+                modifier = Modifier
+                    .width(150.dp)
+                    .height(150.dp)
+                    .wrapContentHeight(Alignment.Bottom) // align bottom
+            )
 
         }
 
@@ -116,29 +109,61 @@ class POIDetailFragment : ComponentActivity() {
 
     @Composable
     fun MessageRow2(poi: POI) {
-        Box(
-            modifier = Modifier.fillMaxWidth().fillMaxHeight().background(
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(
                 Color(
                     ContextCompat.getColor(
                         LocalContext.current, R.color.lightGrey).dec()), RectangleShape
-            ),
-            contentAlignment = Alignment.Center)
+                )
+                .padding(12.dp)
+                .clip(RoundedCornerShape(12.dp)),
+            elevation = 10.dp,
+            backgroundColor = Color.White)
         {
+
+            TextField(
+                value = poi.longDescription,
+                onValueChange = {  },
+                label = { Text(text = "") },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color(0xFFFFFFFF)
+                ))
 
         }
     }
 
     @Composable
     fun MessageRow3(poi: POI) {
-        Box(
-            modifier = Modifier.fillMaxWidth().fillMaxHeight().background(
-                Color(
-                    ContextCompat.getColor(
-                        LocalContext.current, R.color.lightGrey).dec()), RectangleShape
-            ),
-            contentAlignment = Alignment.Center)
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(
+                    Color(
+                        ContextCompat.getColor(
+                            LocalContext.current, R.color.lightGrey).dec()), RectangleShape
+                )
+                .padding(12.dp)
+                .clip(RoundedCornerShape(12.dp)),
+            elevation = 10.dp,
+            backgroundColor = Color.White)
         {
-
+            Image(
+                painter = painterResource(id = poi.imgMap),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    //.align(Alignment.Center)
+                    .padding(12.dp)
+                    .clip(
+                        RoundedCornerShape(12.dp)
+                    ),
+                alignment = Alignment.Center,
+                alpha = DefaultAlpha,
+                colorFilter = null)
         }
     }
 
