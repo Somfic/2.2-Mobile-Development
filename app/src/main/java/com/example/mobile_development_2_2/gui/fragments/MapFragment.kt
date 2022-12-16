@@ -2,6 +2,7 @@ package com.example.mobile_development_2_2.ui.viewmodels
 
 import android.Manifest
 import android.app.PendingIntent
+import android.content.Context
 import android.location.Location
 import android.nfc.Tag
 import android.util.Log
@@ -21,13 +22,11 @@ import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.GeofenceHelper
 import com.example.mobile_development_2_2.data.LocationProvider
+import com.example.mobile_development_2_2.gui.MainActivity
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.common.api.Api
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.location.Geofence
-import com.google.android.gms.location.GeofenceStatusCodes
-import com.google.android.gms.location.GeofencingClient
-import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -39,10 +38,11 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 
 
-class MapFragment {
+class MapFragment(context : Context) {
     private val TAG = "MapFragment"
-    lateinit var geofencingClient: GeofencingClient
-    lateinit var geofenceHelper: GeofenceHelper
+    private var geofencingClient: GeofencingClient = LocationServices.getGeofencingClient(context)
+    private var geofenceHelper: GeofenceHelper = GeofenceHelper(context)
+
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
@@ -51,6 +51,7 @@ class MapFragment {
             modifier = modifier.fillMaxSize()
         ) {
 
+            addGeofence(51.5856, 4.7925)
             val viewmodel = ViewModelMap()
             val premissions = rememberMultiplePermissionsState(
                 listOf(

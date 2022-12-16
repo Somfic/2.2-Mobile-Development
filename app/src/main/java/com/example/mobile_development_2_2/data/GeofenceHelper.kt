@@ -34,7 +34,7 @@ class GeofenceHelper(base: Context?) : ContextWrapper(base) {
     }
 
     fun getPendingIntent() : PendingIntent? {
-        if(pendingIntent != null) {
+        if(::pendingIntent.isInitialized) {
             return pendingIntent
         }
         val intent = Intent(this, GeofenceBroadcastReceiver::class.java)

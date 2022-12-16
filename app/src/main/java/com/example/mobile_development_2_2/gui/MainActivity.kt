@@ -31,7 +31,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import org.osmdroid.config.Configuration.*
 
-class MainActivity : ComponentActivity() {
+open class MainActivity : ComponentActivity() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
     private val homeFragment = HomeFragment()
     private val routelistFragment = RouteListFragment()
@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
             bottomBar = { BottomNavigationBar() },
             content = { padding ->
                 Box(modifier = Modifier.padding(padding)) {
-                    var map = MapFragment()
+                    var map = MapFragment(this@MainActivity)
                     map.MapScreen(viewModel = map, modifier = Modifier)
                 }
             },
