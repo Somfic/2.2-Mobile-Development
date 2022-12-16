@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
+
 import android.location.LocationManager
 import android.provider.ContactsContract.CommonDataKinds.Website
 import androidx.compose.foundation.clickable
@@ -23,15 +24,18 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat.requestLocationUpdates
+import androidx.lifecycle.viewModelScope
 import com.example.mobile_development_2_2.Map.Route.POI
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.LocationProvider
+import com.example.mobile_development_2_2.data.LocationUseCase
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.CurrentLocationRequest
 import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.Priority
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.*
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -48,11 +52,10 @@ class MapFragment {
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
-    fun MapScreen(viewModel: MapFragment, modifier: Modifier) {
+    fun MapScreen(viewModel: OSMViewModel, modifier: Modifier) {
         Surface(
             modifier = modifier.fillMaxSize()
         ) {
-            val viewmodel = ViewModelMap()
             val premissions = rememberMultiplePermissionsState(
                 listOf(
                     Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -60,19 +63,19 @@ class MapFragment {
                 )
             )
 
+
+
             if (premissions.allPermissionsGranted) {
+                viewModel.start()
                 OSM(
-
                     modifier = modifier,
-                    locations = viewmodel,
-                    routePoints = viewmodel.map { it.location }.toMutableList()
-
+                    locations = getLocations(),
+                    routePoints = getLocations().map { it.location }.toMutableList(),
+                    currentLocation = viewModel.currentLocation.geoPoint
                 )
             } else {
-                noPremmisions()
-                OSM(
+                noPremmisions(modifier)
 
-                )
             }
         }
     }
@@ -81,15 +84,18 @@ class MapFragment {
 //TODO DELETE And make other button do the work
 
 @Composable
-private fun noPremmisions() {
+private fun noPremmisions(modifier: Modifier) {
     Column() {
         Text(text = "No Location Premission granted")
-    }
+        Column() {
+
+        OSM(modifier.fillMaxSize())
+    }}
 }
 
 
 //TODO DELETE And make a list provider
-private fun ViewModelMap(): List<POI> {
+private fun getLocations(): List<POI> {
     val avans = POI(
         name = "Avans",
         location = GeoPoint(51.5856, 4.7925),
