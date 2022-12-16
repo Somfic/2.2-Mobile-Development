@@ -3,12 +3,15 @@ package com.example.mobile_development_2_2.ui.viewmodels
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Paint
 import android.location.Location
 
 import android.location.LocationManager
 import android.provider.ContactsContract.CommonDataKinds.Website
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
+
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Surface
@@ -17,10 +20,15 @@ import androidx.compose.runtime.Composable
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat.requestLocationUpdates
@@ -77,20 +85,36 @@ class MapFragment {
                 noPremmisions(modifier)
 
             }
+            Row() {
+
+
+                Text(
+                    text = "© OpenStreetMap contributors",
+                    fontSize = 8.sp,
+                    modifier = Modifier
+                        .background(Color.White, RectangleShape)
+                        .align(Alignment.Bottom)
+                )
+
+
+            }
         }
     }
-
 }
 //TODO DELETE And make other button do the work
 
 @Composable
 private fun noPremmisions(modifier: Modifier) {
-    Column() {
-        Text(text = "No Location Premission granted")
-        Column() {
 
-        OSM(modifier.fillMaxSize())
-    }}
+    OSM(
+        modifier = modifier,
+        locations = getLocations(),
+        routePoints = getLocations().map { it.location }.toMutableList(),
+    )
+    Column() {
+
+        Text(text = "No Location Premission granted", color = Color.Red)
+    }
 }
 
 
@@ -132,7 +156,6 @@ private fun OSM(
     routePoints: MutableList<GeoPoint> = mutableListOf(),
     currentLocation: GeoPoint? = null,
 ) {
-
 
 
     val context = LocalContext.current
@@ -227,10 +250,6 @@ private fun OSM(
     }
 
 }
-
-
-
-
 
 
 private class POIItem(
