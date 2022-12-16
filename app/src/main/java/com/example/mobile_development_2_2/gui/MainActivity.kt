@@ -1,20 +1,15 @@
-package com.example.mobile_development_2_2.GUI
+package com.example.mobile_development_2_2.gui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
-import android.util.Log.DEBUG
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -23,9 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
 import com.example.mobile_development_2_2.GUI.Fragments.HomeFragment.HomeFragment
-import com.example.mobile_development_2_2.GUI.Fragments.MapFragment
 import com.example.mobile_development_2_2.GUI.Fragments.POIListFragment.POIListFragment
 import com.example.mobile_development_2_2.GUI.Fragments.RouteListFragment.RouteListFragment
 import com.example.mobile_development_2_2.R

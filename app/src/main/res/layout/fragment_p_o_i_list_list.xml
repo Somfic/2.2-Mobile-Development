@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".GUI.Fragments.POIListFragment.POIListFragment"
+    tools:context=".gui.fragments.POIListFragment.POIListFragment"
     tools:listitem="@layout/fragment_p_o_i_list" />

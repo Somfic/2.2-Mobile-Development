@@ -1,4 +1,4 @@
-package com.example.mobile_development_2_2.GUI
+package com.example.mobile_development_2_2.gui
 
 import com.example.mobile_development_2_2.R
 

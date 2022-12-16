@@ -1,4 +1,4 @@
-package com.example.mobile_development_2_2.GUI.Fragments.POIListFragment
+package com.example.mobile_development_2_2.gui.fragments.POIListFragment
 
 
 import androidx.activity.ComponentActivity
@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -23,9 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.example.mobile_development_2_2.Map.Route.POI
-import com.example.mobile_development_2_2.Map.Route.Route
 import com.example.mobile_development_2_2.R
 
 class POIDetailFragment : ComponentActivity() {
