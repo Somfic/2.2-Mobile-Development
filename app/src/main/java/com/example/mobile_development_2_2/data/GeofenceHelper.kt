@@ -5,7 +5,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingRequest
 
 
@@ -39,5 +41,17 @@ class GeofenceHelper(base: Context?) : ContextWrapper(base) {
         pendingIntent = PendingIntent.getBroadcast(this, 6969, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         return pendingIntent
+    }
+
+    fun getErrorString(e : Exception) : String {
+        if (e is ApiException) {
+            var apiException : ApiException = e
+            when(apiException.statusCode) {
+                GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE -> return "GEOFENCE_NOT_AVAILABLE"
+                GeofenceStatusCodes.GEOFENCE_TOO_MANY_GEOFENCES -> return "GEOFENCE_TOO_MANY_GEOFENCES"
+                GeofenceStatusCodes.GEOFENCE_TOO_MANY_PENDING_INTENTS -> return "GEOFENCE_TOO_MANY_PENDING_INTENTS"
+            }
+        }
+        return e.localizedMessage
     }
 }

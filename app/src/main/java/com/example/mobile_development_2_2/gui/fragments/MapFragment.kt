@@ -3,6 +3,8 @@ package com.example.mobile_development_2_2.ui.viewmodels
 import android.Manifest
 import android.app.PendingIntent
 import android.location.Location
+import android.nfc.Tag
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
@@ -20,10 +22,14 @@ import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.GeofenceHelper
 import com.example.mobile_development_2_2.data.LocationProvider
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.android.gms.common.api.Api
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -34,6 +40,7 @@ import org.osmdroid.views.overlay.Polyline
 
 
 class MapFragment {
+    private val TAG = "MapFragment"
     lateinit var geofencingClient: GeofencingClient
     lateinit var geofenceHelper: GeofenceHelper
 
@@ -225,13 +232,15 @@ class MapFragment {
         if (geofencingRequest != null) {
             if (pendingIntent != null) {
                 geofencingClient.addGeofences(geofencingRequest, pendingIntent)
-                    .addOnSuccessListener {   }
+                    .addOnSuccessListener(OnSuccessListener {
+                        Log.d(TAG, "onSuccess: Geofence Added...")
+                    })
+                    .addOnFailureListener(OnFailureListener { e ->
+                        Log.d(TAG, "onFailure: " + geofenceHelper.getErrorString(e))
+                    })
             }
         }
     }
-
-
-
 
     private class POIItem(
         val poi: POI //FIXME add poiClass,
