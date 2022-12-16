@@ -18,12 +18,10 @@ class LocationProvider (context : Context,
                         ) {
     private val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
-    fun Location.toGeoLocation() = GeoLocation(
-        geoPoint = GeoPoint(this.longitude,this.latitude)
-    )
 
-    suspend fun lastLocation(): Result<GeoLocation> = last().map { it.toGeoLocation() }
-    fun locationTracker(): Flow<Result<GeoLocation>> = track().map { result -> result.map { it.toGeoLocation() } }
+
+    suspend fun lastLocation(): Result<Location> = last()
+    fun locationTracker(): Flow<Result<Location>> = track()
 
     private suspend fun last(): Result<Location> = suspendCoroutine { continuation ->
         fusedLocationProviderClient.lastLocation

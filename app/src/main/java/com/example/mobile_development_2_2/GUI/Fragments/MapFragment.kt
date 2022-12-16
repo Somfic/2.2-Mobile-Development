@@ -34,7 +34,7 @@ import androidx.core.location.LocationManagerCompat.requestLocationUpdates
 import androidx.lifecycle.viewModelScope
 
 import com.example.mobile_development_2_2.R
-import com.example.mobile_development_2_2.data.GeoLocation
+
 import com.example.mobile_development_2_2.data.LocationProvider
 import com.example.mobile_development_2_2.data.LocationUseCase
 import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
@@ -54,6 +54,8 @@ import org.osmdroid.views.overlay.IconOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 
 class MapFragment {
@@ -80,7 +82,8 @@ class MapFragment {
                 modifier = modifier,
                 locations = getLocations(),
                 routePoints = getLocations().map { it.location }.toMutableList(),
-                currentLocation = viewModel.currentLocation
+                currentLocation = viewModel.currentLocation ,
+                provider = viewModel.provider
             )
             if (!premissions.allPermissionsGranted) {
                 Column() {
@@ -151,7 +154,8 @@ private fun OSM(
     modifier: Modifier = Modifier,
     locations: List<POI> = listOf(),
     routePoints: MutableList<GeoPoint> = mutableListOf(),
-    currentLocation: GeoLocation? = null,
+    currentLocation: Location? = null,
+    provider: IMyLocationProvider,
 ) {
 
 
@@ -206,18 +210,7 @@ private fun OSM(
 
 
     val myLocation = remember(mapView) {
-
-        //todo make follow current location
-
-        // location: Location = Location(LocationProvider(context).)
-
-            val thisLocation = currentLocation?:GeoLocation(null)
-
-            IconOverlay(
-                thisLocation.geoPoint,
-                ContextCompat.getDrawable(context, org.osmdroid.library.R.drawable.person)
-            )
-
+        MyLocationNewOverlay(provider, mapView)
     }
 
 
@@ -235,9 +228,9 @@ private fun OSM(
 
 
                 mapView.overlays.add(poiOverlay)
-                if (currentLocation != null) {
+
                     mapView.overlays.add(myLocation)
-                }
+
                 mapView.overlays.add(currentRoute)
             }
         },
