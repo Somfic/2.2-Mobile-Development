@@ -1,4 +1,4 @@
-package com.example.mobile_development_2_2.GUI.Fragments.POIListFragment
+package com.example.mobile_development_2_2.gui.fragments.poi
 
 
 import androidx.activity.ComponentActivity
@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.mobile_development_2_2.Map.Route.Route
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -33,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.map.route.POI
+import com.example.mobile_development_2_2.map.route.Route
 import org.osmdroid.util.GeoPoint
 
 /**

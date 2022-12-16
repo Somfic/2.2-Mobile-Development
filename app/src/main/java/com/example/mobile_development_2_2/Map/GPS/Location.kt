@@ -1,4 +1,4 @@
-package com.example.mobile_development_2_2.Map.GPS
+package com.example.mobile_development_2_2.map.gps
 
 import org.osmdroid.util.GeoPoint
 

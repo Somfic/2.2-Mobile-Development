@@ -1,4 +1,4 @@
-package com.example.mobile_development_2_2.GUI.Fragments.HomeFragment
+package com.example.mobile_development_2_2.gui.fragments.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

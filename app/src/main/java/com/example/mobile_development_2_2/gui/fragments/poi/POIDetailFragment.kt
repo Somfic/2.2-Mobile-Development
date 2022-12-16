@@ -1,4 +1,4 @@
-package com.example.mobile_development_2_2.gui.fragments.POIListFragment
+package com.example.mobile_development_2_2.gui.fragments.poi
 
 
 import androidx.activity.ComponentActivity

@@ -1,4 +1,4 @@
-package com.example.mobile_development_2_2.GUI.Fragments.RouteListFragment
+package com.example.mobile_development_2_2.gui.fragments.route
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

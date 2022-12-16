@@ -1,4 +1,4 @@
-package com.example.mobile_development_2_2.Map.Route
+package com.example.mobile_development_2_2.map.route
 
 import com.example.mobile_development_2_2.map.route.POI
 

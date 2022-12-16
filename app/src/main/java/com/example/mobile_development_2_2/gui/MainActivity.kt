@@ -19,14 +19,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
-import com.example.mobile_development_2_2.GUI.Fragments.HomeFragment.HomeFragment
-import com.example.mobile_development_2_2.GUI.Fragments.POIListFragment.POIListFragment
-import com.example.mobile_development_2_2.GUI.Fragments.RouteListFragment.RouteListFragment
 
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailFragment
+import com.example.mobile_development_2_2.gui.fragments.poi.POIListFragment
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
-import com.example.mobile_development_2_2.ui.viewmodels.MapFragment
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
@@ -34,9 +31,6 @@ import org.osmdroid.config.Configuration.*
 
 class MainActivity : ComponentActivity() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
-    private val homeFragment = HomeFragment()
-    private val routelistFragment = RouteListFragment()
-    private val poiListFragment = POIListFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,9 +76,14 @@ class MainActivity : ComponentActivity() {
             bottomBar = { BottomNavigationBar() },
             content = { padding ->
                 Box(modifier = Modifier.padding(padding)) {
-                    var map = POIListFragment()
+                    //var map = MapFragment()
                     //map.MapScreen(viewModel = map, modifier = Modifier)
-                    map.POIListScreen(viewModel = map, modifier = Modifier, map.TestRoute())
+
+                    var POIList = POIListFragment()
+                    //POIList.POIListScreen(viewModel = POIList, modifier = Modifier, POIList.TestRoute())
+
+                    var POIDetail = POIDetailFragment()
+                    POIDetail.POIDetailScreen(viewModel = POIDetail, modifier = Modifier, poi = POIList.TestRoute().POIs.get(0))
 
 
                 }

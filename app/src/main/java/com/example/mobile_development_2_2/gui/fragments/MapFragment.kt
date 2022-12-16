@@ -1,4 +1,4 @@
-package com.example.mobile_development_2_2.ui.viewmodels
+package com.example.mobile_development_2_2.gui.fragments
 
 import android.Manifest
 import android.location.Location
@@ -15,27 +15,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.example.mobile_development_2_2.R
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
 import com.example.mobile_development_2_2.map.route.POI
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-
-import android.annotation.SuppressLint
-import android.content.Context
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.viewinterop.AndroidView
-import com.example.mobile_development_2_2.Map.GPS.GPSLocationProvider
-import com.google.accompanist.permissions.MultiplePermissionsState
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import kotlinx.coroutines.CoroutineScope
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -43,7 +25,6 @@ import org.osmdroid.views.overlay.IconOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
-import kotlin.coroutines.CoroutineContext
 
 
 class MapFragment {
