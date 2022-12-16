@@ -1,12 +1,14 @@
 package com.example.mobile_development_2_2.map.route
 
 import com.example.mobile_development_2_2.R
-import com.example.mobile_development_2_2.map.route.POI
 import org.osmdroid.util.GeoPoint
 
 class Route(
     val name : String,
-    val description : String,
+    val cityName: String,
+    val length: Int,
+    val imgId: Int,
+    val shortDescription : String,
     val POIs: List<POI>
     ) {
 
@@ -15,7 +17,11 @@ class Route(
     }
 
     companion object{
-        fun testRoute(): Route {
+        fun TestRoute(): Route{
+            return TestRoute("testRoute")
+        }
+
+        fun TestRoute(name: String): Route {
             val avans = POI(
                 name = "Avans",
                 location = GeoPoint(51.5856, 4.7925),
@@ -230,7 +236,14 @@ class Route(
             )
 
 
-            return Route("testRoute", "a test route", cities)
+            return Route(
+                name = name,
+                cityName = "Breda",
+                length = 6234,
+                imgId = R.drawable.img_map1,
+                shortDescription = "A route for testing",
+                POIs = cities
+            )
 
         }
     }

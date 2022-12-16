@@ -64,6 +64,7 @@ class POIListFragment : ComponentActivity() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
+                .clickable {  }
                 .background(
                     Color(
                         ContextCompat.getColor(

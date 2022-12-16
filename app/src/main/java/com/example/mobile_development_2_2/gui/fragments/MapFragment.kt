@@ -37,7 +37,7 @@ class MapFragment {
         Surface(
             modifier = modifier.fillMaxSize()
         ) {
-            val viewmodel = Route.testRoute().POIs
+            val viewmodel = Route.TestRoute().POIs
             val premissions = rememberMultiplePermissionsState(
                 listOf(
                     Manifest.permission.ACCESS_COARSE_LOCATION,
