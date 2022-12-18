@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.PendingIntent
 import android.content.Context
 import android.location.Location
-import android.nfc.Tag
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,10 +21,7 @@ import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.GeofenceHelper
 import com.example.mobile_development_2_2.data.LocationProvider
-import com.example.mobile_development_2_2.gui.MainActivity
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.android.gms.common.api.Api
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -51,7 +47,8 @@ class MapFragment(context : Context) {
             modifier = modifier.fillMaxSize()
         ) {
 
-            addGeofence(51.5856, 4.7925)
+            AddGeofence(51.5856, 4.7925)
+
             val viewmodel = ViewModelMap()
             val premissions = rememberMultiplePermissionsState(
                 listOf(
@@ -222,7 +219,7 @@ class MapFragment(context : Context) {
         }
 
     }
-    fun addGeofence(lat:Double, lng:Double) {
+    fun AddGeofence(lat:Double, lng:Double) {
         var geofence : Geofence? = geofenceHelper.getGeofence("geo", lat, lng)
         var geofencingRequest : GeofencingRequest? = geofence?.let {
             geofenceHelper.geofencingRequest(
@@ -233,12 +230,12 @@ class MapFragment(context : Context) {
         if (geofencingRequest != null) {
             if (pendingIntent != null) {
                 geofencingClient.addGeofences(geofencingRequest, pendingIntent)
-                    .addOnSuccessListener(OnSuccessListener {
-                        Log.d(TAG, "onSuccess: Geofence Added...")
-                    })
-                    .addOnFailureListener(OnFailureListener { e ->
+                    .addOnSuccessListener {
+                        Log.d(TAG, "Geofence added")
+                    }
+                    .addOnFailureListener{ e ->
                         Log.d(TAG, "onFailure: " + geofenceHelper.getErrorString(e))
-                    })
+                    }
             }
         }
     }
