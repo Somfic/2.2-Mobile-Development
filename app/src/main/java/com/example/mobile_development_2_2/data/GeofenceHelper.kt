@@ -24,17 +24,13 @@ class GeofenceHelper(base: Context?) : ContextWrapper(base) {
     fun getGeofence(id : String, lat : Double, lng : Double) : Geofence? {
         return Geofence.Builder()
             .setRequestId(id)
-            .setCircularRegion(lat, lng, 20f)
+            .setCircularRegion(lat, lng, 1000f)
             .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
             .setExpirationDuration(Geofence.NEVER_EXPIRE)
             .build()
     }
 
     fun getPendingIntent() : PendingIntent? {
-        if(::pendingIntent.isInitialized) {
-            //Toast.makeText(this, "init", Toast.LENGTH_SHORT).show()
-            return pendingIntent
-        }
         //Toast.makeText(this, "not init", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, GeofenceBroadcastReceiver::class.java)
         pendingIntent = PendingIntent.getBroadcast(this, 6969, intent, PendingIntent.FLAG_UPDATE_CURRENT)

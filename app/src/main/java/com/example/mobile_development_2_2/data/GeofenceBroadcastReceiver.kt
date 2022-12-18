@@ -14,5 +14,6 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
     // ...
     override fun onReceive(context: Context, intent: Intent) {
         Toast.makeText(context, "geofence triggered", Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "onReceive: geofence triggered")
     }
 }

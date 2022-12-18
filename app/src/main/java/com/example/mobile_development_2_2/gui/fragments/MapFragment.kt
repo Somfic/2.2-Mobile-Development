@@ -38,7 +38,7 @@ class MapFragment(context : Context) {
     private val TAG = "MapFragment"
     private var geofencingClient: GeofencingClient = LocationServices.getGeofencingClient(context)
     private var geofenceHelper: GeofenceHelper = GeofenceHelper(context)
-
+    private var fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
@@ -46,8 +46,14 @@ class MapFragment(context : Context) {
         Surface(
             modifier = modifier.fillMaxSize()
         ) {
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+                if(location!=null) {
+                    Log.d(TAG, "MapScreen: " + location.latitude + " " + location.longitude)
+                    AddGeofence(location.latitude, location.longitude)
 
-            AddGeofence(51.5856, 4.7925)
+                }
+            }
+
 
             val viewmodel = ViewModelMap()
             val premissions = rememberMultiplePermissionsState(
@@ -71,6 +77,7 @@ class MapFragment(context : Context) {
 
                 )
             }
+            fusedLocationProviderClient.lastLocation
         }
     }
 
@@ -231,7 +238,7 @@ class MapFragment(context : Context) {
             if (pendingIntent != null) {
                 geofencingClient.addGeofences(geofencingRequest, pendingIntent)
                     .addOnSuccessListener {
-                        Log.d(TAG, "Geofence added")
+                        Log.d(TAG, "Geofence added " + geofencingRequest.geofences[0].latitude + " "+ geofencingRequest.geofences[0].longitude)
                     }
                     .addOnFailureListener{ e ->
                         Log.d(TAG, "onFailure: " + geofenceHelper.getErrorString(e))
