@@ -1,5 +1,9 @@
 package com.example.mobile_development_2_2.map.route
 
+import android.util.Log
+import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
+
 class RouteManager {
 
 
@@ -16,6 +20,25 @@ class RouteManager {
             )
 
             return routes
+        }
+        var selectedItem = TestRoutes().get(0)
+
+        fun selectItem(route: Route){
+            Log.d("a", "Item selected")
+            selectedItem = route
+        }
+
+        @JvmName("getSelectedItem1")
+        fun getSelectedRoute(): Route {
+            return selectedItem
+        }
+
+        fun selectPOI(poi:POI){
+            Route.selectItem(poi)
+        }
+
+        fun getSelectedPOI(): POI{
+            return Route.getSelectedPOI()
         }
     }
 }

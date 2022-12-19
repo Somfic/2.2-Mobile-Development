@@ -39,8 +39,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
 import com.example.mobile_development_2_2.gui.fragments.home.HomeScreen
+import com.example.mobile_development_2_2.gui.fragments.home.InfoScreen
+import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailScreen
 import com.example.mobile_development_2_2.gui.fragments.poi.POIListScreen
 import com.example.mobile_development_2_2.gui.fragments.route.RouteListScreen
+import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.map.route.RouteManager
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -135,21 +138,41 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier,
                         helpItems = HelpItem.getItems(),
                         onPOIButtonClicked = {
-                            Log.d("main", "going to route")
-                            navController.navigate(Fragments.Route.name)
+                            navController.navigate(Fragments.Info.name)
                         })
 
                 }
                 composable(route = Fragments.Route.name) {
                     RouteListScreen(
                         modifier = Modifier,
-                        routes = RouteManager.TestRoutes()
+                        routes = RouteManager.TestRoutes(),
+                        onRouteClicked = {
+                            navController.navigate(Fragments.Map.name)
+                        },
+                        onPOIClicked = {
+                            navController.navigate(Fragments.POIList.name)
+                        }
                     )
                 }
                 composable(route = Fragments.POIList.name) {
                     POIListScreen(
                         modifier = Modifier,
-                        route = RouteManager.TestRoutes().get(0)
+                        route = RouteManager.getSelectedRoute(),
+                        onPOIClicked = {
+                            navController.navigate(Fragments.POI.name)
+                        }
+                    )
+                }
+                composable(route = Fragments.Info.name){
+                    InfoScreen(
+                        modifier = Modifier,
+                        helpItem = HelpItem.getSelectedItem()
+                    )
+                }
+                composable(route = Fragments.POI.name){
+                    POIDetailScreen(
+                        modifier = Modifier,
+                        poi = RouteManager.getSelectedPOI()
                     )
                 }
 

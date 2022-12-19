@@ -1,5 +1,6 @@
 package com.example.mobile_development_2_2.map.route
 
+import android.util.Log
 import com.example.mobile_development_2_2.R
 import org.osmdroid.util.GeoPoint
 
@@ -245,6 +246,18 @@ class Route(
                 POIs = cities
             )
 
+        }
+
+        var selectedItem = TestRoute().POIs.get(0)
+
+        fun selectItem(poi: POI){
+            Log.d("a", "Item selected")
+            selectedItem = poi
+        }
+
+        @JvmName("getSelectedItem1")
+        fun getSelectedPOI(): POI {
+            return selectedItem
         }
     }
 

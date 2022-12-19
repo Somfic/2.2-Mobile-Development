@@ -33,7 +33,7 @@ class MapFragment {
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
-    fun MapScreen(viewModel: MapFragment, modifier: Modifier) {
+    fun MapScreen(modifier: Modifier) {
         Surface(
             modifier = modifier.fillMaxSize()
         ) {

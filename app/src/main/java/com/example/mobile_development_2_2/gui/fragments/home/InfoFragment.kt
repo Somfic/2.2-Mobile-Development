@@ -28,151 +28,149 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.example.mobile_development_2_2.R
 
-class InfoFragment : ComponentActivity() {
-
-    @Composable
-    fun InfoScreen(viewModel: InfoFragment, modifier: Modifier, helpItem: HelpItem) {
+@Composable
+fun InfoScreen(modifier: Modifier, helpItem: HelpItem) {
 
 
-        Surface(
-            modifier = modifier
-                .fillMaxSize()
-                .background(
-                    Color(
-                        ContextCompat
-                            .getColor(
-                                LocalContext.current, R.color.lightGrey
-                            )
-                            .dec()
-                    ),
-                )
-        ) {
-            Content(helpItem = helpItem)
-
-
-        }
-
-    }
-
-    @Composable
-    private fun Content(helpItem: HelpItem) {
-        val configuration = LocalConfiguration.current
-
-        val screenHeight = configuration.screenHeightDp.dp
-        val screenWidth = configuration.screenWidthDp.dp
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Color(
-                        ContextCompat
-                            .getColor(
-                                LocalContext.current, R.color.lightGrey
-                            )
-                            .dec()
-                    )
+    Surface(
+        modifier = modifier
+            .fillMaxSize()
+            .background(
+                Color(
+                    ContextCompat
+                        .getColor(
+                            LocalContext.current, R.color.lightGrey
+                        )
+                        .dec()
                 ),
-            // content padding
-            contentPadding = PaddingValues(
-                start = 12.dp,
-                top = 12.dp,
-                end = 12.dp,
-                bottom = 16.dp
-            ),
-            content = {
-                item() {
-                    MessageRow1(helpItem)
-                }
-
-                item() {
-                    MessageRow2(helpItem)
-                }
-
-            })
-    }
-
-    @Composable
-    fun MessageRow1(helpItem: HelpItem) {
-        val configuration = LocalConfiguration.current
-
-        val screenHeight = configuration.screenHeightDp.dp
-        val screenWidth = configuration.screenWidthDp.dp
-
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(screenHeight.div(2))
-                .background(
-                    Color(
-                        ContextCompat
-                            .getColor(
-                                LocalContext.current, R.color.lightGrey
-                            )
-                            .dec()
-                    ), RectangleShape
-                )
-                .padding(12.dp)
-                .clip(RoundedCornerShape(12.dp)),
-            elevation = 10.dp,
-            backgroundColor = Color.White
-        )
-        {
-
-            Image(
-                painter = painterResource(id = helpItem.imgId),
-                contentDescription = null,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .padding(24.dp)
-                    .clip(
-                        RoundedCornerShape(12.dp)
-                    ),
-                alignment = Alignment.CenterStart,
-                alpha = DefaultAlpha,
-                colorFilter = null
             )
-        }
+    ) {
+        Content(helpItem = helpItem)
+
+
     }
 
-    @Composable
-    fun MessageRow2(helpItem: HelpItem) {
-        val configuration = LocalConfiguration.current
+}
 
-        val screenHeight = configuration.screenHeightDp.dp
-        val screenWidth = configuration.screenWidthDp.dp
+@Composable
+private fun Content(helpItem: HelpItem) {
+    val configuration = LocalConfiguration.current
 
-        Card(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Color(
-                        ContextCompat
-                            .getColor(
-                                LocalContext.current, R.color.lightGrey
-                            )
-                            .dec()
-                    ), RectangleShape
+    val screenHeight = configuration.screenHeightDp.dp
+    val screenWidth = configuration.screenWidthDp.dp
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Color(
+                    ContextCompat
+                        .getColor(
+                            LocalContext.current, R.color.lightGrey
+                        )
+                        .dec()
                 )
-                .padding(12.dp)
-                .clip(RoundedCornerShape(12.dp)),
-            elevation = 10.dp,
-            backgroundColor = Color.White
+            ),
+        // content padding
+        contentPadding = PaddingValues(
+            start = 12.dp,
+            top = 12.dp,
+            end = 12.dp,
+            bottom = 16.dp
+        ),
+        content = {
+            item() {
+                MessageRow1(helpItem)
+            }
+
+            item() {
+                MessageRow2(helpItem)
+            }
+
+        })
+}
+
+@Composable
+fun MessageRow1(helpItem: HelpItem) {
+    val configuration = LocalConfiguration.current
+
+    val screenHeight = configuration.screenHeightDp.dp
+    val screenWidth = configuration.screenWidthDp.dp
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(screenHeight.div(2))
+            .background(
+                Color(
+                    ContextCompat
+                        .getColor(
+                            LocalContext.current, R.color.lightGrey
+                        )
+                        .dec()
+                ), RectangleShape
+            )
+            .padding(12.dp)
+            .clip(RoundedCornerShape(12.dp)),
+        elevation = 10.dp,
+        backgroundColor = Color.White
+    )
+    {
+
+        Image(
+            painter = painterResource(id = helpItem.imgId),
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth,
+            modifier = Modifier
+                .padding(24.dp)
+                .clip(
+                    RoundedCornerShape(12.dp)
+                ),
+            alignment = Alignment.CenterStart,
+            alpha = DefaultAlpha,
+            colorFilter = null
         )
-        {
+    }
+}
 
-            TextField(
-                value = helpItem.description,
-                readOnly = true,
-                onValueChange = {  },
-                label = { Text(text = "") },
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color(0xFFFFFFFF)
-                ))
-        }
+@Composable
+fun MessageRow2(helpItem: HelpItem) {
+    val configuration = LocalConfiguration.current
 
+    val screenHeight = configuration.screenHeightDp.dp
+    val screenWidth = configuration.screenWidthDp.dp
 
+    Card(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Color(
+                    ContextCompat
+                        .getColor(
+                            LocalContext.current, R.color.lightGrey
+                        )
+                        .dec()
+                ), RectangleShape
+            )
+            .padding(12.dp)
+            .clip(RoundedCornerShape(12.dp)),
+        elevation = 10.dp,
+        backgroundColor = Color.White
+    )
+    {
+
+        TextField(
+            value = helpItem.title + helpItem.description,
+            readOnly = true,
+            onValueChange = { },
+            label = { Text(text = "") },
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color(0xFFFFFFFF)
+            )
+        )
     }
 
 
 }
+
+

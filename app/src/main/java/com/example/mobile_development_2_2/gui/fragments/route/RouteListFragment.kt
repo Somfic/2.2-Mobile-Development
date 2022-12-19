@@ -26,16 +26,19 @@ import androidx.core.content.ContextCompat
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.map.route.Route
+import com.example.mobile_development_2_2.map.route.RouteManager
 
 
 @Composable
-fun RouteListScreen(modifier: Modifier, routes: List<Route>) {
+fun RouteListScreen(
+    modifier: Modifier, routes: List<Route>, onRouteClicked: () -> Unit, onPOIClicked: () -> Unit
+) {
     Surface(
         modifier = modifier.fillMaxSize()
     ) {
         LazyColumn {
             items(routes) { route ->
-                MessageRow(route)
+                MessageRow(route, onRouteClicked, onPOIClicked)
             }
 
         }
@@ -46,7 +49,7 @@ fun RouteListScreen(modifier: Modifier, routes: List<Route>) {
 }
 
 @Composable
-fun MessageRow(route: Route) {
+fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Unit) {
 
     Card(
         modifier = Modifier
@@ -65,8 +68,7 @@ fun MessageRow(route: Route) {
             .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
         backgroundColor = Color.White
-    )
-    {
+    ) {
 
         Image(
             painter = painterResource(id = route.imgId),
@@ -114,12 +116,13 @@ fun MessageRow(route: Route) {
             contentAlignment = Alignment.BottomCenter
         ) {
             Button(
-                onClick = { },
+                onClick = {
+                    RouteManager.selectItem(route)
+                    onPOIClicked()
+                },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Red,
-                    contentColor = Color.White
-                ),
-                modifier = Modifier
+                    backgroundColor = Color.Red, contentColor = Color.White
+                ), modifier = Modifier
                     .width(150.dp)
                     .height(35.dp)
                     .offset(-100.dp, -25.dp)
@@ -127,12 +130,13 @@ fun MessageRow(route: Route) {
                 Text(text = "Points")
             }
             Button(
-                onClick = { },
+                onClick = {
+                    RouteManager.selectItem(route)
+                    onRouteClicked()
+                },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Red,
-                    contentColor = Color.White
-                ),
-                modifier = Modifier
+                    backgroundColor = Color.Red, contentColor = Color.White
+                ), modifier = Modifier
                     .width(150.dp)
                     .height(35.dp)
                     .offset(100.dp, -25.dp)
@@ -140,9 +144,10 @@ fun MessageRow(route: Route) {
                 Text(text = "Map")
             }
         }
-
-
     }
 
 
 }
+
+
+

@@ -130,28 +130,32 @@ private fun Content(helpItems: List<HelpItem>, onPOIButtonClicked: () -> Unit) {
         })
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MessageRow(helpItem: HelpItem, onPOIButtonClicked: () -> Unit) {
 
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .height(220.dp)
-        .clickable {
-            Log.d("yee", "${helpItem.title} clicked")
-            onPOIButtonClicked }
-        .background(
-            Color(
-                ContextCompat
-                    .getColor(
-                        LocalContext.current, R.color.lightGrey
-                    )
-                    .dec()
-            ), RectangleShape
-        )
-        .padding(12.dp)
-        .clip(RoundedCornerShape(12.dp)),
+    Card(
+        onClick = {
+            HelpItem.selectItem(helpItem)
+            onPOIButtonClicked()
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(220.dp)
+            .background(
+                Color(
+                    ContextCompat
+                        .getColor(
+                            LocalContext.current, R.color.lightGrey
+                        )
+                        .dec()
+                ), RectangleShape
+            )
+            .padding(12.dp)
+            .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
-        backgroundColor = Color.White) {
+        backgroundColor = Color.White
+    ) {
 
         Image(
             painter = painterResource(id = helpItem.imgId),
@@ -175,7 +179,8 @@ fun MessageRow(helpItem: HelpItem, onPOIButtonClicked: () -> Unit) {
                 .wrapContentHeight(Alignment.Bottom)
         )
     }
-
-
 }
+
+
+
 

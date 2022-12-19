@@ -1,5 +1,6 @@
 package com.example.mobile_development_2_2.gui.fragments.home
 
+import android.util.Log
 import com.example.mobile_development_2_2.R
 
 class HelpItem(title: String, imgId: Int) {
@@ -73,6 +74,18 @@ class HelpItem(title: String, imgId: Int) {
             var item8 = HelpItem("helpItem 8", R.drawable.img_help)
 
             return listOf(item1, item2, item3, item4, item5, item6, item7, item8)
+        }
+
+        var selectedItem = HelpItem("should be null", R.drawable.img_help)
+
+        fun selectItem(item: HelpItem){
+            Log.d("a", "Item selected")
+            selectedItem = item
+        }
+
+        @JvmName("getSelectedItem1")
+        fun getSelectedItem(): HelpItem{
+            return selectedItem
         }
     }
 }

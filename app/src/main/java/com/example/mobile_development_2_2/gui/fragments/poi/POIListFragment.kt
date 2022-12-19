@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.example.mobile_development_2_2.gui.fragments.poi
 
 
@@ -33,17 +35,18 @@ import androidx.core.content.ContextCompat
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.map.route.Route
+import com.example.mobile_development_2_2.map.route.RouteManager
 import org.osmdroid.util.GeoPoint
 
 
 @Composable
-fun POIListScreen(modifier: Modifier, route: Route) {
+fun POIListScreen(modifier: Modifier, route: Route, onPOIClicked: () -> Unit) {
     Surface(
         modifier = modifier.fillMaxSize()
     ) {
         LazyColumn {
             items(route.POIs) { poi ->
-                MessageRow(poi)
+                MessageRow(poi, onPOIClicked)
             }
 
         }
@@ -54,13 +57,16 @@ fun POIListScreen(modifier: Modifier, route: Route) {
 }
 
 @Composable
-fun MessageRow(poi: POI) {
+fun MessageRow(poi: POI, onPOIClicked: () -> Unit) {
 
     Card(
+        onClick = {
+            RouteManager.selectPOI(poi)
+            onPOIClicked()
+        },
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .clickable { }
             .background(
                 Color(
                     ContextCompat
@@ -73,7 +79,8 @@ fun MessageRow(poi: POI) {
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
-        backgroundColor = androidx.compose.ui.graphics.Color.White)
+        backgroundColor = androidx.compose.ui.graphics.Color.White
+    )
     {
 
         Image(
@@ -118,9 +125,10 @@ fun MessageRow(poi: POI) {
         )
 
     }
-
-
 }
+
+
+
 
 
 
