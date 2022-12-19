@@ -1,11 +1,21 @@
-package com.example.mobile_development_2_2.ui.viewmodels
+package com.example.mobile_development_2_2.gui.fragments
 
 import android.Manifest
 import android.app.PendingIntent
 import android.content.Context
 import android.location.Location
 import android.util.Log
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Paint
+import android.location.Location
+
+import android.location.LocationManager
+import android.provider.ContactsContract.CommonDataKinds.Website
+import androidx.compose.foundation.background
+
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -13,18 +23,38 @@ import androidx.compose.runtime.Composable
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.example.mobile_development_2_2.map.route.POI
+import androidx.core.location.LocationManagerCompat.requestLocationUpdates
+import androidx.lifecycle.viewModelScope
+
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.GeofenceHelper
+
 import com.example.mobile_development_2_2.data.LocationProvider
+
+import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
+import com.example.mobile_development_2_2.map.route.POI
+import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
+import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.location.CurrentLocationRequest
+import com.google.android.gms.location.Granularity
+import com.google.android.gms.location.Priority
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.*
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -32,6 +62,8 @@ import org.osmdroid.views.overlay.IconOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 
 class MapFragment(context : Context) {
@@ -42,20 +74,10 @@ class MapFragment(context : Context) {
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
-    fun MapScreen(viewModel: MapFragment, modifier: Modifier) {
+    fun MapScreen(viewModel: OSMViewModel, modifier: Modifier) {
         Surface(
             modifier = modifier.fillMaxSize()
         ) {
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                if(location!=null) {
-                    Log.d(TAG, "MapScreen: " + location.latitude + " " + location.longitude)
-                    AddGeofence(location.latitude, location.longitude)
-
-                }
-            }
-
-
-            val viewmodel = ViewModelMap()
             val premissions = rememberMultiplePermissionsState(
                 listOf(
                     Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -64,51 +86,68 @@ class MapFragment(context : Context) {
             )
 
             if (premissions.allPermissionsGranted) {
-                OSM(
 
-                    modifier = modifier,
-                    locations = viewmodel,
-                    routePoints = viewmodel.map { it.location }.toMutableList()
 
+            }
+            OSM(
+                modifier = modifier,
+                locations = getLocations(),
+                routePoints = getLocations().map { it.location }.toMutableList(),
+                currentLocation = viewModel.currentLocation ,
+                provider = viewModel.provider
+            )
+            if (!premissions.allPermissionsGranted) {
+                Column() {
+
+                    Text(text = "No Location Premission granted", color = Color.Red)
+                }
+            }
+            Row() {
+
+
+                Text(
+                    text = "© OpenStreetMap contributors",
+                    fontSize = 8.sp,
+                    modifier = Modifier
+                        .background(Color.White, RectangleShape)
+                        .align(Alignment.Bottom)
                 )
-            } else {
-                noPremmisions()
-                OSM(
 
-                )
+
             }
             fusedLocationProviderClient.lastLocation
         }
     }
+}
 
-//TODO DELETE And make other button do the work
+//TODO DELETE And make a list provider
+private fun getLocations(): List<POI> {
 
-    @Composable
-    private fun noPremmisions() {
-        Column() {
-            Text(text = "No Location Premission granted")
-        }
-    }
+    val avans = POI(
+        name = "Avans",
+        location = GeoPoint(51.5856, 4.7925),
+        imgId = 1,//R.drawable.img_poi1,
+        streetName = "street1",
+        description = "description of Avans"
+    )
 
+    // TODO: Move to POI repository
+    val breda = POI(
+        name = "Breda",
+        location = GeoPoint(51.5719, 4.7683),
+        imgId = 1,//R.drawable.img_poi2,
+        streetName = "street2",
+        description = "description of Breda"
+    )
 
-    //TODO DELETE And make a list provider
-    private fun ViewModelMap(): List<POI> {
-        val avans = POI(
-            name = "Avans",
-            location = GeoPoint(51.5856, 4.7925),
-        )
-
-        // TODO: Move to POI repository
-        val breda = POI(
-            name = "Breda",
-            location = GeoPoint(51.5719, 4.7683),
-        )
-
-        // TODO: Move to POI repository
-        val amsterdam = POI(
-            name = "Amsterdam",
-            location = GeoPoint(52.3676, 4.9041),
-        )
+    // TODO: Move to POI repository
+    val amsterdam = POI(
+        name = "Amsterdam",
+        location = GeoPoint(52.3676, 4.9041),
+        imgId = 1,//R.drawable.img_poi1,
+        streetName = "street3",
+        description = "description of Amsterdam"
+    )
 
         // TODO: Move to POI repository
         val cities = listOf(
@@ -118,6 +157,26 @@ class MapFragment(context : Context) {
         )
         return cities
 
+}
+
+
+@Composable
+private fun OSM(
+
+    modifier: Modifier = Modifier,
+    locations: List<POI> = listOf(),
+    routePoints: MutableList<GeoPoint> = mutableListOf(),
+    currentLocation: Location? = null,
+    provider: IMyLocationProvider,
+) {
+
+
+    val context = LocalContext.current
+    val locationProvider = GPSLocationProvider(context)
+
+
+    val mapView = remember {
+        MapView(context)
     }
 
 
@@ -163,6 +222,16 @@ class MapFragment(context : Context) {
             )
         }
 
+        ItemizedIconOverlay(
+            mutableListOf<POIItem>(),
+            ContextCompat.getDrawable(
+                context,
+                org.osmdroid.library.R.drawable.ic_menu_mylocation
+            ),
+            listener,
+            context
+        )
+    }
 
         val currentRoute = remember {
             Polyline()
@@ -181,19 +250,10 @@ class MapFragment(context : Context) {
 //        correctionRoute.color = R.color.teal_700
 
 
-        val myLocation = remember(mapView) {
-
-            //todo make follow current location
-
-            // location: Location = Location(LocationProvider(context).)
-            val thisLocation = currentLocation ?: GeoPoint(0, 0)
-            IconOverlay(
-                thisLocation,
-                ContextCompat.getDrawable(context, org.osmdroid.library.R.drawable.person)
-            )
-
-        }
-
+    val myLocation = remember(mapView) {
+        MyLocationNewOverlay(provider, mapView)
+    }
+    myLocation.enableMyLocation()
 
 
 
@@ -208,14 +268,19 @@ class MapFragment(context : Context) {
                     //mapView.overlays.add(poiOverlay)
 
 
-                    mapView.overlays.add(poiOverlay)
-                    if (currentLocation != null) {
-                        mapView.overlays.add(myLocation)
-                    }
-                    mapView.overlays.add(currentRoute)
-                }
-            },
-            modifier = modifier,
+                mapView.overlays.add(poiOverlay)
+
+                    mapView.overlays.add(myLocation)
+
+                mapView.overlays.add(currentRoute)
+            }
+        },
+        modifier = modifier,
+    )
+    LaunchedEffect(locations) {
+        poiOverlay.removeAllItems()
+        poiOverlay.addItems(
+            locations.map { POIItem(it) }
         )
         LaunchedEffect(locations) {
             poiOverlay.removeAllItems()
@@ -251,7 +316,11 @@ class MapFragment(context : Context) {
         val poi: POI //FIXME add poiClass,
     ) : OverlayItem(poi.name, null, GeoPoint(poi.location.latitude, poi.location.longitude))
 
-    private class CurrentLocation(
-        val location: Location
-    ) : OverlayItem("current location", null, GeoPoint(location.latitude, location.longitude))
-}
+
+private class POIItem(
+    val poi: POI //FIXME add poiClass,
+) : OverlayItem(poi.name, null, GeoPoint(poi.location.latitude, poi.location.longitude))
+
+private class CurrentLocation(
+    val location: Location
+) : OverlayItem("current location", null, GeoPoint(location.latitude, location.longitude))
