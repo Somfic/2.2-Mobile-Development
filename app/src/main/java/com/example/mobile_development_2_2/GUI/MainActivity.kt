@@ -3,18 +3,14 @@ package com.example.mobile_development_2_2.GUI
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
-import android.util.Log.DEBUG
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -23,21 +19,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
-import com.example.mobile_development_2_2.BuildConfig.DEBUG
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.mobile_development_2_2.GUI.Fragments.FragmentInterface
 import com.example.mobile_development_2_2.GUI.Fragments.HomeFragment.HomeFragment
-import com.example.mobile_development_2_2.GUI.Fragments.MapFragment
 import com.example.mobile_development_2_2.GUI.Fragments.POIListFragment.POIListFragment
 import com.example.mobile_development_2_2.GUI.Fragments.RouteListFragment.RouteListFragment
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 import org.osmdroid.config.Configuration.*
 
+
 class MainActivity : ComponentActivity() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
     private val homeFragment = HomeFragment()
     private val routelistFragment = RouteListFragment()
     private val poiListFragment = POIListFragment()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,9 +49,25 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen(homeFragment)
+
+                    AppNavigator()
                 }
             }
+        }
+    }
+
+    @Composable
+    fun AppNavigator() {
+        val navController = rememberNavController()
+        NavHost(
+            navController = navController,
+            startDestination = "homeFragment"
+        ){
+            composable("bottomPreview"){BottomNavigationBarPreview(navController)}
+            composable("bottom"){BottomNavigationBar(navController)}
+            composable("homeFragment"){MainScreen(fragmentInterface = homeFragment, navController)}
+            composable("poiListFragment"){MainScreen(fragmentInterface = poiListFragment, navController)}
+            composable("routeListFragment"){MainScreen(fragmentInterface = routelistFragment, navController)}
         }
     }
 
@@ -76,15 +93,14 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MainScreen(fragment: Fragment) {
+    fun MainScreen(fragmentInterface: FragmentInterface, navController: NavHostController) {
 
         Scaffold(
             topBar = { TopBar() },
-            bottomBar = { BottomNavigationBar() },
+            bottomBar = { BottomNavigationBar(navController) },
             content = { padding ->
                 Box(modifier = Modifier.padding(padding)) {
-                    var map = MapFragment()
-                    map.MapScreen(viewModel = map, modifier = Modifier)
+                    fragmentInterface.StartActivity(modifier = Modifier)
                 }
             },
             backgroundColor = colorResource(R.color.white)
@@ -94,7 +110,7 @@ class MainActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun MainScreenPreview() {
-        MainScreen(HomeFragment())
+        HomeFragment()
     }
 
     @Composable
@@ -119,11 +135,17 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BottomNavigationBar() {
+    fun BottomNavigationBar(navController: NavHostController) {
+
         val items = listOf(
             NavigationItem.Home,
             NavigationItem.Map,
             NavigationItem.POIs,
+        )
+        val fragments = listOf(
+            "homeFragment",
+            "routeListFragment",
+            "poiListFragment",
         )
         BottomNavigation(
             backgroundColor = colorResource(id = R.color.colorPrimary),
@@ -142,18 +164,20 @@ class MainActivity : ComponentActivity() {
                     unselectedContentColor = Color.White,
                     alwaysShowLabel = true,
                     selected = false,
-                    onClick = {
 
+                    onClick = {
+                        var number = items.indexOf(item)
+                        navController.navigate(fragments[items.indexOf(item)])
                     }
                 )
             }
         }
     }
 
-    @Preview(showBackground = true)
+
     @Composable
-    fun BottomNavigationBarPreview() {
-        BottomNavigationBar()
+    fun BottomNavigationBarPreview(navController: NavHostController) {
+        BottomNavigationBar(navController)
     }
 }
 

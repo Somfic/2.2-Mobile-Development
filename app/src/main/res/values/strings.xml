@@ -105,4 +105,8 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="title_activity_home_fragment">HomeFragment</string>
+    <string name="title_activity_poilist_fragment">POIListFragment</string>
+    <string name="title_activity_route_list_fragment">RouteListFragment</string>
+    <string name="title_activity_settings_fragment">SettingsFragment</string>
 </resources>

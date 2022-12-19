@@ -24,11 +24,11 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 
 
-class MapFragment : ComponentActivity()  {
+class MapFragment : ComponentActivity(), FragmentInterface {
 
 
     @Composable
-    fun MapScreen(viewModel: MapFragment, modifier: Modifier) {
+    fun MapScreen(modifier: Modifier) {
         Surface(
             modifier = modifier.fillMaxSize()
         ) {
@@ -133,6 +133,11 @@ class MapFragment : ComponentActivity()  {
             mapView.invalidate() // Ensures the map is updated on screen
         }
 
+    }
+
+    @Composable
+    override fun StartActivity(modifier: Modifier) {
+        MapScreen(modifier = modifier)
     }
 }
 
