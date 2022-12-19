@@ -27,6 +27,8 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
     private var geofencingClient: GeofencingClient = LocationServices.getGeofencingClient(context)
     private var geofenceHelper: GeofenceHelper = GeofenceHelper(context)
     var currentLocation : Location? = null
+    private val TAG = "OSMViewModel"
+
     private val locations = getLocationProvider().shareIn(
         scope = viewModelScope,
         replay = 1,
@@ -38,10 +40,6 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
         coroutineScope = viewModelScope,
         locationFlow = locations,
     )
-
-    fun invoke () {
-        AddGeofence(51.5856, 4.7925)
-    }
 
     fun AddGeofence(lat: Double, lng: Double) {
         var geofence: Geofence? = geofenceHelper.getGeofence("geo", lat, lng)

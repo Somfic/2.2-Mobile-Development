@@ -89,6 +89,7 @@ class MainActivity : ComponentActivity() {
         val osmViewModel = remember {
             OSMViewModel(GetLocationProvider(LocationProvider(context = context)),  this)
         }
+        osmViewModel.AddGeofence(51.5856, 4.7925)
         this.osmViewModel = osmViewModel
 
         Scaffold(
