@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -47,6 +48,7 @@ import com.example.mobile_development_2_2.gui.fragments.route.RouteListScreen
 import com.example.mobile_development_2_2.map.route.RouteManager
 import com.example.mobile_development_2_2.data.GetLocationProvider
 import com.example.mobile_development_2_2.data.LocationProvider
+import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
@@ -58,6 +60,7 @@ import org.osmdroid.config.Configuration.*
 class MainActivity : ComponentActivity() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
     lateinit var osmViewModel: OSMViewModel
+    var map = MapFragment()
 
     enum class Fragments(@StringRes val title: Int) {
         Home(title = R.string.homeScreen),
@@ -184,6 +187,12 @@ class MainActivity : ComponentActivity() {
                     POIDetailScreen(
                         modifier = Modifier,
                         poi = RouteManager.getSelectedPOI()
+                    )
+                }
+                composable(route = Fragments.Map.name){
+                    map.MapScreen(
+                        viewModel = osmViewModel,
+                        modifier = Modifier
                     )
                 }
 

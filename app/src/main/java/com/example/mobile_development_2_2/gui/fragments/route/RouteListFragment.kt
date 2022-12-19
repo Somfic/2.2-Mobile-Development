@@ -1,5 +1,6 @@
 package com.example.mobile_development_2_2.gui.fragments.route
 
+import android.Manifest
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,6 +28,8 @@ import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.map.route.Route
 import com.example.mobile_development_2_2.map.route.RouteManager
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
 
 @Composable
@@ -48,6 +51,7 @@ fun RouteListScreen(
 
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Unit) {
 
@@ -129,9 +133,17 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
             ) {
                 Text(text = "Points")
             }
+
+            val premissions = rememberMultiplePermissionsState(
+                listOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                )
+            )
             Button(
                 onClick = {
                     RouteManager.selectItem(route)
+                    premissions.launchMultiplePermissionRequest()
                     onRouteClicked()
                 },
                 colors = ButtonDefaults.buttonColors(
