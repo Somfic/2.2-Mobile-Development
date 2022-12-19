@@ -6,11 +6,13 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.example.mobile_development_2_2.map.route.POI
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
 
-class GeofenceBroadcastReceiver : BroadcastReceiver() {
+class GeofenceBroadcastReceiver() : BroadcastReceiver() {
+
     // ...
     override fun onReceive(context: Context, intent: Intent) {
         Toast.makeText(context, "geofence triggered", Toast.LENGTH_SHORT).show()

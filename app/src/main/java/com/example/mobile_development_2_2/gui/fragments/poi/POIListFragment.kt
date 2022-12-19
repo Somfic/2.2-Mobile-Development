@@ -51,10 +51,7 @@ class POIListFragment : ComponentActivity() {
                 }
 
             }
-
-
         }
-
     }
 
     @Composable
@@ -116,59 +113,59 @@ class POIListFragment : ComponentActivity() {
 
 
 
-    fun TestRoute(): Route {
-        val avans = POI(
-            name = "Avans",
-            location = GeoPoint(51.5856, 4.7925),
-            imgId = R.drawable.img_poi1,
-            streetName = "street1",
-            description = "description of Avans"
-        )
-
-        // TODO: Move to POI repository
-        val breda = POI(
-            name = "Breda",
-            location = GeoPoint(51.5719, 4.7683),
-            imgId = R.drawable.img_poi2,
-            streetName = "street2",
-            description = "description of Breda"
-        )
-
-        // TODO: Move to POI repository
-        val amsterdam = POI(
-            name = "Amsterdam",
-            location = GeoPoint(52.3676, 4.9041),
-            imgId = R.drawable.img_poi3,
-            streetName = "street3",
-            description = "description of Amsterdam"
-        )
-
-        // TODO: Move to POI repository
-        val cities = listOf(
-            avans,
-            breda,
-            amsterdam,
-            avans,
-            breda,
-            amsterdam,
-            avans,
-            breda,
-            amsterdam,
-            avans,
-            breda,
-            amsterdam,
-            avans,
-            breda,
-            amsterdam,
-            avans,
-            breda,
-            amsterdam,
-        )
-
-
-        return Route("testRoute", "a test route", cities)
-
-    }
+//    fun TestRoute(): Route {
+//        val avans = POI(
+//            name = "Avans",
+//            location = GeoPoint(51.5856, 4.7925),
+//            imgId = R.drawable.img_poi1,
+//            streetName = "street1",
+//            description = "description of Avans"
+//        )
+//
+//        // TODO: Move to POI repository
+//        val breda = POI(
+//            name = "Breda",
+//            location = GeoPoint(51.5719, 4.7683),
+//            imgId = R.drawable.img_poi2,
+//            streetName = "street2",
+//            description = "description of Breda"
+//        )
+//
+//        // TODO: Move to POI repository
+//        val amsterdam = POI(
+//            name = "Amsterdam",
+//            location = GeoPoint(52.3676, 4.9041),
+//            imgId = R.drawable.img_poi3,
+//            streetName = "street3",
+//            description = "description of Amsterdam"
+//        )
+//
+//        // TODO: Move to POI repository
+//        val cities = listOf(
+//            avans,
+//            breda,
+//            amsterdam,
+//            avans,
+//            breda,
+//            amsterdam,
+//            avans,
+//            breda,
+//            amsterdam,
+//            avans,
+//            breda,
+//            amsterdam,
+//            avans,
+//            breda,
+//            amsterdam,
+//            avans,
+//            breda,
+//            amsterdam,
+//        )
+//
+//
+//        return Route("testRoute", "a test route", cities)
+//
+//    }
 
 }
 
