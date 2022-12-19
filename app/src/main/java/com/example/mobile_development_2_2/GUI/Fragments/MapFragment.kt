@@ -1,17 +1,16 @@
 package com.example.mobile_development_2_2.gui.fragments
 
 import android.Manifest
-import android.app.PendingIntent
-import android.content.Context
-import android.location.Location
-import android.util.Log
 import android.annotation.SuppressLint
+import android.app.PendingIntent
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Paint
 import android.location.Location
 
 import android.location.LocationManager
 import android.provider.ContactsContract.CommonDataKinds.Website
+import android.util.Log
 import androidx.compose.foundation.background
 
 import androidx.compose.foundation.layout.Column
@@ -48,11 +47,6 @@ import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.*
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.location.CurrentLocationRequest
-import com.google.android.gms.location.Granularity
-import com.google.android.gms.location.Priority
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -66,11 +60,7 @@ import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 
-class MapFragment(context : Context) {
-    private val TAG = "MapFragment"
-    private var geofencingClient: GeofencingClient = LocationServices.getGeofencingClient(context)
-    private var geofenceHelper: GeofenceHelper = GeofenceHelper(context)
-    private var fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+class MapFragment () {
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
@@ -93,7 +83,6 @@ class MapFragment(context : Context) {
                 modifier = modifier,
                 locations = getLocations(),
                 routePoints = getLocations().map { it.location }.toMutableList(),
-                currentLocation = viewModel.currentLocation ,
                 provider = viewModel.provider
             )
             if (!premissions.allPermissionsGranted) {
@@ -106,7 +95,7 @@ class MapFragment(context : Context) {
 
 
                 Text(
-                    text = "© OpenStreetMap contributors",
+                    text = "Â© OpenStreetMap contributors",
                     fontSize = 8.sp,
                     modifier = Modifier
                         .background(Color.White, RectangleShape)
@@ -115,39 +104,37 @@ class MapFragment(context : Context) {
 
 
             }
-            fusedLocationProviderClient.lastLocation
         }
     }
-}
 
-//TODO DELETE And make a list provider
-private fun getLocations(): List<POI> {
+    //TODO DELETE And make a list provider
+    private fun getLocations(): List<POI> {
 
-    val avans = POI(
-        name = "Avans",
-        location = GeoPoint(51.5856, 4.7925),
-        imgId = 1,//R.drawable.img_poi1,
-        streetName = "street1",
-        description = "description of Avans"
-    )
+        val avans = POI(
+            name = "Avans",
+            location = GeoPoint(51.5856, 4.7925),
+            imgId = 1,//R.drawable.img_poi1,
+            streetName = "street1",
+            description = "description of Avans"
+        )
 
-    // TODO: Move to POI repository
-    val breda = POI(
-        name = "Breda",
-        location = GeoPoint(51.5719, 4.7683),
-        imgId = 1,//R.drawable.img_poi2,
-        streetName = "street2",
-        description = "description of Breda"
-    )
+        // TODO: Move to POI repository
+        val breda = POI(
+            name = "Breda",
+            location = GeoPoint(51.5719, 4.7683),
+            imgId = 1,//R.drawable.img_poi2,
+            streetName = "street2",
+            description = "description of Breda"
+        )
 
-    // TODO: Move to POI repository
-    val amsterdam = POI(
-        name = "Amsterdam",
-        location = GeoPoint(52.3676, 4.9041),
-        imgId = 1,//R.drawable.img_poi1,
-        streetName = "street3",
-        description = "description of Amsterdam"
-    )
+        // TODO: Move to POI repository
+        val amsterdam = POI(
+            name = "Amsterdam",
+            location = GeoPoint(52.3676, 4.9041),
+            imgId = 1,//R.drawable.img_poi1,
+            streetName = "street3",
+            description = "description of Amsterdam"
+        )
 
         // TODO: Move to POI repository
         val cities = listOf(
@@ -157,26 +144,6 @@ private fun getLocations(): List<POI> {
         )
         return cities
 
-}
-
-
-@Composable
-private fun OSM(
-
-    modifier: Modifier = Modifier,
-    locations: List<POI> = listOf(),
-    routePoints: MutableList<GeoPoint> = mutableListOf(),
-    currentLocation: Location? = null,
-    provider: IMyLocationProvider,
-) {
-
-
-    val context = LocalContext.current
-    val locationProvider = GPSLocationProvider(context)
-
-
-    val mapView = remember {
-        MapView(context)
     }
 
 
@@ -186,12 +153,11 @@ private fun OSM(
         modifier: Modifier = Modifier,
         locations: List<POI> = listOf(),
         routePoints: MutableList<GeoPoint> = mutableListOf(),
-        currentLocation: GeoPoint? = null,
+        provider: IMyLocationProvider,
     ) {
 
 
         val context = LocalContext.current
-        val locationProvider = LocationProvider(context)
 
 
         val mapView = remember {
@@ -222,16 +188,6 @@ private fun OSM(
             )
         }
 
-        ItemizedIconOverlay(
-            mutableListOf<POIItem>(),
-            ContextCompat.getDrawable(
-                context,
-                org.osmdroid.library.R.drawable.ic_menu_mylocation
-            ),
-            listener,
-            context
-        )
-    }
 
         val currentRoute = remember {
             Polyline()
@@ -250,10 +206,10 @@ private fun OSM(
 //        correctionRoute.color = R.color.teal_700
 
 
-    val myLocation = remember(mapView) {
-        MyLocationNewOverlay(provider, mapView)
-    }
-    myLocation.enableMyLocation()
+        val myLocation = remember(mapView) {
+            MyLocationNewOverlay(provider, mapView)
+        }
+        myLocation.enableMyLocation()
 
 
 
@@ -268,19 +224,14 @@ private fun OSM(
                     //mapView.overlays.add(poiOverlay)
 
 
-                mapView.overlays.add(poiOverlay)
+                    mapView.overlays.add(poiOverlay)
 
                     mapView.overlays.add(myLocation)
 
-                mapView.overlays.add(currentRoute)
-            }
-        },
-        modifier = modifier,
-    )
-    LaunchedEffect(locations) {
-        poiOverlay.removeAllItems()
-        poiOverlay.addItems(
-            locations.map { POIItem(it) }
+                    mapView.overlays.add(currentRoute)
+                }
+            },
+            modifier = modifier,
         )
         LaunchedEffect(locations) {
             poiOverlay.removeAllItems()
@@ -291,36 +242,8 @@ private fun OSM(
         }
 
     }
-    fun AddGeofence(lat:Double, lng:Double) {
-        var geofence : Geofence? = geofenceHelper.getGeofence("geo", lat, lng)
-        var geofencingRequest : GeofencingRequest? = geofence?.let {
-            geofenceHelper.geofencingRequest(
-                it
-            )
-        }
-        var pendingIntent : PendingIntent? = geofenceHelper.getPendingIntent()
-        if (geofencingRequest != null) {
-            if (pendingIntent != null) {
-                geofencingClient.addGeofences(geofencingRequest, pendingIntent)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Geofence added " + geofencingRequest.geofences[0].latitude + " "+ geofencingRequest.geofences[0].longitude)
-                    }
-                    .addOnFailureListener{ e ->
-                        Log.d(TAG, "onFailure: " + geofenceHelper.getErrorString(e))
-                    }
-            }
-        }
-    }
+}
 
     private class POIItem(
         val poi: POI //FIXME add poiClass,
     ) : OverlayItem(poi.name, null, GeoPoint(poi.location.latitude, poi.location.longitude))
-
-
-private class POIItem(
-    val poi: POI //FIXME add poiClass,
-) : OverlayItem(poi.name, null, GeoPoint(poi.location.latitude, poi.location.longitude))
-
-private class CurrentLocation(
-    val location: Location
-) : OverlayItem("current location", null, GeoPoint(location.latitude, location.longitude))

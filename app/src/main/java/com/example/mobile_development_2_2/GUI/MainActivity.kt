@@ -39,7 +39,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.currentCoroutineContext
 import org.osmdroid.config.Configuration.*
 
-open class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
     private val homeFragment = HomeFragment()
     private val routelistFragment = RouteListFragment()
@@ -84,10 +84,10 @@ open class MainActivity : ComponentActivity() {
 
     @Composable
     fun MainScreen() {
-    
+
         val context = LocalContext.current
         val osmViewModel = remember {
-            OSMViewModel(GetLocationProvider(LocationProvider(context = context)))
+            OSMViewModel(GetLocationProvider(LocationProvider(context = context)),  this)
         }
         this.osmViewModel = osmViewModel
 
@@ -96,7 +96,7 @@ open class MainActivity : ComponentActivity() {
             bottomBar = { BottomNavigationBar() },
             content = { padding ->
                 Box(modifier = Modifier.padding(padding)) {
-                    var map = MapFragment(this@MainActivity)
+                    var map = MapFragment()
                     map.MapScreen(viewModel = osmViewModel, modifier = Modifier)
                 }
             },
@@ -179,4 +179,3 @@ open class MainActivity : ComponentActivity() {
         BottomNavigationBar()
     }
 }
-
