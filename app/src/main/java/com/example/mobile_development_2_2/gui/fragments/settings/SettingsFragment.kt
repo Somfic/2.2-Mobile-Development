@@ -24,16 +24,11 @@ import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
-
-class SettingsFragment : PreferenceFragmentCompat() {
+import com.example.mobile_development_2_2.data.Lang
+import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
 
     val languages = arrayOf("English", "Nederlands")
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.root_preferences, rootKey)
-    }
-
-    @Preview
     @Composable
     fun SettingsFragment() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -52,7 +47,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         Column() {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = /* getString(R.string.settings_language) */ "Language",
+                    text = Lang.get(R.string.settings_language),
                     modifier = Modifier.padding(8.dp),
                 )
                 Row(Modifier.clickable { expanded = !expanded }, verticalAlignment = Alignment.CenterVertically) {
@@ -77,16 +72,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = /*getString(R.string.settings_colour_blind)*/ "Color blind",
+                    text = Lang.get(R.string.settings_colour_blind),
                     modifier = Modifier.padding(8.dp),
                 )
                 val checkedState = remember { mutableStateOf(true) }
                 Switch(
                     checked = checkedState.value,
                     onCheckedChange = {
-                        checkedState.value = it;
-
-                                      },
+                        checkedState.value = it; },
                 )
             }
         }
@@ -110,8 +103,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     @Composable
     fun Copyright() {
         Text(
-            text = /* getString(R.string.settings_copyright) */ "Made by A4",
+            text = Lang.get(R.string.settings_copyright),
             modifier = Modifier.padding(8.dp),
         )
     }
-}

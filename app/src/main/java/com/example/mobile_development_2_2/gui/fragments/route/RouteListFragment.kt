@@ -45,10 +45,7 @@ fun RouteListScreen(
             }
 
         }
-
-
     }
-
 }
 
 @OptIn(ExperimentalPermissionsApi::class)

@@ -49,6 +49,7 @@ import com.example.mobile_development_2_2.map.route.RouteManager
 import com.example.mobile_development_2_2.data.GetLocationProvider
 import com.example.mobile_development_2_2.data.LocationProvider
 import com.example.mobile_development_2_2.gui.fragments.MapFragment
+import com.example.mobile_development_2_2.gui.fragments.settings.SettingsFragment
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
@@ -132,7 +133,8 @@ class MainActivity : ComponentActivity() {
                 TopBar(
                     currentScreen = currentScreen,
                     canNavigateBack = navController.previousBackStackEntry != null,
-                    navigateUp = { navController.navigateUp() })
+                    navigateUp = { navController.navigateUp() },
+                    onSettingsButtonClicked = { navController.navigate(Fragments.Settings.name) })
             },
             bottomBar = { BottomNavigationBar(
                 onHomeButtonClicked = {navController.navigate(Fragments.Home.name)},
@@ -195,6 +197,12 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                     )
                 }
+                composable(route = Fragments.Settings.name){
+                    SettingsFragment(
+//                        viewModel = osmViewModel,
+//                        modifier = Modifier
+                    )
+                }
 
             }
         }
@@ -211,7 +219,8 @@ class MainActivity : ComponentActivity() {
         currentScreen: Fragments,
         canNavigateBack: Boolean,
         navigateUp: () -> Unit,
-        modifier: Modifier = Modifier
+        modifier: Modifier = Modifier,
+        onSettingsButtonClicked: () -> Unit
     ) {
         val item = NavigationItem.Settings
         TopAppBar(
@@ -235,7 +244,7 @@ class MainActivity : ComponentActivity() {
             backgroundColor = colorResource(id = R.color.colorPrimary),
             contentColor = Color.White,
             actions = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { onSettingsButtonClicked() }) {
                     Icon(painterResource(id = item.icon), contentDescription = item.title)
                 }
 
