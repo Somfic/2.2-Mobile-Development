@@ -35,88 +35,92 @@ import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.map.route.Route
 import org.osmdroid.util.GeoPoint
 
-/**
- * A fragment representing a list of Items.
- */
-class POIListFragment : ComponentActivity() {
 
-    @Composable
-    fun POIListScreen(viewModel: POIListFragment, modifier: Modifier, route: Route) {
-        Surface(
-            modifier = modifier.fillMaxSize()
-        ) {
-            LazyColumn {
-                items(route.POIs) { poi ->
-                    MessageRow(poi)
-                }
-
+@Composable
+fun POIListScreen(modifier: Modifier, route: Route) {
+    Surface(
+        modifier = modifier.fillMaxSize()
+    ) {
+        LazyColumn {
+            items(route.POIs) { poi ->
+                MessageRow(poi)
             }
 
-
         }
-
-    }
-
-    @Composable
-    fun MessageRow(poi: POI) {
-
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .clickable {  }
-                .background(
-                    Color(
-                        ContextCompat.getColor(
-                            LocalContext.current, R.color.lightGrey).dec()), RectangleShape
-                )
-                .padding(12.dp)
-                .clip(RoundedCornerShape(12.dp)),
-            elevation = 10.dp,
-            backgroundColor = androidx.compose.ui.graphics.Color.White)
-        {
-
-            Image(
-                painter = painterResource(id = poi.imgId),
-                contentDescription = null,
-                contentScale = ContentScale.FillHeight,
-                modifier = Modifier
-                    .padding(24.dp)
-                    .clip(RoundedCornerShape(12.dp)
-                    ),
-                alignment = Alignment.CenterStart,
-                alpha = DefaultAlpha,
-                colorFilter = null)
-
-            Text(
-                text = poi.name,
-                modifier = Modifier
-                    .padding(start = 24.dp, bottom = 24.dp, top = 24.dp)
-                    .offset(x = 190.dp))
-
-            Text(
-                text = poi.streetName,
-                modifier = Modifier
-                    .padding(start = 24.dp, bottom = 24.dp, top = 48.dp)
-                    .offset(x = 190.dp))
-
-            TextField(
-                value = poi.shortDescription,
-                modifier = Modifier
-                    .padding(start = 200.dp, bottom = 24.dp, top = 65.dp, end = 24.dp)
-                    .width(50.dp),
-                readOnly = true,
-                onValueChange = {  },
-                label = { Text(text = "") },
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color(0xFFFFFFFF)
-                ))
-
-        }
-
 
 
     }
 
 }
+
+@Composable
+fun MessageRow(poi: POI) {
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .clickable { }
+            .background(
+                Color(
+                    ContextCompat
+                        .getColor(
+                            LocalContext.current, R.color.lightGrey
+                        )
+                        .dec()
+                ), RectangleShape
+            )
+            .padding(12.dp)
+            .clip(RoundedCornerShape(12.dp)),
+        elevation = 10.dp,
+        backgroundColor = androidx.compose.ui.graphics.Color.White)
+    {
+
+        Image(
+            painter = painterResource(id = poi.imgId),
+            contentDescription = null,
+            contentScale = ContentScale.FillHeight,
+            modifier = Modifier
+                .padding(24.dp)
+                .clip(
+                    RoundedCornerShape(12.dp)
+                ),
+            alignment = Alignment.CenterStart,
+            alpha = DefaultAlpha,
+            colorFilter = null
+        )
+
+        Text(
+            text = poi.name,
+            modifier = Modifier
+                .padding(start = 24.dp, bottom = 24.dp, top = 24.dp)
+                .offset(x = 190.dp)
+        )
+
+        Text(
+            text = poi.streetName,
+            modifier = Modifier
+                .padding(start = 24.dp, bottom = 24.dp, top = 48.dp)
+                .offset(x = 190.dp)
+        )
+
+        TextField(
+            value = poi.shortDescription,
+            modifier = Modifier
+                .padding(start = 200.dp, bottom = 24.dp, top = 65.dp, end = 24.dp)
+                .width(50.dp),
+            readOnly = true,
+            onValueChange = { },
+            label = { Text(text = "") },
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color(0xFFFFFFFF)
+            )
+        )
+
+    }
+
+
+}
+
+
 

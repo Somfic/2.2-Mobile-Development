@@ -4,15 +4,20 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -25,15 +30,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
-import com.example.mobile_development_2_2.gui.fragments.home.HomeFragment
-import com.example.mobile_development_2_2.gui.fragments.home.InfoFragment
-import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailFragment
-import com.example.mobile_development_2_2.gui.fragments.poi.POIListFragment
-import com.example.mobile_development_2_2.gui.fragments.route.RouteListFragment
-import com.example.mobile_development_2_2.map.route.Route
+import com.example.mobile_development_2_2.gui.fragments.home.HomeScreen
+import com.example.mobile_development_2_2.gui.fragments.poi.POIListScreen
+import com.example.mobile_development_2_2.gui.fragments.route.RouteListScreen
 import com.example.mobile_development_2_2.map.route.RouteManager
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -44,9 +51,22 @@ import org.osmdroid.config.Configuration.*
 class MainActivity : ComponentActivity() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
 
+    enum class Fragments(@StringRes val title: Int) {
+        Home(title = R.string.homeScreen),
+        Info(title = R.string.infoScreen),
+        POIList(title = R.string.poiListScreen),
+        POI(title = R.string.POIScreen),
+        Route(title = R.string.routeScreen),
+        Map(title = R.string.mapScreen),
+        Settings(title = R.string.settingsScreen),
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
+
+
+
         setContent {
             MobileDevelopment2_2Theme {
                 Surface(
@@ -81,38 +101,60 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MainScreen() {
+    fun MainScreen(navController: NavHostController = rememberNavController()) {
+        // Get current back stack entry
+        val backStackEntry by navController.currentBackStackEntryAsState()
+
+        // Get the name of the current screen
+        val currentScreen = Fragments.valueOf(
+            backStackEntry?.destination?.route ?: Fragments.Home.name
+        )
 
         Scaffold(
-            topBar = { TopBar() },
-            bottomBar = { BottomNavigationBar() },
-            content = { padding ->
-                Box(modifier = Modifier.padding(padding)) {
-                    var home = HomeFragment()
-                    home.HomeScreen(
-                        viewModel = home,
-                        modifier = Modifier,
-                        helpItems = HelpItem.getItems()
-                    )
-
-                    var info = InfoFragment()
-                    info.InfoScreen(viewModel = info, modifier = Modifier, helpItem = HelpItem.getItems().get(0))
-
-                    //var map = MapFragment()
-                    //map.MapScreen(viewModel = map, modifier = Modifier)
-
-                    var POIList = POIListFragment()
-                    //POIList.POIListScreen(viewModel = POIList, modifier = Modifier, Route.TestRoute())
-
-                    var POIDetail = POIDetailFragment()
-                    //POIDetail.POIDetailScreen(viewModel = POIDetail, modifier = Modifier, poi = Route.testRoute().POIs.get(0))
-
-                    var routeList = RouteListFragment()
-                    //routeList.RouteListScreen(viewModel = routeList, modifier = Modifier, routes = RouteManager.TestRoutes())
-                }
+            topBar = {
+                TopBar(
+                    currentScreen = currentScreen,
+                    canNavigateBack = navController.previousBackStackEntry != null,
+                    navigateUp = { navController.navigateUp() })
             },
+            bottomBar = { BottomNavigationBar(
+                onHomeButtonClicked = {navController.navigate(Fragments.Home.name)},
+                onHomePOIClicked = {navController.navigate(Fragments.POIList.name)},
+                onMapButtonClicked = {navController.navigate(Fragments.Route.name)
+                    Log.d("123", "map")}
+            ) },
             backgroundColor = colorResource(R.color.lightGrey)
-        )
+        ) { innerpadding ->
+            NavHost(
+                navController = navController,
+                startDestination = Fragments.Home.name,
+                modifier = Modifier.padding(innerpadding)
+            ) {
+                composable(route = Fragments.Home.name) {
+                    HomeScreen(
+                        modifier = Modifier,
+                        helpItems = HelpItem.getItems(),
+                        onPOIButtonClicked = {
+                            Log.d("main", "going to route")
+                            navController.navigate(Fragments.Route.name)
+                        })
+
+                }
+                composable(route = Fragments.Route.name) {
+                    RouteListScreen(
+                        modifier = Modifier,
+                        routes = RouteManager.TestRoutes()
+                    )
+                }
+                composable(route = Fragments.POIList.name) {
+                    POIListScreen(
+                        modifier = Modifier,
+                        route = RouteManager.TestRoutes().get(0)
+                    )
+                }
+
+            }
+        }
     }
 
     @Preview(showBackground = true)
@@ -122,10 +164,15 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun TopBar() {
+    fun TopBar(
+        currentScreen: Fragments,
+        canNavigateBack: Boolean,
+        navigateUp: () -> Unit,
+        modifier: Modifier = Modifier
+    ) {
         val item = NavigationItem.Settings
         TopAppBar(
-            title = { Text(text = stringResource(R.string.app_name), fontSize = 18.sp) },
+            title = { Text(stringResource(currentScreen.title)) },
             modifier = Modifier
                 .clip(
                     RoundedCornerShape(
@@ -148,19 +195,34 @@ class MainActivity : ComponentActivity() {
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(painterResource(id = item.icon), contentDescription = item.title)
                 }
+
+            },
+            navigationIcon = {
+                if (canNavigateBack) {
+                    IconButton(onClick = navigateUp) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = ""
+                        )
+                    }
+                }
             }
         )
     }
 
-    @Preview(showBackground = true)
+/*    @Preview(showBackground = true)
     @Composable
     fun TopBarPreview() {
-        TopBar()
-    }
+        TopBar(true, {})
+    }*/
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
-    fun BottomNavigationBar() {
+    fun BottomNavigationBar(
+        onHomeButtonClicked: () -> Unit,
+        onMapButtonClicked: () -> Unit,
+        onHomePOIClicked: () -> Unit
+    ) {
         val items = listOf(
             NavigationItem.Home,
             NavigationItem.Map,
@@ -193,6 +255,20 @@ class MainActivity : ComponentActivity() {
                 ),
         ) {
             items.forEach { item ->
+                var onClick = onHomeButtonClicked
+
+                if(item.title.equals("Map")){
+                    onClick = onMapButtonClicked
+
+                } else if(item.title.equals("Home")){
+                    onClick = onHomeButtonClicked
+
+                } else if(item.title.equals("POIs")){
+                    onClick = onHomePOIClicked
+
+                }
+
+
                 BottomNavigationItem(
                     icon = {
                         Icon(
@@ -205,20 +281,17 @@ class MainActivity : ComponentActivity() {
                     unselectedContentColor = Color.White,
                     alwaysShowLabel = true,
                     selected = false,
-                    onClick = {
-                        if (item.title.equals("Map")) {
-                            premissions.launchMultiplePermissionRequest()
-                        }
-                    }
+                    onClick = onClick
+                    //premissions.launchMultiplePermissionRequest()
                 )
             }
         }
     }
 
-    @Preview(showBackground = true)
+/*    @Preview(showBackground = true)
     @Composable
     fun BottomNavigationBarPreview() {
         BottomNavigationBar()
-    }
+    }*/
 }
 

@@ -105,4 +105,11 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="homeScreen">home</string>
+    <string name="infoScreen">info</string>
+    <string name="poiListScreen">POIList</string>
+    <string name="POIScreen">POI</string>
+    <string name="routeScreen">route</string>
+    <string name="mapScreen">map</string>
+    <string name="settingsScreen">setttings</string>
 </resources>
