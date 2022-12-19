@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.example.mobile_development_2_2.gui.MainActivity
+import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
@@ -15,6 +17,9 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
     private val TAG = "GeofenceBroadcastReceiver"
     // ...
     override fun onReceive(context: Context, intent: Intent) {
+        var notificationHelper = NotificationHelper(context)
+
+
         Toast.makeText(context, "geofence triggered", Toast.LENGTH_SHORT).show()
         Log.d(TAG, "onReceive: geofence triggered")
 
@@ -30,7 +35,8 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
         if (geofenceList != null) {
             for (geofence in geofenceList) {
-                Log.d(TAG, "onReceive: " + geofence.requestId + " triggered")
+                Log.d(TAG, "onReceive: " + geofence.requestId + " triggered ")
+                notificationHelper.sendHighPriorityNotification("Geofence triggered ouleh","", MapFragment::class.java)
             }
         }
     }

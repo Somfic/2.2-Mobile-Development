@@ -40,7 +40,7 @@ class NotificationHelper(base: Context?) : ContextWrapper(base) {
         manager.createNotificationChannel(notificationChannel)
     }
 
-    fun sendHighPriorityNotification(title: String?, body: String?, activityName: Class<*>?) {
+    fun sendHighPriorityNotification(title: String?, body: String?, activityName: Class<*>) {
         val intent = Intent(this, activityName)
         val pendingIntent =
             PendingIntent.getActivity(this, 267, intent, PendingIntent.FLAG_UPDATE_CURRENT)
