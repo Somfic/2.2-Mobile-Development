@@ -26,6 +26,9 @@ import com.example.mobile_development_2_2.R
 
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
+import com.google.accompanist.permissions.MultiplePermissionsState
+import com.example.mobile_development_2_2.map.route.Route
+import com.example.mobile_development_2_2.map.route.RouteManager
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.*
 import kotlinx.coroutines.flow.*
@@ -62,9 +65,10 @@ class MapFragment () {
 
             }
             OSM(
+
                 modifier = modifier,
-                locations = getLocations(),
-                routePoints = getLocations().map { it.location }.toMutableList(),
+                locations = RouteManager.TestRoutes().get(0).POIs,
+                routePoints = RouteManager.TestRoutes().get(0).POIs.map { it.location }.toMutableList(),
                 provider = viewModel.provider
             )
             if (!premissions.allPermissionsGranted) {
@@ -87,45 +91,6 @@ class MapFragment () {
 
             }
         }
-    }
-
-    //TODO DELETE And make a list provider
-    private fun getLocations(): List<POI> {
-
-        val avans = POI(
-            name = "Avans",
-            location = GeoPoint(51.5856, 4.7925),
-            imgId = 1,//R.drawable.img_poi1,
-            streetName = "street1",
-            description = "description of Avans"
-        )
-
-        // TODO: Move to POI repository
-        val breda = POI(
-            name = "Breda",
-            location = GeoPoint(51.5719, 4.7683),
-            imgId = 1,//R.drawable.img_poi2,
-            streetName = "street2",
-            description = "description of Breda"
-        )
-
-        // TODO: Move to POI repository
-        val amsterdam = POI(
-            name = "Amsterdam",
-            location = GeoPoint(52.3676, 4.9041),
-            imgId = 1,//R.drawable.img_poi1,
-            streetName = "street3",
-            description = "description of Amsterdam"
-        )
-
-        // TODO: Move to POI repository
-        val cities = listOf(
-            avans,
-            breda,
-            amsterdam,
-        )
-        return cities
-
     }
 
 
@@ -218,6 +183,7 @@ class MapFragment () {
 
 
                     val resources = getResources()
+                    //switch case voor verschillende routes
 
                     val inputStream = resources.openRawResource(R.raw.test_route)
                     kmldocument.parseGeoJSONStream(inputStream)
