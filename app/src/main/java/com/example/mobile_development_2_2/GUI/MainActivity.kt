@@ -11,24 +11,32 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
-import com.example.mobile_development_2_2.gui.fragments.home.HomeFragment
 
-import com.example.mobile_development_2_2.gui.fragments.poi.POIListFragment
-import com.example.mobile_development_2_2.gui.fragments.route.RouteListFragment
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.data.GetLocationProvider
+import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailFragment
+import com.example.mobile_development_2_2.gui.fragments.poi.POIListFragment
+import com.example.mobile_development_2_2.data.LocationProvider
+
+import com.example.mobile_development_2_2.gui.fragments.MapFragment
+import com.example.mobile_development_2_2.gui.fragments.home.HomeFragment
+import com.example.mobile_development_2_2.gui.fragments.route.RouteListFragment
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
-import com.example.mobile_development_2_2.ui.viewmodels.MapFragment
+
+import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlinx.coroutines.currentCoroutineContext
 import org.osmdroid.config.Configuration.*
 
 class MainActivity : ComponentActivity() {
@@ -36,6 +44,7 @@ class MainActivity : ComponentActivity() {
     private val homeFragment = HomeFragment()
     private val routelistFragment = RouteListFragment()
     private val poiListFragment = POIListFragment()
+    lateinit var osmViewModel: OSMViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +55,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen(homeFragment)
+                    MainScreen()
                 }
             }
         }
@@ -74,7 +83,13 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MainScreen(fragment: Fragment) {
+    fun MainScreen() {
+
+        val context = LocalContext.current
+        val osmViewModel = remember {
+            OSMViewModel(GetLocationProvider(LocationProvider(context = context)),  this)
+        }
+        this.osmViewModel = osmViewModel
 
         Scaffold(
             topBar = { TopBar() },
@@ -82,17 +97,17 @@ class MainActivity : ComponentActivity() {
             content = { padding ->
                 Box(modifier = Modifier.padding(padding)) {
                     var map = MapFragment()
-                    map.MapScreen(viewModel = map, modifier = Modifier)
+                    map.MapScreen(viewModel = osmViewModel, modifier = Modifier)
                 }
             },
-            backgroundColor = colorResource(R.color.white)
+            backgroundColor = colorResource(R.color.black)
         )
     }
 
     @Preview(showBackground = true)
     @Composable
     fun MainScreenPreview() {
-        MainScreen(HomeFragment())
+        MainScreen()
     }
 
     @Composable
@@ -150,6 +165,7 @@ class MainActivity : ComponentActivity() {
                     onClick = {
                         if (item.title.equals("Map")){
                             premissions.launchMultiplePermissionRequest()
+
                         }
                     }
                 )
@@ -163,4 +179,3 @@ class MainActivity : ComponentActivity() {
         BottomNavigationBar()
     }
 }
-
