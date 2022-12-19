@@ -99,7 +99,7 @@ class MainActivity : ComponentActivity() {
     fun TopBar() {
         val item = NavigationItem.Settings
         TopAppBar(
-            title = { Text(text = stringResource(R.string.app_name), fontSize = 18.sp) },
+            title = { Text(text = stringResource(R.string.project_name), fontSize = 18.sp) },
             backgroundColor = colorResource(id = R.color.colorPrimary),
             contentColor = Color.White,
             actions = {
