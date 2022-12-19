@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
 import com.example.mobile_development_2_2.gui.fragments.home.HomeFragment
+import com.example.mobile_development_2_2.gui.fragments.home.InfoFragment
 import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailFragment
 import com.example.mobile_development_2_2.gui.fragments.poi.POIListFragment
 import com.example.mobile_development_2_2.gui.fragments.route.RouteListFragment
@@ -93,6 +94,9 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier,
                         helpItems = HelpItem.getItems()
                     )
+
+                    var info = InfoFragment()
+                    info.InfoScreen(viewModel = info, modifier = Modifier, helpItem = HelpItem.getItems().get(0))
 
                     //var map = MapFragment()
                     //map.MapScreen(viewModel = map, modifier = Modifier)
