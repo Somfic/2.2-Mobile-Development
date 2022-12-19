@@ -11,9 +11,27 @@ import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
+
+    private val TAG = "GeofenceBroadcastReceiver"
     // ...
     override fun onReceive(context: Context, intent: Intent) {
         Toast.makeText(context, "geofence triggered", Toast.LENGTH_SHORT).show()
         Log.d(TAG, "onReceive: geofence triggered")
+
+        var geofencingEvent : GeofencingEvent? = GeofencingEvent.fromIntent(intent)
+
+        if (geofencingEvent != null) {
+            if(geofencingEvent.hasError()) {
+                Log.d(TAG, "onReceive: Error geofencing event")
+            }
+        }
+
+        var geofenceList : List<Geofence>? = geofencingEvent?.triggeringGeofences
+
+        if (geofenceList != null) {
+            for (geofence in geofenceList) {
+                Log.d(TAG, "onReceive: " + geofence.requestId + " triggered")
+            }
+        }
     }
 }
