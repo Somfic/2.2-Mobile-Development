@@ -114,7 +114,7 @@ class RouteListFragment : ComponentActivity() {
             ) {
                 Button(
                     onClick = {  },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red, contentColor = Color.White),
                     modifier = Modifier
                         .width(150.dp)
                         .height(35.dp)
@@ -123,7 +123,7 @@ class RouteListFragment : ComponentActivity() {
                 }
                 Button(
                     onClick = {  },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red, contentColor = Color.White),
                     modifier = Modifier
                         .width(150.dp)
                         .height(35.dp)
