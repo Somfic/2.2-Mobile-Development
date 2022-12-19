@@ -20,7 +20,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         var notificationHelper = NotificationHelper(context)
 
 
-        Toast.makeText(context, "geofence triggered", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context, "geofence triggered", Toast.LENGTH_SHORT).show()
         Log.d(TAG, "onReceive: geofence triggered")
 
         var geofencingEvent : GeofencingEvent? = GeofencingEvent.fromIntent(intent)
@@ -36,7 +36,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         if (geofenceList != null) {
             for (geofence in geofenceList) {
                 Log.d(TAG, "onReceive: " + geofence.requestId + " triggered ")
-                notificationHelper.sendHighPriorityNotification("Geofence triggered ouleh","eee", MapFragment::class.java)
+                notificationHelper.sendHighPriorityNotification("Geofence triggered ouleh","eee", MainActivity::class.java)
             }
         }
     }
