@@ -6,21 +6,29 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
+import com.example.mobile_development_2_2.gui.fragments.home.HomeFragment
 import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailFragment
 import com.example.mobile_development_2_2.gui.fragments.poi.POIListFragment
 import com.example.mobile_development_2_2.gui.fragments.route.RouteListFragment
@@ -79,6 +87,13 @@ class MainActivity : ComponentActivity() {
             bottomBar = { BottomNavigationBar() },
             content = { padding ->
                 Box(modifier = Modifier.padding(padding)) {
+                    var home = HomeFragment()
+                    home.HomeScreen(
+                        viewModel = home,
+                        modifier = Modifier,
+                        helpItems = HelpItem.getItems()
+                    )
+
                     //var map = MapFragment()
                     //map.MapScreen(viewModel = map, modifier = Modifier)
 
@@ -89,10 +104,10 @@ class MainActivity : ComponentActivity() {
                     //POIDetail.POIDetailScreen(viewModel = POIDetail, modifier = Modifier, poi = Route.testRoute().POIs.get(0))
 
                     var routeList = RouteListFragment()
-                    routeList.RouteListScreen(viewModel = routeList, modifier = Modifier, routes = RouteManager.TestRoutes())
+                    //routeList.RouteListScreen(viewModel = routeList, modifier = Modifier, routes = RouteManager.TestRoutes())
                 }
             },
-            backgroundColor = colorResource(R.color.black)
+            backgroundColor = colorResource(R.color.lightGrey)
         )
     }
 
@@ -107,6 +122,22 @@ class MainActivity : ComponentActivity() {
         val item = NavigationItem.Settings
         TopAppBar(
             title = { Text(text = stringResource(R.string.app_name), fontSize = 18.sp) },
+            modifier = Modifier
+                .clip(
+                    RoundedCornerShape(
+                        bottomEnd = 12.dp,
+                        bottomStart = 12.dp
+                    )
+                )
+                .background(
+                    Color(
+                        ContextCompat
+                            .getColor(
+                                LocalContext.current, R.color.lightGrey
+                            )
+                            .dec()
+                    )
+                ),
             backgroundColor = colorResource(id = R.color.colorPrimary),
             contentColor = Color.White,
             actions = {
@@ -139,7 +170,23 @@ class MainActivity : ComponentActivity() {
         )
         BottomNavigation(
             backgroundColor = colorResource(id = R.color.colorPrimary),
-            contentColor = Color.White
+            contentColor = Color.White,
+            modifier = Modifier
+                .clip(
+                    RoundedCornerShape(
+                        topStart = 12.dp,
+                        topEnd = 12.dp
+                    )
+                )
+                .background(
+                    Color(
+                        ContextCompat
+                            .getColor(
+                                LocalContext.current, R.color.lightGrey
+                            )
+                            .dec()
+                    )
+                ),
         ) {
             items.forEach { item ->
                 BottomNavigationItem(
@@ -155,7 +202,7 @@ class MainActivity : ComponentActivity() {
                     alwaysShowLabel = true,
                     selected = false,
                     onClick = {
-                        if (item.title.equals("Map")){
+                        if (item.title.equals("Map")) {
                             premissions.launchMultiplePermissionRequest()
                         }
                     }
