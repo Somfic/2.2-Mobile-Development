@@ -10,4 +10,11 @@
     <string name="settings_language">Taal</string>
     <string name="settings_colour_blind">Kleurenblindemodus</string>
     <string name="settings_copyright">Gemaakt door A4 in samenwerking met A3</string>
+    <string name="messages_header">Berichten</string>
+    <string name="reply_title">Reactie</string>
+    <string name="sync_header">Sync</string>
+    <string name="sync_title">Sync</string>
+    <string name="attachment_summary_off">Bijlage uit</string>
+    <string name="attachment_summary_on">Bijlage aan</string>
+    <string name="attachment_title">Bijlages</string>
 </resources>
