@@ -36,7 +36,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobile_development_2_2.R
 
 import com.example.mobile_development_2_2.data.LocationProvider
-import com.example.mobile_development_2_2.data.LocationUseCase
+
 import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
@@ -75,7 +75,7 @@ class MapFragment {
             )
 
             if (premissions.allPermissionsGranted) {
-                viewModel.start()
+
 
             }
             OSM(
@@ -212,7 +212,7 @@ private fun OSM(
     val myLocation = remember(mapView) {
         MyLocationNewOverlay(provider, mapView)
     }
-
+    myLocation.enableMyLocation()
 
 
 

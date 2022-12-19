@@ -23,10 +23,11 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.data.GetLocationProvider
 import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailFragment
 import com.example.mobile_development_2_2.gui.fragments.poi.POIListFragment
 import com.example.mobile_development_2_2.data.LocationProvider
-import com.example.mobile_development_2_2.data.LocationUseCase
+
 import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.gui.fragments.home.HomeFragment
 import com.example.mobile_development_2_2.gui.fragments.route.RouteListFragment
@@ -86,7 +87,7 @@ class MainActivity : ComponentActivity() {
     
         val context = LocalContext.current
         val osmViewModel = remember {
-            OSMViewModel(LocationUseCase(LocationProvider(context = context)))
+            OSMViewModel(GetLocationProvider(LocationProvider(context = context)))
         }
         this.osmViewModel = osmViewModel
 

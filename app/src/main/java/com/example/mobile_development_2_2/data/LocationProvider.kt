@@ -5,10 +5,7 @@ import android.location.Location
 import com.google.android.gms.location.*
 
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import org.osmdroid.util.GeoPoint
 
 import kotlin.coroutines.resume
@@ -57,4 +54,11 @@ class LocationProvider (context : Context,
     }.catch {
         emit(Result.failure(it))
     }
+}
+class GetLocationProvider(
+    private val locationprovider: LocationProvider,
+) {
+    operator fun invoke() = locationprovider.locationTracker()
+        .map { it.getOrNull() }
+        .filterNotNull()
 }
