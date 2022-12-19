@@ -17,6 +17,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,16 +44,20 @@ import com.example.mobile_development_2_2.gui.fragments.home.InfoScreen
 import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailScreen
 import com.example.mobile_development_2_2.gui.fragments.poi.POIListScreen
 import com.example.mobile_development_2_2.gui.fragments.route.RouteListScreen
-import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.map.route.RouteManager
+import com.example.mobile_development_2_2.data.GetLocationProvider
+import com.example.mobile_development_2_2.data.LocationProvider
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
+
+import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-
+import kotlinx.coroutines.currentCoroutineContext
 import org.osmdroid.config.Configuration.*
 
 class MainActivity : ComponentActivity() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
+    lateinit var osmViewModel: OSMViewModel
 
     enum class Fragments(@StringRes val title: Int) {
         Home(title = R.string.homeScreen),
@@ -107,6 +112,12 @@ class MainActivity : ComponentActivity() {
     fun MainScreen(navController: NavHostController = rememberNavController()) {
         // Get current back stack entry
         val backStackEntry by navController.currentBackStackEntryAsState()
+
+        val context = LocalContext.current
+        val osmViewModel = remember {
+            OSMViewModel(GetLocationProvider(LocationProvider(context = context)),  this)
+        }
+        this.osmViewModel = osmViewModel
 
         // Get the name of the current screen
         val currentScreen = Fragments.valueOf(
@@ -317,4 +328,3 @@ class MainActivity : ComponentActivity() {
         BottomNavigationBar()
     }*/
 }
-
