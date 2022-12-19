@@ -1,16 +1,7 @@
 package com.example.mobile_development_2_2.gui.fragments
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.app.PendingIntent
-import android.content.ContentValues.TAG
-import android.content.Context
-import android.graphics.Paint
-import android.location.Location
 
-import android.location.LocationManager
-import android.provider.ContactsContract.CommonDataKinds.Website
-import android.util.Log
 import androidx.compose.foundation.background
 
 import androidx.compose.foundation.layout.Column
@@ -27,32 +18,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.core.location.LocationManagerCompat.requestLocationUpdates
-import androidx.lifecycle.viewModelScope
 
 import com.example.mobile_development_2_2.R
-import com.example.mobile_development_2_2.data.GeofenceHelper
 
-import com.example.mobile_development_2_2.data.LocationProvider
-
-import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
-import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
+import org.osmdroid.bonuspack.kml.KmlDocument
+import org.osmdroid.bonuspack.kml.KmlGeometry
+import org.osmdroid.bonuspack.kml.Style
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.IconOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
@@ -229,6 +211,24 @@ class MapFragment () {
                     mapView.overlays.add(myLocation)
 
                     mapView.overlays.add(currentRoute)
+                    val kmldocument = KmlDocument()
+                    //get data/routes/historische_kilometer.geojson
+
+
+
+
+                    val resources = getResources()
+
+                    val inputStream = resources.openRawResource(R.raw.test_route)
+                    kmldocument.parseGeoJSONStream(inputStream)
+
+                    val klmstyle = kmldocument.getStyle("route")
+
+
+                    val feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument);
+                    mapView.overlays.add(feature)
+                    mapView.invalidate()
+
                 }
             },
             modifier = modifier,
@@ -242,6 +242,9 @@ class MapFragment () {
         }
 
     }
+
+
+
 }
 
     private class POIItem(
