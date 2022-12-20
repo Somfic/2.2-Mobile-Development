@@ -3,14 +3,12 @@ package com.example.mobile_development_2_2.gui.fragments
 import android.Manifest
 import android.content.Context
 import android.location.Location
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
-import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,36 +19,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
-import com.example.mobile_development_2_2.R
-import com.example.mobile_development_2_2.data.Lang
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.scale
-import androidx.core.location.LocationManagerCompat.requestLocationUpdates
-import androidx.lifecycle.viewModelScope
-
 import com.example.mobile_development_2_2.R
-
+import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.map.route.POI
-import com.example.mobile_development_2_2.map.route.RouteManager
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.*
 import kotlinx.coroutines.flow.*
 import org.osmdroid.bonuspack.kml.KmlDocument
-import org.osmdroid.bonuspack.kml.KmlGeometry
-import org.osmdroid.bonuspack.kml.Style
-import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
@@ -59,7 +43,7 @@ import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 
-class MapFragment() : LocationListener {
+class MapFragment : LocationListener {
 
 
     lateinit var myLocation: MyLocationNewOverlay
@@ -94,12 +78,12 @@ class MapFragment() : LocationListener {
                 followRoute = true
             )
             if (!premissions.allPermissionsGranted) {
-                Column() {
+                Column {
 
                     Text(text = Lang.get(R.string.map_no_location_permission), color = Color.Red)
                 }
             }
-            Row() {
+            Row {
 
 
                 Text(
@@ -224,7 +208,7 @@ class MapFragment() : LocationListener {
 
 
 
-                    val resources = getResources()
+                    val resources = resources
                     //switch case voor verschillende routes
 
                     val inputStream = resources.openRawResource(R.raw.test_route)
@@ -233,7 +217,7 @@ class MapFragment() : LocationListener {
                     val klmstyle = kmldocument.getStyle("route")
 
 
-                    val feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument);
+                    val feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument)
                     mapView.overlays.add(feature)
                     mapView.invalidate()
 
