@@ -220,9 +220,6 @@ class MapFragment() : LocationListener {
                     val kmldocument = KmlDocument()
                     //get data/routes/historische_kilometer.geojson
 
-
-
-
                     val resources = getResources()
                     //switch case voor verschillende routes
 
@@ -298,7 +295,7 @@ class MapFragment() : LocationListener {
         if (myLocation.isFollowLocationEnabled) {
             mapView.mapOrientation = 360 - p0.bearing
             mapView.controller.setZoom(17.0)
-            mapView.setMapCenterOffset(0, 600)
+            mapView.setMapCenterOffset(0, 500)
             myLocation.isDrawAccuracyEnabled = false
 
         } else {

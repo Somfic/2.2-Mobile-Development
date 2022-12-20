@@ -9,7 +9,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,10 +27,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -46,16 +43,15 @@ import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailScreen
 import com.example.mobile_development_2_2.gui.fragments.poi.POIListScreen
 import com.example.mobile_development_2_2.gui.fragments.route.RouteListScreen
 import com.example.mobile_development_2_2.map.route.RouteManager
-import com.example.mobile_development_2_2.data.GetLocationProvider
-import com.example.mobile_development_2_2.data.LocationProvider
 import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.gui.fragments.settings.SettingsFragment
+import com.example.mobile_development_2_2.map.GPS.GPSLocationProvider
+import com.example.mobile_development_2_2.map.GPS.GetLocationProvider
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import kotlinx.coroutines.currentCoroutineContext
 import org.osmdroid.config.Configuration.*
 
 class MainActivity : ComponentActivity() {
@@ -112,6 +108,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalPermissionsApi::class)
     @Composable
     fun MainScreen(navController: NavHostController = rememberNavController()) {
         // Get current back stack entry
@@ -119,13 +116,20 @@ class MainActivity : ComponentActivity() {
 
         val context = LocalContext.current
         val osmViewModel = remember {
-            OSMViewModel(GetLocationProvider(LocationProvider(context = context)),  this)
+            OSMViewModel(GetLocationProvider(GPSLocationProvider(context = context)),  this)
         }
         this.osmViewModel = osmViewModel
 
         // Get the name of the current screen
         val currentScreen = Fragments.valueOf(
             backStackEntry?.destination?.route ?: Fragments.Home.name
+        )
+        val permissions = rememberMultiplePermissionsState(
+                listOf(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                )
         )
 
         Scaffold(
@@ -140,7 +144,8 @@ class MainActivity : ComponentActivity() {
                 onHomeButtonClicked = {navController.navigate(Fragments.Home.name)},
                 onHomePOIClicked = {navController.navigate(Fragments.POIList.name)},
                 onMapButtonClicked = {navController.navigate(Fragments.Route.name)
-                    Log.d("123", "map")}
+                    Log.d("123", "map")
+                    permissions.launchMultiplePermissionRequest()}
             ) },
             backgroundColor = colorResource(R.color.lightGrey)
         ) { innerpadding ->
