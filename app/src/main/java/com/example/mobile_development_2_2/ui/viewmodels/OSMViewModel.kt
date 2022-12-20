@@ -92,12 +92,12 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
 
     fun invoke () {
         for (it in pois) {
-            AddGeofence(it.location.latitude,it.location.longitude)
+            setGeofenceLocation(it.location.latitude,it.location.longitude)
         }
         //AddGeofence(51.5856, 4.7925)
     }
 
-    fun AddGeofence(lat: Double, lng: Double, ) {
+    fun setGeofenceLocation(lat: Double, lng: Double, ) {
         var geofence: Geofence? = geofenceHelper.getGeofence("geo", lat, lng)
 
         var geofencingRequest: GeofencingRequest? = geofence?.let {
