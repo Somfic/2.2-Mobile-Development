@@ -1,25 +1,23 @@
 package com.example.mobile_development_2_2.ui.viewmodels
 
+
 import android.app.PendingIntent
 import android.content.ContentValues
 import android.content.Context
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.ViewModel
-
-
 import androidx.lifecycle.viewModelScope
 import com.example.mobile_development_2_2.data.GeofenceHelper
 import com.example.mobile_development_2_2.data.GetLocationProvider
 import com.example.mobile_development_2_2.map.route.POI
-import com.google.android.gms.location.Geofence
-import com.google.android.gms.location.GeofencingClient
-import com.google.android.gms.location.GeofencingRequest
-import com.google.android.gms.location.LocationListener
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.mylocation.IMyLocationConsumer
@@ -30,9 +28,7 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
     private var geofencingClient: GeofencingClient = LocationServices.getGeofencingClient(context)
     private var geofenceHelper: GeofenceHelper = GeofenceHelper(context)
     var currentLocation : Location? = null
-    private val TAG = "OSMViewModel"
-
-    private val locations = getLocationProvider().shareIn(
+    private val lastLocations = getLocationProvider().shareIn(
         scope = viewModelScope,
         replay = 1,
         started = SharingStarted.WhileSubscribed()
@@ -49,7 +45,7 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
             longDescription = "description of Avans",
             shortDescription = "short description of Avans",
             imgMap = 1,
-                    visited = true
+            visited = true
 
 
         )
@@ -92,7 +88,6 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
     val provider = Provider(
         coroutineScope = viewModelScope,
         locationFlow = lastLocations,
-
     )
 
     fun invoke () {
@@ -130,7 +125,7 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
         private val coroutineScope: CoroutineScope,
         private val locationFlow: Flow<Location>,
 
-    ): IMyLocationProvider {
+        ): IMyLocationProvider {
         private var currentLocation: Location? = null
         private var job: Job? = null
         lateinit var locationListener: LocationListener
@@ -146,7 +141,7 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
                     .collect { location -> currentLocation = location
 
                         locationListener.onLocationChanged(currentLocation!!)
-                    Log.d("Location", "${currentLocation!!.latitude} , ${currentLocation!!.longitude}"  )}
+                        Log.d("Location", "${currentLocation!!.latitude} , ${currentLocation!!.longitude}"  )}
 
             }
             return true
@@ -163,4 +158,3 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
         override fun destroy() = stopLocationProvider()
     }
 }
-
