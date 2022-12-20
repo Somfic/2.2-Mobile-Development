@@ -123,7 +123,13 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
                     onPOIClicked()
                 },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Red, contentColor = Color.White
+                    backgroundColor = Color(
+                        ContextCompat
+                            .getColor(
+                                LocalContext.current, R.color.colorPrimary
+                            )
+                            .dec()
+                    ), contentColor = Color.White
                 ), modifier = Modifier
                     .width(150.dp)
                     .height(35.dp)
@@ -145,7 +151,13 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
                     onRouteClicked()
                 },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Red, contentColor = Color.White
+                    backgroundColor = Color(
+                        ContextCompat
+                            .getColor(
+                                LocalContext.current, R.color.colorPrimary
+                            )
+                            .dec()
+                    ), contentColor = Color.White
                 ), modifier = Modifier
                     .width(150.dp)
                     .height(35.dp)
