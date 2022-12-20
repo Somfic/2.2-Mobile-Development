@@ -1,25 +1,17 @@
 package com.example.mobile_development_2_2.gui.fragments
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.app.PendingIntent
-import android.content.ContentValues.TAG
 import android.content.Context
-import android.graphics.Paint
 import android.location.Location
-
-import android.location.LocationManager
-import android.provider.ContactsContract.CommonDataKinds.Website
-import android.util.Log
 import androidx.compose.foundation.background
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,32 +19,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.core.location.LocationManagerCompat.requestLocationUpdates
-import androidx.lifecycle.viewModelScope
-
+import androidx.core.graphics.drawable.toBitmap
 import com.example.mobile_development_2_2.R
-import com.example.mobile_development_2_2.data.GeofenceHelper
-
-import com.example.mobile_development_2_2.data.LocationProvider
-
-import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
+import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
-import com.google.accompanist.permissions.MultiplePermissionsState
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
+import org.osmdroid.bonuspack.kml.KmlDocument
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.IconOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
@@ -60,11 +43,18 @@ import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 
-class MapFragment () {
+class MapFragment : LocationListener {
+
+
+    lateinit var myLocation: MyLocationNewOverlay
+    lateinit var mapView: MapView
+    lateinit var context: Context
+
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
     fun MapScreen(viewModel: OSMViewModel, modifier: Modifier) {
+        viewModel.provider.locationListener = this
         Surface(
             modifier = modifier.fillMaxSize()
         ) {
@@ -80,18 +70,20 @@ class MapFragment () {
 
             }
             OSM(
+
                 modifier = modifier,
-                locations = getLocations(),
-                routePoints = getLocations().map { it.location }.toMutableList(),
-                provider = viewModel.provider
+                locations = viewModel.pois,
+                routePoints = viewModel.pois.map { it.location }.toMutableList(),
+                provider = viewModel.provider,
+                followRoute = true
             )
             if (!premissions.allPermissionsGranted) {
-                Column() {
+                Column {
 
-                    Text(text = "No Location Premission granted", color = Color.Red)
+                    Text(text = Lang.get(R.string.map_no_location_permission), color = Color.Red)
                 }
             }
-            Row() {
+            Row {
 
 
                 Text(
@@ -107,45 +99,6 @@ class MapFragment () {
         }
     }
 
-    //TODO DELETE And make a list provider
-    private fun getLocations(): List<POI> {
-
-        val avans = POI(
-            name = "Avans",
-            location = GeoPoint(51.5856, 4.7925),
-            imgId = 1,//R.drawable.img_poi1,
-            streetName = "street1",
-            description = "description of Avans"
-        )
-
-        // TODO: Move to POI repository
-        val breda = POI(
-            name = "Breda",
-            location = GeoPoint(51.5719, 4.7683),
-            imgId = 1,//R.drawable.img_poi2,
-            streetName = "street2",
-            description = "description of Breda"
-        )
-
-        // TODO: Move to POI repository
-        val amsterdam = POI(
-            name = "Amsterdam",
-            location = GeoPoint(52.3676, 4.9041),
-            imgId = 1,//R.drawable.img_poi1,
-            streetName = "street3",
-            description = "description of Amsterdam"
-        )
-
-        // TODO: Move to POI repository
-        val cities = listOf(
-            avans,
-            breda,
-            amsterdam,
-        )
-        return cities
-
-    }
-
 
     @Composable
     private fun OSM(
@@ -154,34 +107,51 @@ class MapFragment () {
         locations: List<POI> = listOf(),
         routePoints: MutableList<GeoPoint> = mutableListOf(),
         provider: IMyLocationProvider,
+        followRoute: Boolean,
     ) {
 
+        val listener = object : ItemizedIconOverlay.OnItemGestureListener<POIItem> {
+            override fun onItemSingleTapUp(index: Int, item: POIItem?): Boolean {
+                if (item != null) {
+                    clickedOnPoi(item.poi)
+                }
+                return true
+            }
 
-        val context = LocalContext.current
+            override fun onItemLongPress(index: Int, item: POIItem?): Boolean {
+                if (item != null) {
+                    longClickOnPoi(item.poi)
+                }
+                return false
+            }
+        }
+        context = LocalContext.current
 
 
         val mapView = remember {
             MapView(context)
         }
+        this.mapView = mapView
+
+
         //FIXME poilayer kan toegevoegd worden als er point of interest zijn
         val poiOverlay = remember {
-            val listener = object : ItemizedIconOverlay.OnItemGestureListener<POIItem> {
-                override fun onItemSingleTapUp(index: Int, item: POIItem?): Boolean {
-                    println("onItemSingleTapUp")
-                    return true
-                }
-
-                override fun onItemLongPress(index: Int, item: POIItem?): Boolean {
-                    println("onItemLongPress")
-                    return false
-                }
-            }
-
             ItemizedIconOverlay(
                 mutableListOf<POIItem>(),
                 ContextCompat.getDrawable(
                     context,
                     org.osmdroid.library.R.drawable.ic_menu_mylocation
+                ),
+                listener,
+                context
+            )
+        }
+        val visitedOverlay = remember {
+            ItemizedIconOverlay(
+                mutableListOf<POIItem>(),
+                ContextCompat.getDrawable(
+                    context,
+                    org.osmdroid.library.R.drawable.person
                 ),
                 listener,
                 context
@@ -209,6 +179,7 @@ class MapFragment () {
         val myLocation = remember(mapView) {
             MyLocationNewOverlay(provider, mapView)
         }
+        this.myLocation = myLocation
         myLocation.enableMyLocation()
 
 
@@ -221,29 +192,121 @@ class MapFragment () {
                     controller.setCenter(GeoPoint(51.5856, 4.7925)) // Avans
                     controller.setZoom(17.0)
 
+
                     //mapView.overlays.add(poiOverlay)
 
 
                     mapView.overlays.add(poiOverlay)
+                    mapView.overlays.add(visitedOverlay)
 
                     mapView.overlays.add(myLocation)
 
                     mapView.overlays.add(currentRoute)
+                    val kmldocument = KmlDocument()
+                    //get data/routes/historische_kilometer.geojson
+
+
+
+
+                    val resources = resources
+                    //switch case voor verschillende routes
+
+                    val inputStream = resources.openRawResource(R.raw.test_route)
+                    kmldocument.parseGeoJSONStream(inputStream)
+
+                    val klmstyle = kmldocument.getStyle("route")
+
+
+                    val feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument)
+                    mapView.overlays.add(feature)
+                    mapView.invalidate()
+
                 }
             },
             modifier = modifier,
+            update = {
+                if (followRoute) {
+                    myLocation.disableFollowLocation()
+                    myLocation.enableFollowLocation()
+
+                } else {
+                    myLocation.disableFollowLocation()
+                    mapView.mapOrientation = 0f
+
+                }
+            }
+
         )
         LaunchedEffect(locations) {
             poiOverlay.removeAllItems()
             poiOverlay.addItems(
-                locations.map { POIItem(it) }
+                locations.filter { !it.visited }.map { POIItem(it) }
             )
             mapView.invalidate() // Ensures the map is updated on screen
         }
+        LaunchedEffect(locations) {
+            visitedOverlay.removeAllItems()
+            visitedOverlay.addItems(
+                locations.filter { it.visited }.map { POIItem(it) }
+            )
+            mapView.invalidate() // Ensures the map is updated on screen
+        }
+        if (followRoute) {
+            Row(verticalAlignment = Alignment.Bottom) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+
+                    Button(
+                        onClick = { myLocation.enableFollowLocation() },
+                        modifier = Modifier
+                            .size(50.dp)
+                            .align(Alignment.End),
+                    ) {
+
+                    }
+                }
+            }
+        }
 
     }
+
+    private fun clickedOnPoi(poi: POI) {
+        //todo
+    }
+
+    private fun longClickOnPoi(poi: POI) {
+        //todo
+    }
+
+    override fun onLocationChanged(p0: Location) {
+
+        if (myLocation.isFollowLocationEnabled) {
+            mapView.mapOrientation = 360 - p0.bearing
+            mapView.controller.setZoom(17.0)
+            mapView.setMapCenterOffset(0, 600)
+            myLocation.setDirectionIcon(
+                ContextCompat.getDrawable(
+                    context,
+                    org.osmdroid.library.R.drawable.round_navigation_white_48
+                )!!.toBitmap(150, 150)
+            )
+
+        } else {
+            mapView.mapOrientation = 0f
+            mapView.setMapCenterOffset(0, 0)
+            myLocation.setDirectionIcon(
+                ContextCompat.getDrawable(
+                    context,
+                    org.osmdroid.library.R.drawable.round_navigation_white_48
+                )!!.toBitmap(150, 150)
+            )
+        }
+        //myLocation.enableFollowLocation()
+        mapView.invalidate()
+    }
+
 }
 
-    private class POIItem(
-        val poi: POI //FIXME add poiClass,
-    ) : OverlayItem(poi.name, null, GeoPoint(poi.location.latitude, poi.location.longitude))
+private class POIItem(
+    val poi: POI //FIXME add poiClass,
+) : OverlayItem(poi.name, null, GeoPoint(poi.location.latitude, poi.location.longitude))
