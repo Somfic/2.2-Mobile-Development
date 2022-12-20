@@ -90,7 +90,7 @@ class Route(
                         "Never gonna make you cry\n" +
                         "Never gonna say goodbye\n" +
                         "Never gonna tell a lie and hurt you",
-                imgMap = R.drawable.img_map1
+                imgMap = R.drawable.ic_launcher_background
 
 
             )
@@ -157,7 +157,7 @@ class Route(
                         "Never gonna make you cry\n" +
                         "Never gonna say goodbye\n" +
                         "Never gonna tell a lie and hurt you",
-                imgMap = R.drawable.img_map1
+                imgMap = R.drawable.ic_launcher_background
             )
 
             // TODO: Move to POI repository
@@ -222,7 +222,7 @@ class Route(
                         "Never gonna make you cry\n" +
                         "Never gonna say goodbye\n" +
                         "Never gonna tell a lie and hurt you",
-                imgMap = R.drawable.img_map1
+                imgMap = R.drawable.ic_launcher_background
             )
 
             // TODO: Move to POI repository
@@ -253,7 +253,7 @@ class Route(
                 cityName = "Breda",
                 visited = false,
                 length = 6234,
-                imgId = R.drawable.img_map1,
+                imgId = R.drawable.ic_launcher_background,
                 shortDescription = "A route for testing",
                 POIs = cities
             )
