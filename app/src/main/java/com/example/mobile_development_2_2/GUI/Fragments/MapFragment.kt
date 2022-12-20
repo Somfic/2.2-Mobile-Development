@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,7 +62,7 @@ class MapFragment() : LocationListener {
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
-    fun MapScreen(viewModel: OSMViewModel, modifier: Modifier) {
+    fun MapScreen(viewModel: OSMViewModel, modifier: Modifier, onPOIClicked :() -> Unit) {
         viewModel.provider.locationListener = this
 
         Surface(
@@ -79,16 +80,17 @@ class MapFragment() : LocationListener {
 
             }
             OSM(
-
+                route = viewModel.route,
                 modifier = modifier,
                 locations = viewModel.pois,
                 routePoints = viewModel.pois.map { it.location }.toMutableList(),
                 provider = viewModel.provider,
+                onPOIClicked = onPOIClicked
             )
             if (!premissions.allPermissionsGranted) {
                 Column() {
 
-                    Text(text = "No Location Premission granted", color = Color.Red)
+                    Text(text = "No Location Premission granted", color = Color(ContextCompat.getColor(context,R.color.colorPrimary).dec()) )
                 }
             }
             Row() {
@@ -168,21 +170,23 @@ class MapFragment() : LocationListener {
 
         modifier: Modifier = Modifier,
         locations: List<POI> = listOf(),
+        route: Route,
         routePoints: MutableList<GeoPoint> = mutableListOf(),
         provider: IMyLocationProvider,
+        onPOIClicked :() -> Unit,
     ) {
 
         val listener = object : ItemizedIconOverlay.OnItemGestureListener<POIItem> {
             override fun onItemSingleTapUp(index: Int, item: POIItem?): Boolean {
                 if (item != null) {
-                    clickedOnPoi(item.poi)
+                    clickedOnPoi(item.poi,onPOIClicked )
                 }
                 return true
             }
 
             override fun onItemLongPress(index: Int, item: POIItem?): Boolean {
                 if (item != null) {
-                    longClickOnPoi(item.poi)
+                    longClickOnPoi(item.poi, onPOIClicked)
                 }
                 return false
             }
@@ -296,6 +300,7 @@ class MapFragment() : LocationListener {
             }
 
         )
+
         LaunchedEffect(locations) {
             poiOverlay.removeAllItems()
             poiOverlay.addItems(
@@ -317,11 +322,12 @@ class MapFragment() : LocationListener {
 
     }
 
-    private fun clickedOnPoi(poi: POI) {
-        //todo
+    private fun clickedOnPoi(poi: POI, onPOIClicked :() -> Unit) {
+        RouteManager.selectPOI(poi)
+        onPOIClicked()
     }
 
-    private fun longClickOnPoi(poi: POI) {
+    private fun longClickOnPoi(poi: POI , onPOIClicked :() -> Unit) {
         //todo
     }
 

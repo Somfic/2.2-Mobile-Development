@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
     lateinit var osmViewModel: OSMViewModel
     var map = MapFragment()
-
+    //val RouteManager = RouteManager()
     enum class Fragments(@StringRes val title: Int) {
         Home(title = R.string.homeScreen),
         Info(title = R.string.infoScreen),
@@ -177,6 +177,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier,
                         routes = RouteManager.TestRoutes(),
                         onRouteClicked = {
+                            //osmViewModel.route = RouteManager.getSelectedRoute()
                             navController.navigate(Fragments.Map.name)
                         },
                         onPOIClicked = {
@@ -209,7 +210,10 @@ class MainActivity : ComponentActivity() {
                 composable(route = Fragments.Map.name){
                     map.MapScreen(
                         viewModel = osmViewModel,
-                        modifier = Modifier
+                        modifier = Modifier,
+                        onPOIClicked = {
+                            navController.navigate(Fragments.POI.name)
+                        }
                     )
                 }
                 composable(route = Fragments.Settings.name){
