@@ -112,6 +112,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
+
+
     @Composable
     fun MainScreen(navController: NavHostController = rememberNavController()) {
         // Get current back stack entry
@@ -137,9 +140,20 @@ class MainActivity : ComponentActivity() {
                     onSettingsButtonClicked = { navController.navigate(Fragments.Settings.name) })
             },
             bottomBar = { BottomNavigationBar(
-                onHomeButtonClicked = {navController.navigate(Fragments.Home.name)},
-                onHomePOIClicked = {navController.navigate(Fragments.POIList.name)},
-                onMapButtonClicked = {navController.navigate(Fragments.Route.name)
+                onHomeButtonClicked = {
+                    navController.backQueue.clear()
+                    navController.navigate(Fragments.Home.name)
+
+                                      },
+                onHomePOIClicked = {
+                    navController.backQueue.clear()
+                    navController.navigate(Fragments.POIList.name)
+
+                                   },
+                onMapButtonClicked = {
+                    navController.backQueue.clear()
+                    navController.navigate(Fragments.Route.name)
+
                     Log.d("123", "map")}
             ) },
             backgroundColor = colorResource(R.color.lightGrey)
@@ -155,6 +169,7 @@ class MainActivity : ComponentActivity() {
                         helpItems = HelpItem.getItems(),
                         onPOIButtonClicked = {
                             navController.navigate(Fragments.Info.name)
+
                         })
 
                 }
@@ -167,6 +182,8 @@ class MainActivity : ComponentActivity() {
                         },
                         onPOIClicked = {
                             navController.navigate(Fragments.POIList.name)
+
+                                navController.popBackStack()
                         }
                     )
                 }
@@ -175,7 +192,6 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier,
                         route = RouteManager.getSelectedRoute(),
                         onPOIClicked = {
-                            navController.navigate(Fragments.POI.name)
                         }
                     )
                 }
@@ -206,6 +222,7 @@ class MainActivity : ComponentActivity() {
 
             }
         }
+
     }
 
     @Preview(showBackground = true)
