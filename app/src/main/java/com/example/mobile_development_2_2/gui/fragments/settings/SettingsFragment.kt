@@ -27,7 +27,7 @@ import androidx.compose.ui.window.PopupProperties
 import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
 
-    val languages = arrayOf("English", "Nederlands")
+    val languages = arrayOf(Pair("English", "en"), Pair("Nederlands", "nl"))
 
     @Composable
     fun SettingsFragment() {
@@ -51,7 +51,7 @@ import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
                     modifier = Modifier.padding(8.dp),
                 )
                 Row(Modifier.clickable { expanded = !expanded }, verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = language) // City name label
+                    Text(text = language.first) // City name label
                     Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
                     DropdownMenu(
                         expanded = expanded,
@@ -62,8 +62,10 @@ import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
                             DropdownMenuItem(onClick = {
                                 expanded = false
                                 language = l
+                                Lang.setLanguage(l.second)
+                                // Reload the fragmeng
                             }) {
-                                Text(text = l)
+                                Text(text = l.first)
                             }
                         }
                     }
