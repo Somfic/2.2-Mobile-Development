@@ -3,6 +3,8 @@ package com.example.mobile_development_2_2.map.route
 import android.util.Log
 import com.example.mobile_development_2_2.R
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Overlay
 
 class Route(
     val name : String,
@@ -10,7 +12,11 @@ class Route(
     val length: Int,
     val imgId: Int,
     val shortDescription : String,
-    val POIs: List<POI>
+    val POIs: List<POI>,
+    val visited: Boolean?,
+
+
+
     ) {
 
     fun addPOI(poi: POI){
@@ -25,6 +31,7 @@ class Route(
         fun TestRoute(name: String): Route {
             val avans = POI(
                 name = "Avans",
+                visited = false,
                 location = GeoPoint(51.5856, 4.7925),
                 imgId = R.drawable.img_poi1,
                 streetName = "street1",
@@ -84,11 +91,14 @@ class Route(
                         "Never gonna say goodbye\n" +
                         "Never gonna tell a lie and hurt you",
                 imgMap = R.drawable.img_map1
+
+
             )
 
             // TODO: Move to POI repository
             val breda = POI(
                 name = "Breda",
+                visited = false,
                 location = GeoPoint(51.5719, 4.7683),
                 imgId = R.drawable.img_poi2,
                 streetName = "street2",
@@ -153,6 +163,7 @@ class Route(
             // TODO: Move to POI repository
             val amsterdam = POI(
                 name = "Amsterdam",
+                visited = false,
                 location = GeoPoint(52.3676, 4.9041),
                 imgId = R.drawable.img_poi3,
                 streetName = "street3",
@@ -240,6 +251,7 @@ class Route(
             return Route(
                 name = name,
                 cityName = "Breda",
+                visited = false,
                 length = 6234,
                 imgId = R.drawable.img_map1,
                 shortDescription = "A route for testing",
