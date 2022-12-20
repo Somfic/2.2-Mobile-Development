@@ -37,7 +37,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         if (geofenceList != null) {
             for (geofence in geofenceList) {
                 Log.d(TAG, "onReceive: " + geofence.requestId + " triggered ")
-                notificationHelper.sendHighPriorityNotification("Geofence triggered ouleh","eee", MainActivity::class.java)
+                notificationHelper.sendHighPriorityNotification("Geofence triggered",geofence.requestId, MainActivity::class.java)
             }
         }
     }
