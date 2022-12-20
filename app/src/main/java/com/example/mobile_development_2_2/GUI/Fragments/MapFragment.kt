@@ -59,6 +59,7 @@ class MapFragment() : LocationListener {
     lateinit var mapView: MapView
     lateinit var context: Context
     var followRoute by mutableStateOf(false)
+    lateinit var route: Route
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
@@ -120,7 +121,10 @@ class MapFragment() : LocationListener {
                                 ).dec()), contentColor = Color.White
                         )
                     ) {
-                        Text(text = "Start route")
+                        if(route.hasProgress())
+                            Text(text = "Start route")
+                        else
+                            Text(text = "Resume route")
                     }
 
                 }
@@ -175,7 +179,7 @@ class MapFragment() : LocationListener {
         provider: IMyLocationProvider,
         onPOIClicked :() -> Unit,
     ) {
-
+        this.route = route
         val listener = object : ItemizedIconOverlay.OnItemGestureListener<POIItem> {
             override fun onItemSingleTapUp(index: Int, item: POIItem?): Boolean {
                 if (item != null) {
