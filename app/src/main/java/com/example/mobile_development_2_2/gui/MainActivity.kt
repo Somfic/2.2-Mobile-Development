@@ -47,6 +47,7 @@ import com.example.mobile_development_2_2.gui.fragments.poi.POIListScreen
 import com.example.mobile_development_2_2.gui.fragments.route.RouteListScreen
 import com.example.mobile_development_2_2.map.route.RouteManager
 import com.example.mobile_development_2_2.data.GetLocationProvider
+import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.data.LocationProvider
 import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.gui.fragments.settings.SettingsFragment
@@ -76,8 +77,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
-
-
+        Lang.setContext(this)
 
         setContent {
             MobileDevelopment2_2Theme {
