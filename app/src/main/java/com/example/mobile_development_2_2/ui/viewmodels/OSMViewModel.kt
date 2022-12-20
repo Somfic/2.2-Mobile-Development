@@ -12,6 +12,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobile_development_2_2.data.GeofenceHelper
 import com.example.mobile_development_2_2.map.GPS.GetLocationProvider
 import com.example.mobile_development_2_2.map.route.POI
+import com.example.mobile_development_2_2.map.route.Route
+import com.example.mobile_development_2_2.map.route.RouteManager
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingRequest
@@ -27,6 +29,7 @@ import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 
 class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) : ViewModel() {
 
+
     private var geofencingClient: GeofencingClient = LocationServices.getGeofencingClient(context)
     private var geofenceHelper: GeofenceHelper = GeofenceHelper(context)
     var currentLocation : Location? = null
@@ -39,50 +42,51 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
 
     private fun getLocations(): List<POI> {
 
-        val avans = POI(
-            name = "Avans",
-            location = GeoPoint(51.5856, 4.7925),
-            imgId = 1,//R.drawable.img_poi1,
-            streetName = "street1",
-            longDescription = "description of Avans",
-            shortDescription = "short description of Avans",
-            imgMap = 1,
-                    visited = true
-
-
-        )
-
-        // TODO: Move to POI repository
-        val breda = POI(
-            name = "Breda",
-            location = GeoPoint(51.5719, 4.7683),
-            imgId = 1,//R.drawable.img_poi2,
-            streetName = "street2",
-            longDescription = "description of Breda",
-            shortDescription = "short description of Avans",
-            imgMap = 1,
-            visited = false,
-        )
-
-        // TODO: Move to POI repository
-        val amsterdam = POI(
-            name = "Amsterdam",
-            location = GeoPoint(52.3676, 4.9041),
-            imgId = 1,//R.drawable.img_poi1,
-            streetName = "street3",
-            longDescription = "description of Amsterdam",
-            shortDescription = "short description of Avans",
-            imgMap = 1,
-            visited = false
-        )
-
-        // TODO: Move to POI repository
-        val cities = listOf(
-            avans,
-            breda,
-            amsterdam,
-        )
-        return cities
+        return RouteManager.selectedItem.POIs
+//        val avans = POI(
+//            name = "Avans",
+//            location = GeoPoint(51.5856, 4.7925),
+//            imgId = 1,//R.drawable.img_poi1,
+//            streetName = "street1",
+//            longDescription = "description of Avans",
+//            shortDescription = "short description of Avans",
+//            imgMap = 1,
+//                    visited = true
+//
+//
+//        )
+//
+//        // TODO: Move to POI repository
+//        val breda = POI(
+//            name = "Breda",
+//            location = GeoPoint(51.5719, 4.7683),
+//            imgId = 1,//R.drawable.img_poi2,
+//            streetName = "street2",
+//            longDescription = "description of Breda",
+//            shortDescription = "short description of Avans",
+//            imgMap = 1,
+//            visited = false,
+//        )
+//
+//        // TODO: Move to POI repository
+//        val amsterdam = POI(
+//            name = "Amsterdam",
+//            location = GeoPoint(52.3676, 4.9041),
+//            imgId = 1,//R.drawable.img_poi1,
+//            streetName = "street3",
+//            longDescription = "description of Amsterdam",
+//            shortDescription = "short description of Avans",
+//            imgMap = 1,
+//            visited = false
+//        )
+//
+//        // TODO: Move to POI repository
+//        val cities = listOf(
+//            avans,
+//            breda,
+//            amsterdam,
+//        )
+//        return cities
 
     }
 
