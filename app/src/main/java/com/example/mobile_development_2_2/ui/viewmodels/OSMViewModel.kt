@@ -39,10 +39,12 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
         started = SharingStarted.WhileSubscribed()
     )
     val pois = getLocations()
+    val route = RouteManager.selectedItem
+
 
     private fun getLocations(): List<POI> {
 
-        return RouteManager.selectedItem.POIs
+        return route.POIs
 //        val avans = POI(
 //            name = "Avans",
 //            location = GeoPoint(51.5856, 4.7925),

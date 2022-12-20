@@ -86,7 +86,7 @@ class MapFragment() : LocationListener {
 
             }
             OSM(
-
+                route = viewModel.route,
                 modifier = modifier,
                 locations = viewModel.pois,
                 routePoints = viewModel.pois.map { it.location }.toMutableList(),
@@ -122,6 +122,7 @@ class MapFragment() : LocationListener {
 
         modifier: Modifier = Modifier,
         locations: List<POI> = listOf(),
+        route: Route,
         routePoints: MutableList<GeoPoint> = mutableListOf(),
         provider: IMyLocationProvider,
         followRoute: Boolean,
@@ -252,6 +253,7 @@ class MapFragment() : LocationListener {
             }
 
         )
+
         LaunchedEffect(locations) {
             poiOverlay.removeAllItems()
             poiOverlay.addItems(
