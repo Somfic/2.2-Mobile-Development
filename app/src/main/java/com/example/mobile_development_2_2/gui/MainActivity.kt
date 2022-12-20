@@ -9,7 +9,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,8 +16,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -28,35 +27,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.data.GetLocationProvider
+import com.example.mobile_development_2_2.data.Lang
+import com.example.mobile_development_2_2.data.LocationProvider
+import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
 import com.example.mobile_development_2_2.gui.fragments.home.HomeScreen
 import com.example.mobile_development_2_2.gui.fragments.home.InfoScreen
 import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailScreen
 import com.example.mobile_development_2_2.gui.fragments.poi.POIListScreen
 import com.example.mobile_development_2_2.gui.fragments.route.RouteListScreen
-import com.example.mobile_development_2_2.map.route.RouteManager
-import com.example.mobile_development_2_2.data.GetLocationProvider
-import com.example.mobile_development_2_2.data.Lang
-import com.example.mobile_development_2_2.data.LocationProvider
-import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.gui.fragments.settings.SettingsFragment
+import com.example.mobile_development_2_2.map.route.RouteManager
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
-
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import kotlinx.coroutines.currentCoroutineContext
 import org.osmdroid.config.Configuration.*
 
 class MainActivity : ComponentActivity() {
@@ -78,6 +72,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
         Lang.setContext(this)
+        Lang.onLanguageChanged { recreate() }
 
         setContent {
             MobileDevelopment2_2Theme {
@@ -309,17 +304,16 @@ class MainActivity : ComponentActivity() {
             items.forEach { item ->
                 var onClick = onHomeButtonClicked
 
-                if(item.title.equals("Map")){
+                if(item.route.equals("map")){
                     onClick = onMapButtonClicked
 
-                } else if(item.title.equals("Home")){
+                } else if(item.route.equals("home")){
                     onClick = onHomeButtonClicked
 
-                } else if(item.title.equals("POIs")){
+                } else if(item.route.equals("POIs")){
                     onClick = onHomePOIClicked
 
                 }
-
 
                 BottomNavigationItem(
                     icon = {

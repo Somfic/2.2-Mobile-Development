@@ -26,9 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
-
-    val languages = arrayOf(Pair("English", "en"), Pair("Nederlands", "nl"))
-
     @Composable
     fun SettingsFragment() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -42,7 +39,6 @@ import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
     @Composable
     fun Settings() {
         var expanded by remember { mutableStateOf(false)}
-        var language by remember {mutableStateOf(languages[0])}
 
         Column() {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -51,19 +47,17 @@ import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
                     modifier = Modifier.padding(8.dp),
                 )
                 Row(Modifier.clickable { expanded = !expanded }, verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = language.first) // City name label
+                    Text(text = Lang.language.first)
                     Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
                         properties = PopupProperties(focusable = false)
                     ) {
-                        languages.forEach { l ->
+                        Lang.languages.forEach { l ->
                             DropdownMenuItem(onClick = {
                                 expanded = false
-                                language = l
-                                Lang.setLanguage(l.second)
-                                // Reload the fragmeng
+                                Lang.set(l)
                             }) {
                                 Text(text = l.first)
                             }
@@ -90,7 +84,7 @@ import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
     @Composable
     fun AgsLogo() {
         Image(
-            painter = painterResource(id =R.drawable.ic_logo),
+            painter = painterResource(id = R.drawable.ic_logo),
             contentDescription = null,
             modifier = Modifier
                 //.align(Alignment.CenterStart)

@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.map.route.Route
 import com.example.mobile_development_2_2.map.route.RouteManager
@@ -95,7 +96,7 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
         )
 
         Text(
-            text = "Distance: ${route.length} meters",
+            text = Lang.get(R.string.route_distance) + ": ${route.length}m",
             textAlign = TextAlign.Start,
             modifier = Modifier
                 .padding(bottom = 80.dp, top = 80.dp, start = 12.dp)
@@ -103,7 +104,7 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
         )
 
         Text(
-            text = "Points: ${route.POIs.size}",
+            text = Lang.get(R.string.routes_waypoints) + ": ${route.POIs.size}",
             textAlign = TextAlign.End,
             modifier = Modifier
                 .padding(bottom = 80.dp, top = 80.dp, end = 12.dp)
@@ -128,7 +129,7 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
                     .height(35.dp)
                     .offset(-100.dp, -25.dp)
             ) {
-                Text(text = "Points")
+                Text(text = Lang.get(R.string.routes_waypoints))
             }
 
             val premissions = rememberMultiplePermissionsState(
@@ -150,7 +151,7 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
                     .height(35.dp)
                     .offset(100.dp, -25.dp)
             ) {
-                Text(text = "Map")
+                Text(text =  Lang.get(R.string.routes_map))
             }
         }
     }

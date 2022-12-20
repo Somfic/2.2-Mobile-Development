@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.map.route.POI
 import androidx.compose.ui.text.TextStyle as TextStyle1
 
@@ -85,7 +86,7 @@ private fun Header(height: Float) {
             )
     ) {
         Text(
-            text = "Welcome to CHLAM", style = TextStyle1(
+            text = Lang.get(R.string.home_welcome_to_chlam), style = TextStyle1(
                 fontSize = 30.sp,
                 color = Color(
                     ContextCompat.getColor(
