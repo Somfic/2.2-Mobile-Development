@@ -164,6 +164,8 @@ class MainActivity : ComponentActivity() {
                         routes = RouteManager.TestRoutes(),
                         onRouteClicked = {
                             navController.navigate(Fragments.Map.name)
+
+
                         },
                         onPOIClicked = {
                             navController.navigate(Fragments.POIList.name)
@@ -193,9 +195,14 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(route = Fragments.Map.name){
                     map.MapScreen(
+
                         viewModel = osmViewModel,
                         modifier = Modifier
+
                     )
+                    map.setRoute(RouteManager.getSelectedRoute().name)
+
+
                 }
                 composable(route = Fragments.Settings.name){
                     SettingsFragment(

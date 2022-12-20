@@ -2,6 +2,10 @@ package com.example.mobile_development_2_2.gui.fragments
 
 import android.Manifest
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 
 import androidx.compose.foundation.background
@@ -46,13 +50,16 @@ import org.osmdroid.bonuspack.kml.KmlDocument
 import org.osmdroid.bonuspack.kml.KmlGeometry
 import org.osmdroid.bonuspack.kml.Style
 import org.osmdroid.api.IMapController
+import org.osmdroid.bonuspack.kml.LineStyle
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapController
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay.lineColor
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
@@ -203,7 +210,7 @@ class MapFragment() : LocationListener {
                 mapView.apply {
                     setTileSource(TileSourceFactory.MAPNIK)
                     isTilesScaledToDpi = true
-                    controller.setCenter(GeoPoint(51.5856, 4.7925)) // Avans
+                    controller.setCenter(GeoPoint(51.58703, 4.773187)) // Avans
                     controller.setZoom(17.0)
 
 
@@ -216,24 +223,7 @@ class MapFragment() : LocationListener {
                     mapView.overlays.add(myLocation)
 
                     mapView.overlays.add(currentRoute)
-                    val kmldocument = KmlDocument()
-                    //get data/routes/historische_kilometer.geojson
 
-
-
-
-                    val resources = getResources()
-                    //switch case voor verschillende routes
-
-                    val inputStream = resources.openRawResource(R.raw.test_route)
-                    kmldocument.parseGeoJSONStream(inputStream)
-
-                    val klmstyle = kmldocument.getStyle("route")
-
-
-                    val feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument);
-                    mapView.overlays.add(feature)
-                    mapView.invalidate()
 
                 }
             },
@@ -281,6 +271,43 @@ class MapFragment() : LocationListener {
                 }
             }
         }
+
+    }
+
+    fun setRoute(route: String?) {
+
+
+
+        val resources = mapView.resources
+
+
+//        val inputStream = resources.openRawResource(R.raw.test_route)
+        val inputStream = when (route) {
+            "test_Route1" -> resources.openRawResource(R.raw.test_route)
+            "testRoute2" -> resources.openRawResource(R.raw.test_route2)
+            "testRoute3" -> resources.openRawResource(R.raw.test_route3)
+            else -> resources.openRawResource(R.raw.test_route)
+        }
+//        val inputStream = resources.openRawResource(R.raw.test_route)
+
+        val kmldocument = KmlDocument()
+        kmldocument.parseGeoJSONStream(inputStream)
+        val kmlIcon = BitmapDrawable(resources, BitmapFactory.decodeResource(resources, R.drawable.marker_node))
+
+        val klmstyle = Style(
+           kmlIcon.bitmap,Color.Red.hashCode(),20f,Color.White.hashCode())
+
+
+            //	public Style(Bitmap icon, int lineColor, float lineWidth, int fillColor){ )
+
+
+//        klmstyle.mLineStyle = LineStyle(0,10f)
+
+        val feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument);
+       
+        mapView.overlays.add(feature)
+        mapView.invalidate()
+
 
     }
 

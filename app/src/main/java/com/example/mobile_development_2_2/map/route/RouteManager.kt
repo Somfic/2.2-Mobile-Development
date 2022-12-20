@@ -9,14 +9,16 @@ class RouteManager {
 
     companion object{
         fun TestRoutes(): List<Route>{
-            var testRoute1 = Route.TestRoute("testRoute1")
+            var testRoute1 = Route.TestRoute("test_Route1")
             var testRoute2 = Route.TestRoute("testRoute2")
             var testRoute3 = Route.TestRoute("testRoute3")
-
+            var testRoute4 = Route.TestRoute("__++__")
             var routes = listOf<Route>(
                 testRoute1,
                 testRoute2,
-                testRoute3
+                testRoute3,
+                testRoute4
+
             )
 
             return routes
