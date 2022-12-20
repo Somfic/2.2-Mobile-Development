@@ -1,6 +1,8 @@
 package com.example.mobile_development_2_2.gui.fragments
 
 import android.Manifest
+import android.content.Context
+import android.location.Location
 
 import androidx.compose.foundation.background
 
@@ -21,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat

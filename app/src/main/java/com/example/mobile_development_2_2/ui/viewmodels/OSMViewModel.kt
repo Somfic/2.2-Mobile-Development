@@ -44,8 +44,12 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
             location = GeoPoint(51.5856, 4.7925),
             imgId = 1,//R.drawable.img_poi1,
             streetName = "street1",
-            description = "description of Avans",
+            longDescription = "description of Avans",
+            shortDescription = "short description of Avans",
+            imgMap = 1,
                     visited = true
+
+
         )
 
         // TODO: Move to POI repository
@@ -54,7 +58,9 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
             location = GeoPoint(51.5719, 4.7683),
             imgId = 1,//R.drawable.img_poi2,
             streetName = "street2",
-            description = "description of Breda",
+            longDescription = "description of Breda",
+            shortDescription = "short description of Avans",
+            imgMap = 1,
             visited = false,
         )
 
@@ -64,7 +70,9 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
             location = GeoPoint(52.3676, 4.9041),
             imgId = 1,//R.drawable.img_poi1,
             streetName = "street3",
-            description = "description of Amsterdam",
+            longDescription = "description of Amsterdam",
+            shortDescription = "short description of Avans",
+            imgMap = 1,
             visited = false
         )
 
