@@ -41,8 +41,9 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
         locationFlow = locations,
     )
 
-    fun AddGeofence(lat: Double, lng: Double) {
+    fun addGeofence(lat: Double, lng: Double) {
         var geofence: Geofence? = geofenceHelper.getGeofence("geo", lat, lng)
+
         var geofencingRequest: GeofencingRequest? = geofence?.let {
             geofenceHelper.geofencingRequest(
                 it

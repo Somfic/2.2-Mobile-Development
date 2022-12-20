@@ -24,7 +24,6 @@ import androidx.core.app.ActivityCompat
 
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.GetLocationProvider
-import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailFragment
 import com.example.mobile_development_2_2.gui.fragments.poi.POIListFragment
 import com.example.mobile_development_2_2.data.LocationProvider
 
@@ -36,7 +35,6 @@ import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import kotlinx.coroutines.currentCoroutineContext
 import org.osmdroid.config.Configuration.*
 
 class MainActivity : ComponentActivity() {
@@ -89,7 +87,7 @@ class MainActivity : ComponentActivity() {
         val osmViewModel = remember {
             OSMViewModel(GetLocationProvider(LocationProvider(context = context)),  this)
         }
-        osmViewModel.AddGeofence(51.5856, 4.7925)
+        osmViewModel.addGeofence(51.5856, 4.7925)
         this.osmViewModel = osmViewModel
 
         Scaffold(
