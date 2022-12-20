@@ -1,4 +1,4 @@
-package com.example.mobile_development_2_2.map.GPS
+package com.example.mobile_development_2_2.map.gps
 
 
 import android.content.Context

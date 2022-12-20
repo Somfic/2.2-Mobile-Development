@@ -23,10 +23,20 @@ class Route(
         POIs.plus(poi)
     }
 
+    fun hasProgress(): Boolean{
+        for(poi in POIs ){
+            if(poi.visited)
+                return true
+        }
+        return false
+    }
+
+
     companion object{
         fun TestRoute(): Route{
             return TestRoute("testRoute")
         }
+
 
         fun TestRoute(name: String): Route {
             val avans = POI(

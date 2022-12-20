@@ -2,6 +2,7 @@ package com.example.mobile_development_2_2.gui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.location.LocationProvider
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -45,8 +46,8 @@ import com.example.mobile_development_2_2.gui.fragments.route.RouteListScreen
 import com.example.mobile_development_2_2.map.route.RouteManager
 import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.gui.fragments.settings.SettingsFragment
-import com.example.mobile_development_2_2.map.GPS.GPSLocationProvider
-import com.example.mobile_development_2_2.map.GPS.GetLocationProvider
+import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
+import com.example.mobile_development_2_2.map.gps.GetLocationProvider
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
@@ -108,7 +109,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalPermissionsApi::class)
+
+    fun CheckForDuplicateFragmentOnStack(navController: NavHostController) {
+        if(navController.previousBackStackEntry!!.destination.displayName == navController.currentBackStackEntry!!.destination.displayName){
+            navController.popBackStack()
+        }
+    }
+
     @Composable
     fun MainScreen(navController: NavHostController = rememberNavController()) {
         // Get current back stack entry
@@ -124,13 +131,6 @@ class MainActivity : ComponentActivity() {
         val currentScreen = Fragments.valueOf(
             backStackEntry?.destination?.route ?: Fragments.Home.name
         )
-        val permissions = rememberMultiplePermissionsState(
-                listOf(
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                )
-        )
 
         Scaffold(
             topBar = {
@@ -142,21 +142,18 @@ class MainActivity : ComponentActivity() {
             },
             bottomBar = { BottomNavigationBar(
                 onHomeButtonClicked = {
-                    navController.backQueue.clear()
                     navController.navigate(Fragments.Home.name)
-
+                    navController.backQueue.clear()
                                       },
                 onHomePOIClicked = {
-                    navController.backQueue.clear()
                     navController.navigate(Fragments.POIList.name)
-
+                    navController.backQueue.clear()
                                    },
                 onMapButtonClicked = {
                     navController.backQueue.clear()
                     navController.navigate(Fragments.Route.name)
 
                     Log.d("123", "map")}
-                    permissions.launchMultiplePermissionRequest()}
             ) },
             backgroundColor = colorResource(R.color.lightGrey)
         ) { innerpadding ->

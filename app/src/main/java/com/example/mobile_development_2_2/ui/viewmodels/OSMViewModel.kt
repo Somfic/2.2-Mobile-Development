@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 
 import androidx.lifecycle.viewModelScope
 import com.example.mobile_development_2_2.data.GeofenceHelper
-import com.example.mobile_development_2_2.map.GPS.GetLocationProvider
+import com.example.mobile_development_2_2.map.gps.GetLocationProvider
 import com.example.mobile_development_2_2.map.route.POI
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient

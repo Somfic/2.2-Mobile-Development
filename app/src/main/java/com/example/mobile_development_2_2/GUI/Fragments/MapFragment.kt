@@ -5,24 +5,17 @@ import android.content.Context
 import android.location.Location
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -64,12 +57,13 @@ class MapFragment() : LocationListener {
     lateinit var myLocation: MyLocationNewOverlay
     lateinit var mapView: MapView
     lateinit var context: Context
-
+    var followRoute by mutableStateOf(false)
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
     fun MapScreen(viewModel: OSMViewModel, modifier: Modifier) {
         viewModel.provider.locationListener = this
+
         Surface(
             modifier = modifier.fillMaxSize()
         ) {
@@ -90,7 +84,6 @@ class MapFragment() : LocationListener {
                 locations = viewModel.pois,
                 routePoints = viewModel.pois.map { it.location }.toMutableList(),
                 provider = viewModel.provider,
-                followRoute = true
             )
             if (!premissions.allPermissionsGranted) {
                 Column() {
@@ -111,6 +104,61 @@ class MapFragment() : LocationListener {
 
 
             }
+            if(!followRoute){
+
+                Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center) {
+                    Button(
+                        onClick = { followRoute = true },
+                        modifier = Modifier
+                            .padding(bottom = 20.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(
+                                ContextCompat.getColor(
+                                    LocalContext.current, R.color.colorPrimary
+                                ).dec()), contentColor = Color.White
+                        )
+                    ) {
+                        Text(text = "Start route")
+                    }
+
+                }
+            }
+            if (followRoute) {
+                Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.End) {
+                    Button(
+                        onClick = { myLocation.enableFollowLocation() },
+                        modifier = Modifier
+                            .padding(bottom = 20.dp, end = 30.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(
+                                ContextCompat.getColor(
+                                    LocalContext.current, R.color.colorPrimary
+                                ).dec()), contentColor = Color.White
+                        )
+                    ) {
+                        Text(text = "Recenter")
+                    }
+
+                }
+                
+                Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start) {
+                    Button(
+                        onClick = { followRoute = false },
+                        modifier = Modifier
+                            .padding(top = 20.dp, start = 30.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(
+                                ContextCompat.getColor(
+                                    LocalContext.current, R.color.colorPrimary
+                                ).dec()), contentColor = Color.White
+                        )
+
+                    ) {
+                        Icon(painter = painterResource(id = R.drawable.ic_baseline_close_24), contentDescription = "")
+                    }
+
+                }
+            }
         }
     }
 
@@ -122,7 +170,6 @@ class MapFragment() : LocationListener {
         locations: List<POI> = listOf(),
         routePoints: MutableList<GeoPoint> = mutableListOf(),
         provider: IMyLocationProvider,
-        followRoute: Boolean,
     ) {
 
         val listener = object : ItemizedIconOverlay.OnItemGestureListener<POIItem> {
@@ -263,22 +310,10 @@ class MapFragment() : LocationListener {
             )
             mapView.invalidate() // Ensures the map is updated on screen
         }
-        if (followRoute) {
-            Row(verticalAlignment = Alignment.Bottom) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
 
-                    Button(
-                        onClick = { myLocation.enableFollowLocation() },
-                        modifier = Modifier
-                            .size(50.dp)
-                            .align(Alignment.End),
-                    ) {
 
-                    }
-                }
-            }
-        }
+
 
     }
 
