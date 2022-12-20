@@ -55,6 +55,7 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import kotlin.math.roundToInt
 
 
 class MapFragment() : LocationListener {
@@ -219,9 +220,6 @@ class MapFragment() : LocationListener {
                     val kmldocument = KmlDocument()
                     //get data/routes/historische_kilometer.geojson
 
-
-
-
                     val resources = getResources()
                     //switch case voor verschillende routes
 
@@ -297,25 +295,14 @@ class MapFragment() : LocationListener {
         if (myLocation.isFollowLocationEnabled) {
             mapView.mapOrientation = 360 - p0.bearing
             mapView.controller.setZoom(17.0)
-            mapView.setMapCenterOffset(0, 600)
-            myLocation.setDirectionIcon(
-                ContextCompat.getDrawable(
-                    context,
-                    org.osmdroid.library.R.drawable.round_navigation_white_48
-                )!!.toBitmap(150, 150)
-            )
+            mapView.setMapCenterOffset(0, 500)
+            myLocation.isDrawAccuracyEnabled = false
 
         } else {
             mapView.mapOrientation = 0f
             mapView.setMapCenterOffset(0, 0)
-            myLocation.setDirectionIcon(
-                ContextCompat.getDrawable(
-                    context,
-                    org.osmdroid.library.R.drawable.round_navigation_white_48
-                )!!.toBitmap(150, 150)
-            )
+            myLocation.isDrawAccuracyEnabled = true
         }
-        //myLocation.enableFollowLocation()
         mapView.invalidate()
     }
 
