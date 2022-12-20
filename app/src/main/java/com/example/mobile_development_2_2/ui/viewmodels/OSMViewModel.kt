@@ -30,7 +30,9 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
     private var geofencingClient: GeofencingClient = LocationServices.getGeofencingClient(context)
     private var geofenceHelper: GeofenceHelper = GeofenceHelper(context)
     var currentLocation : Location? = null
-    private val lastLocations = getLocationProvider().shareIn(
+    private val TAG = "OSMViewModel"
+
+    private val locations = getLocationProvider().shareIn(
         scope = viewModelScope,
         replay = 1,
         started = SharingStarted.WhileSubscribed()
