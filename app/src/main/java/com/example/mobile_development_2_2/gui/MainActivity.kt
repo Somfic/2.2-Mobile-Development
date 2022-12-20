@@ -177,8 +177,6 @@ class MainActivity : ComponentActivity() {
                         },
                         onPOIClicked = {
                             navController.navigate(Fragments.POIList.name)
-
-                            navController.popBackStack()
                         }
                     )
                 }
@@ -187,6 +185,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier,
                         route = RouteManager.getSelectedRoute(),
                         onPOIClicked = {
+                            navController.navigate(Fragments.POI.name)
                         }
                     )
                 }
