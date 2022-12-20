@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -350,10 +351,45 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+    @Composable
+    fun popUp(title : String, text : String) {
+        val openDialog = remember {
+            mutableStateOf(true)
+        }
+        if (openDialog.value) {
+            AlertDialog(
+                onDismissRequest = { !openDialog.value },
+                title = { Text(text = title, color = Color.Black) },
+                text = { Text(text = text, color = Color.Black) },
+
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            openDialog.value = false
+                        }
+                    ) {
+                        Text(text = "Yes", color = Color.Blue)
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            openDialog.value = false
+                        }
+                    ) {
+                        Text(text = "No", color = Color.Blue)
+                    }
+                },
+                backgroundColor = Color.White,
+                contentColor = Color.Black
+            )
+        }
+    }
+}
+
 
 /*    @Preview(showBackground = true)
     @Composable
     fun BottomNavigationBarPreview() {
         BottomNavigationBar()
     }*/
-}
