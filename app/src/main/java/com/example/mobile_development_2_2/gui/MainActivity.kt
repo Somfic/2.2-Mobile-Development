@@ -2,6 +2,9 @@ package com.example.mobile_development_2_2.gui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Build.VERSION_CODES.N
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -22,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key.Companion.N
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -59,6 +63,12 @@ class MainActivity : ComponentActivity() {
     lateinit var osmViewModel: OSMViewModel
     var map = MapFragment()
 
+    private val isPipSupported by lazy {
+        packageManager.hasSystemFeature(
+            PackageManager.FEATURE_PICTURE_IN_PICTURE
+        )
+    }
+
     enum class Fragments(@StringRes val title: Int) {
         Home(title = R.string.homeScreen),
         Info(title = R.string.infoScreen),
@@ -86,6 +96,14 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+    override fun onUserLeaveHint() {
+        if(!isPipSupported)
+            return
+        super.onUserLeaveHint()
+        enterPictureInPictureMode()
+    }
+
+
 
     @SuppressLint("MissingSuperCall")
     override fun onRequestPermissionsResult(
@@ -120,6 +138,7 @@ class MainActivity : ComponentActivity() {
         val osmViewModel = remember {
             OSMViewModel(GetLocationProvider(LocationProvider(context = context)),  this)
         }
+        osmViewModel.setGeofenceLocation(51.5856, 4.7925)
         this.osmViewModel = osmViewModel
 
         // Get the name of the current screen

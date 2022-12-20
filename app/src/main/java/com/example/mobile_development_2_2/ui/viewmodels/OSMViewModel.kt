@@ -94,7 +94,7 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
         for (it in pois) {
             setGeofenceLocation(it.location.latitude,it.location.longitude)
         }
-        //AddGeofence(51.5856, 4.7925)
+        setGeofenceLocation(51.5856, 4.7925)
     }
 
     fun setGeofenceLocation(lat: Double, lng: Double, ) {
