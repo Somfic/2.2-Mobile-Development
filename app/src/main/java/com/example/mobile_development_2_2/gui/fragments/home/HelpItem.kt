@@ -21,6 +21,8 @@ class HelpItem(title: String, imgId: Int, description: String) {
             var item7 = HelpItem(Lang.get(R.string.HelpItem7), R.drawable.img_infolang, Lang.get(R.string.HelpItem7Description))
             var item8 = HelpItem(Lang.get(R.string.HelpItem8), R.drawable.img_infocolor, Lang.get(R.string.HelpItem8Description))
 
+
+
             return listOf(item1, item2, item3, item4, item5, item6, item7, item8)
         }
 

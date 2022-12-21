@@ -54,6 +54,7 @@ import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.gui.fragments.settings.SettingsFragment
 import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
 import com.example.mobile_development_2_2.map.gps.GetLocationProvider
+import com.example.mobile_development_2_2.map.route.Route
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -90,6 +91,8 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
+
+            Log.d("Mainactivity", RouteManager.getStringById(this, "HelpItem1"))
 
             val openDialog = remember {
                 mutableStateOf(false)

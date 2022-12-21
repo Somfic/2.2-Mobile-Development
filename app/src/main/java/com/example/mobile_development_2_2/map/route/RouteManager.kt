@@ -1,7 +1,10 @@
 package com.example.mobile_development_2_2.map.route
 
+import android.content.Context
+import android.content.res.Resources
 import android.util.Log
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
 
 class RouteManager {
@@ -52,6 +55,12 @@ class RouteManager {
 
         fun getSelectedPOI(): POI{
             return Route.getSelectedPOI()
+        }
+
+        fun getStringById(context: Context, idName: String): String{
+            val resources = context.resources
+
+            return Lang.get(resources.getIdentifier(idName, "string", context.packageName))
         }
     }
 }
