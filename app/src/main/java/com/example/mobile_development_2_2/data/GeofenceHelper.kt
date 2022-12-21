@@ -22,9 +22,9 @@ class GeofenceHelper(base: Context?) : ContextWrapper(base) {
             .build()
     }
 
-    fun getGeofence(id : String, lat : Double, lng : Double) : Geofence? {
+    fun getGeofence(lat : Double, lng : Double) : Geofence? {
         return Geofence.Builder()
-            .setRequestId(id)
+            .setRequestId("geo")
             .setCircularRegion(lat, lng, 1000f)
             .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
             .setExpirationDuration(Geofence.NEVER_EXPIRE)

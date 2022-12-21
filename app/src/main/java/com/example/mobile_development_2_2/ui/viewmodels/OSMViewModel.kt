@@ -104,17 +104,15 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
 
     fun invoke () {
         for (it in pois) {
-            setGeofenceLocation(it.location.latitude,it.location.longitude, it.name)
+            setGeofenceLocation(it.location.latitude,it.location.longitude)
         }
         //this method changes the location of the geofence,
         //keep in mind there is always 1 active geofence which should be the next geofence in the route,
-        //"ïd" in this method should be the name of the geofence, this will be shown in the notification
-        setGeofenceLocation(51.5856, 4.7925, "geo")
+        setGeofenceLocation(51.5856, 4.7925)
     }
 
-    fun setGeofenceLocation(lat: Double, lng: Double, id : String  ) {
-        geofenceHelper.getPendingIntent()?.let { geofencingClient.removeGeofences(it) }
-        var geofence: Geofence? = geofenceHelper.getGeofence(id, lat, lng)
+    fun setGeofenceLocation(lat: Double, lng: Double) {
+        var geofence: Geofence? = geofenceHelper.getGeofence(lat, lng)
 
         var geofencingRequest: GeofencingRequest? = geofence?.let {
             geofenceHelper.geofencingRequest(

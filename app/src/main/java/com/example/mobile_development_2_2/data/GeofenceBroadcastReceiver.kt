@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.gui.MainActivity
 import com.example.mobile_development_2_2.gui.fragments.MapFragment
+import com.example.mobile_development_2_2.map.route.Route
 import com.example.mobile_development_2_2.map.route.RouteManager
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofenceStatusCodes
@@ -42,6 +43,8 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
                 //RouteManager.SelectPOI()
                 PopupHelper.SetState(true)
+
+                Route.getNextPOI()
             }
         }
     }
