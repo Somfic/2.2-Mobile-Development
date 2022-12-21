@@ -1,8 +1,10 @@
 package com.example.mobile_development_2_2.map.route
 
+import android.content.Context
 import android.content.res.Resources
 import android.util.Log
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
 import com.google.gson.Gson
 
@@ -10,7 +12,8 @@ class RouteManager {
 
 
     companion object{
-        fun TestRoutes(): List<Route>{
+        var routes = TestRoutes()
+         private fun TestRoutes(): List<Route>{
             var testRoute1 = Route.TestRoute("testRoute1")
             var testRoute2 = Route.TestRoute2("testRoute2")
             //var testRoute3 = Route.TestRoute("testRoute3")
@@ -42,7 +45,17 @@ class RouteManager {
         }
         var selectedItem = TestRoutes().get(0)
 
+        fun setRouteState(started: Boolean){
+            getRouteByName(selectedItem.name)?.started?.value = started
+        }
 
+        fun getRouteByName(name : String) : Route?{
+            for (route in routes){
+                if(route.name == name)
+                    return route
+            }
+            return null
+        }
 
         fun selectItem(route: Route){
             Log.d("a", "Item selected")
@@ -60,6 +73,12 @@ class RouteManager {
 
         fun getSelectedPOI(): POI{
             return Route.getSelectedPOI()
+        }
+
+        fun getStringById(context: Context, idName: String): String{
+            val resources = context.resources
+
+            return Lang.get(resources.getIdentifier(idName, "string", context.packageName))
         }
     }
 }

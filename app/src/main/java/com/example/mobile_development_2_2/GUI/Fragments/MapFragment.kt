@@ -3,6 +3,7 @@ package com.example.mobile_development_2_2.gui.fragments
 import android.Manifest
 import android.content.Context
 import android.location.Location
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -13,9 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -23,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -59,8 +59,8 @@ class MapFragment : LocationListener {
     lateinit var myLocation: MyLocationNewOverlay
     lateinit var mapView: MapView
     lateinit var context: Context
-    var followRoute by mutableStateOf(false)
     lateinit var route: Route
+    //var followRoute by mutableStateOf(this.route.started)
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
@@ -90,27 +90,29 @@ class MapFragment : LocationListener {
             if (!premissions.allPermissionsGranted) {
                 Column {
 
-                    Text(text = Lang.get(R.string.map_no_location_permission), color = Color(ContextCompat.getColor(context,R.color.colorPrimary).dec()))
+                    Text(text = Lang.get(R.string.map_no_location_permission), color = MaterialTheme.colors.error)
                 }
             }
             Row {
-
-
                 Text(
                     text = "Â© OpenStreetMap contributors",
                     fontSize = 8.sp,
                     modifier = Modifier
-                        .background(Color.White, RectangleShape)
+                        .background(MaterialTheme.colors.surface, RectangleShape)
                         .align(Alignment.Bottom)
                 )
 
 
             }
-            if(!followRoute){
+            if(!route.started.value){
 
                 Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center) {
                     Button(
-                        onClick = { followRoute = true },
+                        onClick = {
+                            Log.d("f", "" + route.started.value)
+                            RouteManager.setRouteState(true);
+                            Log.d("f", "" + route.started.value)
+                                  },
                         modifier = Modifier
                             .padding(bottom = 20.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -120,7 +122,7 @@ class MapFragment : LocationListener {
                                 ).dec()), contentColor = Color.White
                         )
                     ) {
-                        if(route.hasProgress())
+                        if(!route.hasProgress())
                             Text(text = "Start route")
                         else
                             Text(text = "Resume route")
@@ -128,7 +130,7 @@ class MapFragment : LocationListener {
 
                 }
             }
-            if (followRoute) {
+            if (route.started.value) {
                 Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.End) {
                     Button(
                         onClick = { myLocation.enableFollowLocation() },
@@ -148,7 +150,8 @@ class MapFragment : LocationListener {
                 
                 Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start) {
                     Button(
-                        onClick = { followRoute = false },
+                        onClick = {
+                            RouteManager.setRouteState(false); },
                         modifier = Modifier
                             .padding(top = 20.dp, start = 30.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -230,8 +233,8 @@ class MapFragment : LocationListener {
         val currentRoute = remember {
             Polyline()
         }
-        currentRoute.outlinePaint.color = ContextCompat.getColor(context, R.color.purple_200)
-        ContextCompat.getColor(context, R.color.purple_200).dec()
+        currentRoute.outlinePaint.color = MaterialTheme.colors.primary.toArgb()
+
         currentRoute.setPoints(routePoints)
         //todo Als we willen dat de gelopen route wordt getekend en/of een correctieroute wordt getekend
 //        val walkedRoute = remember {
@@ -290,7 +293,7 @@ class MapFragment : LocationListener {
             },
             modifier = modifier,
             update = {
-                if (followRoute) {
+                if (route.started.value) {
                     myLocation.disableFollowLocation()
                     myLocation.enableFollowLocation()
 

@@ -20,6 +20,7 @@
 
         <activity
             android:name=".gui.MainActivity"
+            android:supportsPictureInPicture="true"
             android:exported="true"
             android:label="@string/project_name"
             android:theme="@style/Theme.MobileDevelopment2_2">

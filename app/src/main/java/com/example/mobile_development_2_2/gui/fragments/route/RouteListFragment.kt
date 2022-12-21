@@ -65,18 +65,12 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
             .fillMaxWidth()
             .height(500.dp)
             .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                ), RectangleShape
+              MaterialTheme.colors.background, RectangleShape
             )
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
-        backgroundColor = Color.White
+        backgroundColor = MaterialTheme.colors.surface
     ) {
         val application = LocalContext.current.applicationContext as Application
         Log.d("image", route.name)
@@ -134,8 +128,10 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
                     onPOIClicked()
                 },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Red, contentColor = Color.White
-                ), modifier = Modifier
+                    backgroundColor = MaterialTheme.colors.primary,
+                    contentColor = MaterialTheme.colors.onPrimary,
+                ),
+                modifier = Modifier
                     .width(150.dp)
                     .height(35.dp)
                     .offset(-100.dp, -25.dp)
@@ -157,11 +153,11 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
                     onRouteClicked()
                 },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Red, contentColor = Color.White
+                    backgroundColor = MaterialTheme.colors.primary, contentColor = MaterialTheme.colors.onPrimary
                 ), modifier = Modifier
                     .width(150.dp)
                     .height(35.dp)
-                    .offset(100.dp, -25.dp)
+                    .offset(100.dp, (-25).dp)
             ) {
                 Text(text =  Lang.get(R.string.routes_map))
             }

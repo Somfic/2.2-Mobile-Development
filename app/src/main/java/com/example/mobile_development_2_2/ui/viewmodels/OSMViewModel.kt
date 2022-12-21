@@ -6,6 +6,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.location.Location
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mobile_development_2_2.data.GeofenceHelper
@@ -103,13 +104,18 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
 
     fun invoke () {
         for (it in pois) {
-            AddGeofence(it.location.latitude,it.location.longitude)
+            setGeofenceLocation(it.location.latitude,it.location.longitude, it.name)
         }
-        //AddGeofence(51.5856, 4.7925)
+        //this method changes the location of the geofence,
+        //keep in mind there is always 1 active geofence which should be the next geofence in the route,
+        //"ïd" in this method should be the name of the geofence, this will be shown in the notification
+        setGeofenceLocation(51.5856, 4.7925, "geo")
     }
 
-    fun AddGeofence(lat: Double, lng: Double, ) {
-        var geofence: Geofence? = geofenceHelper.getGeofence("geo", lat, lng)
+    fun setGeofenceLocation(lat: Double, lng: Double, id : String  ) {
+        geofenceHelper.getPendingIntent()?.let { geofencingClient.removeGeofences(it) }
+        var geofence: Geofence? = geofenceHelper.getGeofence(id, lat, lng)
+
         var geofencingRequest: GeofencingRequest? = geofence?.let {
             geofenceHelper.geofencingRequest(
                 it

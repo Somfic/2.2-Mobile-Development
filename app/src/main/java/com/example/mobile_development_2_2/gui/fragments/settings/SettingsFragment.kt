@@ -28,10 +28,22 @@ import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
     @Composable
     fun SettingsFragment() {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Settings()
-            AgsLogo()
-            Copyright()
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            Card(
+                backgroundColor = MaterialTheme.colors.surface
+            ) {
+                Settings()
+            }
+                Card(
+                    backgroundColor = MaterialTheme.colors.surface
+                ) {
+                    AgsLogo()
+                }
+                    Card(
+                        backgroundColor = MaterialTheme.colors.surface
+                    ) {
+                        Copyright()
+                    }
         }
     }
 
@@ -57,7 +69,7 @@ import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
                         Lang.languages.forEach { l ->
                             DropdownMenuItem(onClick = {
                                 expanded = false
-                                Lang.set(l)
+                                Lang.setLang(l)
                             }) {
                                 Text(text = l.first)
                             }
@@ -71,11 +83,10 @@ import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
                     text = Lang.get(R.string.settings_colour_blind),
                     modifier = Modifier.padding(8.dp),
                 )
-                val checkedState = remember { mutableStateOf(true) }
                 Switch(
-                    checked = checkedState.value,
+                    checked = Lang.colorblind,
                     onCheckedChange = {
-                        checkedState.value = it; },
+                        Lang.setColor(it); },
                 )
             }
         }

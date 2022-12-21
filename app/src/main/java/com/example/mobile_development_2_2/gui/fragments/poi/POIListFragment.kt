@@ -27,7 +27,6 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.BlendMode.Companion.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
@@ -71,18 +70,12 @@ fun MessageRow(poi: POI, onPOIClicked: () -> Unit) {
             .fillMaxWidth()
             .height(200.dp)
             .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                ), RectangleShape
+                MaterialTheme.colors.surface, RectangleShape
             )
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
-        backgroundColor = androidx.compose.ui.graphics.Color.White
+        backgroundColor = MaterialTheme.colors.surface
     )
     {
         val application = LocalContext.current.applicationContext as Application
@@ -124,9 +117,6 @@ fun MessageRow(poi: POI, onPOIClicked: () -> Unit) {
             readOnly = true,
             onValueChange = { },
             label = { Text(text = "") },
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color(0xFFFFFFFF)
-            )
         )
 
     }

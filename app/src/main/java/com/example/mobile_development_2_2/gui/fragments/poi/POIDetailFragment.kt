@@ -63,18 +63,12 @@ fun MessageRow1(poi: POI) {
             .fillMaxWidth()
             .height(370.dp)
             .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                ), RectangleShape
+                MaterialTheme.colors.background, RectangleShape
             )
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
-        backgroundColor = Color.White
+        backgroundColor = MaterialTheme.colors.surface
     )
     {
         val application = LocalContext.current.applicationContext as Application
@@ -129,18 +123,12 @@ fun MessageRow2(poi: POI) {
             .fillMaxWidth()
             .fillMaxHeight()
             .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                ), RectangleShape
+                MaterialTheme.colors.background, RectangleShape
             )
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
-        backgroundColor = Color.White
+        backgroundColor = MaterialTheme.colors.surface
     )
     {
 
@@ -150,7 +138,7 @@ fun MessageRow2(poi: POI) {
             onValueChange = { },
             label = { Text(text = "") },
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color(0xFFFFFFFF)
+                backgroundColor = MaterialTheme.colors.background
             )
         )
 
@@ -164,18 +152,12 @@ fun MessageRow3(poi: POI) {
             .fillMaxWidth()
             .fillMaxHeight()
             .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                ), RectangleShape
+                MaterialTheme.colors.background, RectangleShape
             )
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
-        backgroundColor = Color.White
+        backgroundColor = MaterialTheme.colors.surface
     )
     {
         val application = LocalContext.current.applicationContext as Application

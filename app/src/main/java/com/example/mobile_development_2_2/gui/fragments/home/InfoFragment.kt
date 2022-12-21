@@ -35,15 +35,7 @@ fun InfoScreen(modifier: Modifier, helpItem: HelpItem) {
     Surface(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                ),
-            )
+            .background(MaterialTheme.colors.surface)
     ) {
         Content(helpItem = helpItem)
 
@@ -62,15 +54,7 @@ private fun Content(helpItem: HelpItem) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                )
-            ),
+            .background(MaterialTheme.colors.background),
         // content padding
         contentPadding = PaddingValues(
             start = 12.dp,
@@ -102,18 +86,12 @@ fun MessageRow1(helpItem: HelpItem) {
             .fillMaxWidth()
             .height(screenHeight.div(2))
             .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                ), RectangleShape
+                MaterialTheme.colors.background, RectangleShape
             )
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
-        backgroundColor = Color.White
+        backgroundColor = MaterialTheme.colors.background
     )
     {
 
@@ -128,7 +106,8 @@ fun MessageRow1(helpItem: HelpItem) {
                 ),
             alignment = Alignment.CenterStart,
             alpha = DefaultAlpha,
-            colorFilter = null
+            colorFilter = null,
+
         )
     }
 }
@@ -144,13 +123,7 @@ fun MessageRow2(helpItem: HelpItem) {
         modifier = Modifier
             .fillMaxSize()
             .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                ), RectangleShape
+                MaterialTheme.colors.background, RectangleShape
             )
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp)),
@@ -160,12 +133,12 @@ fun MessageRow2(helpItem: HelpItem) {
     {
 
         TextField(
-            value = helpItem.title + helpItem.description,
+            value = helpItem.description,
             readOnly = true,
             onValueChange = { },
             label = { Text(text = "") },
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color(0xFFFFFFFF)
+                backgroundColor = MaterialTheme.colors.background
             )
         )
     }

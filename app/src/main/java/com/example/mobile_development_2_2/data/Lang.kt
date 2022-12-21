@@ -1,6 +1,7 @@
 package com.example.mobile_development_2_2.data
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,10 +12,13 @@ class Lang {
         private lateinit var context: Context
         private var locale: Locale = Locale.getDefault()
 
-        private var callbacks: ArrayList<() -> Unit> = ArrayList()
+        private var languageCallbacks: ArrayList<() -> Unit> = ArrayList()
+        private var colorblindCallbacks: ArrayList<() -> Unit> = ArrayList()
 
         val languages = arrayOf(Pair("English", "en"), Pair("Nederlands", "nl"))
         var language: Pair<String, String> by mutableStateOf(languages[0])
+
+        var colorblind by mutableStateOf(false)
 
         fun setContext(context: Context) {
             if(!this::context.isInitialized) {
@@ -24,14 +28,19 @@ class Lang {
             }
         }
 
-        fun set(l: Pair<String, String>) {
+        fun setLang(l: Pair<String, String>) {
             // Change the locale on the context
             context.resources.configuration.setLocale(Locale(l.second))
             context.resources.updateConfiguration(context.resources.configuration, context.resources.displayMetrics)
 
             locale = Locale(l.second)
             language = l
-            callbacks.forEach { it() }
+            languageCallbacks.forEach { it() }
+        }
+
+        fun setColor(c: Boolean) {
+            colorblind = c
+            colorblindCallbacks.forEach { it() }
         }
 
         fun get(id: Int) : String {
@@ -39,7 +48,11 @@ class Lang {
         }
 
         fun onLanguageChanged(callback: () -> Unit) {
-            callbacks.add(callback)
+            languageCallbacks.add(callback)
+        }
+
+        fun onColorblindChange(callback: () -> Unit) {
+            colorblindCallbacks.add(callback)
         }
     }
 }

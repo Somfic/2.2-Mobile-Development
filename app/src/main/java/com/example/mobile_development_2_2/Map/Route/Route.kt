@@ -1,6 +1,8 @@
 package com.example.mobile_development_2_2.map.route
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.example.mobile_development_2_2.R
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -13,7 +15,8 @@ data class Route(
     val img: String = "ic_logo.png",
     val shortDescription : String,
     val POIs: List<POI>,
-    val visited: Boolean?,
+    var finished: MutableState<Boolean> = mutableStateOf(false),
+    var started: MutableState<Boolean> = mutableStateOf(false)
 
 
 
@@ -87,11 +90,11 @@ data class Route(
             return Route(
                 name = name,
                 cityName = "Breda",
-                visited = false,
                 length = 6234,
                 img = "img_poi3.jpg",
                 shortDescription = "A route for testing",
-                POIs = cities
+                POIs = cities,
+
             )
 
         }
@@ -144,11 +147,11 @@ data class Route(
             return Route(
                 name = name,
                 cityName = "Breda2",
-                visited = false,
                 length = 6234,
                 img = "img_poi3.jpg",
                 shortDescription = "A route for testing2",
-                POIs = cities
+                POIs = cities,
+
             )
 
         }
