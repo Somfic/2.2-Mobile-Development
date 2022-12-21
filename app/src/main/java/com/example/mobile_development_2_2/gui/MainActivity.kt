@@ -200,7 +200,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
 
                     )
-                    map.setRoute(RouteManager.getSelectedRoute().name)
+//                   map.setRoute(RouteManager.getSelectedRoute().name)
 
 
                 }
@@ -223,7 +223,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun TopBar(
-        currentScreen: Fragments,
+        currentScreen: MainActivity.Fragments,
         canNavigateBack: Boolean,
         navigateUp: () -> Unit,
         modifier: Modifier = Modifier,

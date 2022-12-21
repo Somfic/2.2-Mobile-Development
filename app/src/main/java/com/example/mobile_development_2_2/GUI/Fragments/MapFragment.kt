@@ -2,11 +2,8 @@ package com.example.mobile_development_2_2.gui.fragments
 
 import android.Manifest
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.location.Location
+import android.util.Log
 
 import androidx.compose.foundation.background
 
@@ -15,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
-import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -31,35 +27,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.scale
-import androidx.core.location.LocationManagerCompat.requestLocationUpdates
-import androidx.lifecycle.viewModelScope
+import com.example.mobile_development_2_2.map.RouteRequest
 
 import com.example.mobile_development_2_2.R
 
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
-import com.google.accompanist.permissions.MultiplePermissionsState
-import com.example.mobile_development_2_2.map.route.Route
-import com.example.mobile_development_2_2.map.route.RouteManager
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.osmdroid.bonuspack.kml.KmlDocument
-import org.osmdroid.bonuspack.kml.KmlGeometry
 import org.osmdroid.bonuspack.kml.Style
-import org.osmdroid.api.IMapController
-import org.osmdroid.bonuspack.kml.LineStyle
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
-import org.osmdroid.views.overlay.gridlines.LatLonGridlineOverlay.lineColor
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
@@ -70,6 +62,9 @@ class MapFragment() : LocationListener {
     lateinit var myLocation: MyLocationNewOverlay
     lateinit var mapView: MapView
     lateinit var context: Context
+     var lastrouterequest = System.currentTimeMillis()
+     var feature = FolderOverlay()
+
 
 
     @OptIn(ExperimentalPermissionsApi::class)
@@ -90,6 +85,7 @@ class MapFragment() : LocationListener {
 
 
             }
+
             OSM(
 
                 modifier = modifier,
@@ -274,39 +270,73 @@ class MapFragment() : LocationListener {
 
     }
 
-    fun setRoute(route: String?) {
+   fun setRoute(start : GeoPoint, end : GeoPoint){
 
 
+
+       var route: String
 
         val resources = mapView.resources
 
 
 //        val inputStream = resources.openRawResource(R.raw.test_route)
-        val inputStream = when (route) {
-            "test_Route1" -> resources.openRawResource(R.raw.test_route)
-            "testRoute2" -> resources.openRawResource(R.raw.test_route2)
-            "testRoute3" -> resources.openRawResource(R.raw.test_route3)
-            else -> resources.openRawResource(R.raw.test_route)
-        }
+
 //        val inputStream = resources.openRawResource(R.raw.test_route)
 
         val kmldocument = KmlDocument()
-        kmldocument.parseGeoJSONStream(inputStream)
-        val kmlIcon = BitmapDrawable(resources, BitmapFactory.decodeResource(resources, R.drawable.marker_node))
-
-        val klmstyle = Style(
-           kmlIcon.bitmap,Color.Red.hashCode(),20f,Color.White.hashCode())
+//        kmldocument.parseGeoJSONStream(inputStream)
 
 
-            //	public Style(Bitmap icon, int lineColor, float lineWidth, int fillColor){ )
+       runBlocking {
+           GlobalScope.launch {
+
+               route = RouteRequest.getRoute(start, end)
+               kmldocument.parseGeoJSON(route)
+               val klmstyle = Style(
+                   null,Color.Red.hashCode(),20f,Color.White.hashCode())
 
 
-//        klmstyle.mLineStyle = LineStyle(0,10f)
+               //	public Style(Bitmap icon, int lineColor, float lineWidth, int fillColor){ )
 
-        val feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument);
-       
-        mapView.overlays.add(feature)
-        mapView.invalidate()
+
+                if(feature != null){
+                  feature.closeAllInfoWindows()
+                    mapView.overlays.remove(feature)
+                }
+
+               feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument) as FolderOverlay;
+               var count = 0
+              println( "(feature.items.size) heuu")
+               feature.items.forEach {
+                   if (it is Polyline) {
+                       it.outlinePaint.color = ColorUtils.HSLToColor(floatArrayOf(count.toFloat(), 1f, 0.5f))
+
+                       it.outlinePaint.strokeWidth = 20f
+                       count += 10
+                   }
+               }
+                mapView.overlays.add(feature)
+               mapView.invalidate()
+
+
+
+
+//                if (mapView.overlays.contains(feature)){
+//                    mapView.overlays.remove(feature)
+//                    mapView.invalidate()
+//                    mapView.overlays.add(feature)
+//
+//                }else{
+//                    mapView.overlays.add(feature)
+//                }
+
+
+           }
+       }
+
+//        val kmlIcon = BitmapDrawable(resources, BitmapFactory.decodeResource(resources, R.drawable.marker_node))
+
+
 
 
     }
@@ -330,6 +360,7 @@ class MapFragment() : LocationListener {
                     context,
                     org.osmdroid.library.R.drawable.round_navigation_white_48
                 )!!.toBitmap(150, 150)
+
             )
 
         } else {
@@ -343,6 +374,11 @@ class MapFragment() : LocationListener {
             )
         }
         //myLocation.enableFollowLocation()
+      if (System.currentTimeMillis() - lastrouterequest > 1800) {
+
+          lastrouterequest = System.currentTimeMillis()
+          setRoute(GeoPoint(51.58703, 4.773187), GeoPoint(p0.latitude, p0.longitude))
+      }
         mapView.invalidate()
     }
 
