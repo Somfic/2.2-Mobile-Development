@@ -34,7 +34,7 @@ class GeofenceHelper(base: Context?) : ContextWrapper(base) {
     fun getPendingIntent() : PendingIntent? {
         //Toast.makeText(this, "not init", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, GeofenceBroadcastReceiver::class.java)
-        pendingIntent = PendingIntent.getBroadcast(this, 6969, intent, PendingIntent.FLAG_IMMUTABLE)
+        pendingIntent = PendingIntent.getBroadcast(this, 6969, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         return pendingIntent
     }
