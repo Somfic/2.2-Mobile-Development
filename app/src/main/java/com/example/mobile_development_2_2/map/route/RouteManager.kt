@@ -8,6 +8,8 @@ class RouteManager {
 
 
     companion object{
+        var targetPOI: POI? = null
+
         var routes = TestRoutes()
          private fun TestRoutes(): List<Route>{
             var testRoute1 = Route.TestRoute("testRoute1")
