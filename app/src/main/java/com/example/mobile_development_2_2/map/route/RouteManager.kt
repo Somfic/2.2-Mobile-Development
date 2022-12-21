@@ -80,6 +80,7 @@ class RouteManager {
         fun getNextPOI() : POI? {
             return Route.getNextPOI()
         }
+
         fun getStringById(context: Context, idName: String): String{
             val resources = context.resources
 
