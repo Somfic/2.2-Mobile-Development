@@ -10,12 +10,12 @@ import com.example.mobile_development_2_2.data.Lang
 
 private val DarkColorPalette = darkColors(
     primary = Primary
-
 )
 
 private val LightColorPalette = lightColors(
     primary = Primary,
     surface = Surface,
+    background = Background
 )
 
 private val DarkColorBlindPalette = darkColors(
