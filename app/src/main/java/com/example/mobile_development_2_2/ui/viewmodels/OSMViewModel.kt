@@ -95,6 +95,9 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
         for (it in pois) {
             setGeofenceLocation(it.location.latitude,it.location.longitude, it.name)
         }
+        //this method changes the location of the geofence,
+        //keep in mind there is always 1 active geofence which should be the next geofence in the route,
+        //"ïd" in this method should be the name of the geofence, this will be shown in the notification
         setGeofenceLocation(51.5856, 4.7925, "geo")
     }
 
