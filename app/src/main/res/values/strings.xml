@@ -16,15 +16,18 @@
     <string name="sync_header">Sync</string>
 
 
-    <string name="homeScreen" translatable="false">home</string>
-    <string name="infoScreen" translatable="false">info</string>
-    <string name="poiListScreen" translatable="false">POIList</string>
-    <string name="POIScreen" translatable="false">POI</string>
-    <string name="routeScreen" translatable="false">route</string>
-    <string name="mapScreen" translatable="false">map</string>
-    <string name="settingsScreen" translatable="false">setttings</string>
+    <string name="homeScreen">Home</string>
+    <string name="infoScreen">Info</string>
+    <string name="poiListScreen">Points of Interest</string>
+    <string name="POIScreen">Point of Interest</string>
+    <string name="routeScreen">Route</string>
+    <string name="mapScreen">Map</string>
+    <string name="settingsScreen">Settings</string>
     <string name="sync_title">Sync</string>
     <string name="attachment_summary_off">Attachment off</string>
     <string name="attachment_summary_on">Attachment on</string>
     <string name="attachment_title">Attachments</string>
+    <string name="route_distance">Distance</string>
+    <string name="routes_waypoints">Waypoints</string>
+    <string name="map_no_location_permission">No location permissions</string>
 </resources>

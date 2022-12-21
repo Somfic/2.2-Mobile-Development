@@ -3,13 +3,22 @@ package com.example.mobile_development_2_2.gui.fragments
 import android.Manifest
 import android.content.Context
 import android.location.Location
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 
 import androidx.compose.runtime.*
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Button
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,27 +31,19 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.scale
-import androidx.core.location.LocationManagerCompat.requestLocationUpdates
-import androidx.lifecycle.viewModelScope
-
 import com.example.mobile_development_2_2.R
-
+import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.map.route.POI
-import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
-import com.google.accompanist.permissions.MultiplePermissionsState
 import com.example.mobile_development_2_2.map.route.Route
 import com.example.mobile_development_2_2.map.route.RouteManager
+import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.*
 import kotlinx.coroutines.flow.*
 import org.osmdroid.bonuspack.kml.KmlDocument
-import org.osmdroid.bonuspack.kml.KmlGeometry
-import org.osmdroid.bonuspack.kml.Style
-import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
@@ -52,7 +53,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import kotlin.math.roundToInt
 
 
-class MapFragment() : LocationListener {
+class MapFragment : LocationListener {
 
 
     lateinit var myLocation: MyLocationNewOverlay
@@ -81,20 +82,18 @@ class MapFragment() : LocationListener {
 
             }
             OSM(
-                route = viewModel.route,
                 modifier = modifier,
-                locations = viewModel.pois,
                 routePoints = viewModel.pois.map { it.location }.toMutableList(),
                 provider = viewModel.provider,
                 onPOIClicked = onPOIClicked
             )
             if (!premissions.allPermissionsGranted) {
-                Column() {
+                Column {
 
-                    Text(text = "No Location Premission granted", color = Color(ContextCompat.getColor(context,R.color.colorPrimary).dec()) )
+                    Text(text = Lang.get(R.string.map_no_location_permission), color = Color(ContextCompat.getColor(context,R.color.colorPrimary).dec()))
                 }
             }
-            Row() {
+            Row {
 
 
                 Text(
@@ -173,13 +172,12 @@ class MapFragment() : LocationListener {
     private fun OSM(
 
         modifier: Modifier = Modifier,
-        locations: List<POI> = listOf(),
-        route: Route,
         routePoints: MutableList<GeoPoint> = mutableListOf(),
         provider: IMyLocationProvider,
         onPOIClicked :() -> Unit,
     ) {
-        this.route = route
+        this.route = RouteManager.getSelectedRoute()
+        val locations = route.POIs
         val listener = object : ItemizedIconOverlay.OnItemGestureListener<POIItem> {
             override fun onItemSingleTapUp(index: Int, item: POIItem?): Boolean {
                 if (item != null) {
@@ -284,7 +282,7 @@ class MapFragment() : LocationListener {
                     val klmstyle = kmldocument.getStyle("route")
 
 
-                    val feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument);
+                    val feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument)
                     mapView.overlays.add(feature)
                     mapView.invalidate()
 
