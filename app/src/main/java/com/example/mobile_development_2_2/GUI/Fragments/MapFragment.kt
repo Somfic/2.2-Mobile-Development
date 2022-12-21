@@ -14,9 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -24,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -91,17 +90,15 @@ class MapFragment : LocationListener {
             if (!premissions.allPermissionsGranted) {
                 Column {
 
-                    Text(text = Lang.get(R.string.map_no_location_permission), color = Color(ContextCompat.getColor(context,R.color.colorPrimary).dec()))
+                    Text(text = Lang.get(R.string.map_no_location_permission), color = MaterialTheme.colors.error)
                 }
             }
             Row {
-
-
                 Text(
                     text = "Â© OpenStreetMap contributors",
                     fontSize = 8.sp,
                     modifier = Modifier
-                        .background(Color.White, RectangleShape)
+                        .background(MaterialTheme.colors.surface, RectangleShape)
                         .align(Alignment.Bottom)
                 )
 
@@ -236,8 +233,8 @@ class MapFragment : LocationListener {
         val currentRoute = remember {
             Polyline()
         }
-        currentRoute.outlinePaint.color = ContextCompat.getColor(context, R.color.purple_200)
-        ContextCompat.getColor(context, R.color.purple_200).dec()
+        currentRoute.outlinePaint.color = MaterialTheme.colors.primary.toArgb()
+
         currentRoute.setPoints(routePoints)
         //todo Als we willen dat de gelopen route wordt getekend en/of een correctieroute wordt getekend
 //        val walkedRoute = remember {

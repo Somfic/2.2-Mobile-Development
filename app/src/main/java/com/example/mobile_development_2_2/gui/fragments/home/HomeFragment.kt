@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -32,7 +33,6 @@ import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.map.route.POI
 import androidx.compose.ui.text.TextStyle as TextStyle1
-
 
 @Composable
 fun HomeScreen(modifier: Modifier, helpItems: List<HelpItem>, onPOIButtonClicked: () -> Unit) {
@@ -44,15 +44,7 @@ fun HomeScreen(modifier: Modifier, helpItems: List<HelpItem>, onPOIButtonClicked
     Surface(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                ),
-            )
+            .background(MaterialTheme.colors.background)
     ) {
         LazyColumn {
             item {
@@ -75,24 +67,12 @@ private fun Header(height: Float) {
         modifier = Modifier
             .fillMaxWidth()
             .height(height.dp)
-            .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                )
-            )
+            .background(MaterialTheme.colors.background)
     ) {
         Text(
             text = Lang.get(R.string.home_welcome_to_chlam), style = TextStyle1(
                 fontSize = 30.sp,
-                color = Color(
-                    ContextCompat.getColor(
-                        LocalContext.current, R.color.colorPrimary
-                    ).dec()
-                ),
+                color = MaterialTheme.colors.primary,
             ), modifier = Modifier.align(Alignment.Center)
 
         )
@@ -110,15 +90,7 @@ private fun Content(helpItems: List<HelpItem>, onPOIButtonClicked: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(screenHeight.minus(screenHeight.div(5)))
-            .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                )
-            ),
+            .background(MaterialTheme.colors.background),
         // content padding
         contentPadding = PaddingValues(
             start = 12.dp, top = 12.dp, end = 12.dp, bottom = 16.dp
@@ -144,18 +116,12 @@ fun MessageRow(helpItem: HelpItem, onPOIButtonClicked: () -> Unit) {
             .fillMaxWidth()
             .height(220.dp)
             .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                ), RectangleShape
+               MaterialTheme.colors.background, RectangleShape
             )
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
-        backgroundColor = Color.White
+        backgroundColor = MaterialTheme.colors.surface
     ) {
 
         Image(
