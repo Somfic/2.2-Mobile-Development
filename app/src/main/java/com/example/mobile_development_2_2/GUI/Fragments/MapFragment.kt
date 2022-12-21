@@ -90,7 +90,7 @@ class MapFragment : LocationListener {
             if (!premissions.allPermissionsGranted) {
                 Column {
 
-                    Text(text = Lang.get(R.string.map_no_location_permission), color = MaterialTheme.colors.error))
+                    Text(text = Lang.get(R.string.map_no_location_permission), color = MaterialTheme.colors.error)
                 }
             }
             Row {
