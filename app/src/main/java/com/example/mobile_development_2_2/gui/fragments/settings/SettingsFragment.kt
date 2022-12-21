@@ -28,10 +28,22 @@ import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
     @Composable
     fun SettingsFragment() {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Settings()
-            AgsLogo()
-            Copyright()
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            Card(
+                backgroundColor = MaterialTheme.colors.surface
+            ) {
+                Settings()
+            }
+                Card(
+                    backgroundColor = MaterialTheme.colors.surface
+                ) {
+                    AgsLogo()
+                }
+                    Card(
+                        backgroundColor = MaterialTheme.colors.surface
+                    ) {
+                        Copyright()
+                    }
         }
     }
 

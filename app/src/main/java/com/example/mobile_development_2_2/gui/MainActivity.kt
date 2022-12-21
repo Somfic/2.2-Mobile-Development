@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -22,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -73,12 +73,12 @@ class MainActivity : ComponentActivity() {
         getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
         Lang.setContext(this)
         Lang.onLanguageChanged { recreate() }
+        Lang.onColorblindChange { recreate() }
 
         setContent {
             MobileDevelopment2_2Theme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
                 ) {
                     MainScreen()
                 }
@@ -107,11 +107,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
-
-
     @Composable
     fun MainScreen(navController: NavHostController = rememberNavController()) {
+
         // Get current back stack entry
         val backStackEntry by navController.currentBackStackEntryAsState()
 
@@ -151,7 +149,7 @@ class MainActivity : ComponentActivity() {
 
                     Log.d("123", "map")}
             ) },
-            backgroundColor = colorResource(R.color.lightGrey)
+            backgroundColor = MaterialTheme.colors.background
         ) { innerpadding ->
             NavHost(
                 navController = navController,
@@ -207,13 +205,12 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                     )
                 }
-                composable(route = Fragments.Settings.name){
+                composable(route = Fragments.Settings.name) {
                     SettingsFragment(
 //                        viewModel = osmViewModel,
 //                        modifier = Modifier
                     )
                 }
-
             }
         }
 
@@ -244,16 +241,10 @@ class MainActivity : ComponentActivity() {
                     )
                 )
                 .background(
-                    Color(
-                        ContextCompat
-                            .getColor(
-                                LocalContext.current, R.color.lightGrey
-                            )
-                            .dec()
-                    )
+                    MaterialTheme.colors.background
                 ),
-            backgroundColor = colorResource(id = R.color.colorPrimary),
-            contentColor = Color.White,
+            backgroundColor = MaterialTheme.colors.primary,
+            contentColor = MaterialTheme.colors.onPrimary,
             actions = {
                 IconButton(onClick = { onSettingsButtonClicked() }) {
                     Icon(painterResource(id = item.icon), contentDescription = item.title)
@@ -298,8 +289,8 @@ class MainActivity : ComponentActivity() {
             )
         )
         BottomNavigation(
-            backgroundColor = colorResource(id = R.color.colorPrimary),
-            contentColor = Color.White,
+            backgroundColor = MaterialTheme.colors.primary,
+            contentColor = MaterialTheme.colors.onPrimary,
             modifier = Modifier
                 .clip(
                     RoundedCornerShape(
@@ -308,13 +299,7 @@ class MainActivity : ComponentActivity() {
                     )
                 )
                 .background(
-                    Color(
-                        ContextCompat
-                            .getColor(
-                                LocalContext.current, R.color.lightGrey
-                            )
-                            .dec()
-                    )
+                    MaterialTheme.colors.background
                 ),
         ) {
             items.forEach { item ->
@@ -339,8 +324,8 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     label = { Text(text = item.title) },
-                    selectedContentColor = Color.White.copy(0.4f),
-                    unselectedContentColor = Color.White,
+                    selectedContentColor = MaterialTheme.colors.primary,
+                    unselectedContentColor = MaterialTheme.colors.surface,
                     alwaysShowLabel = true,
                     selected = false,
                     onClick = onClick
