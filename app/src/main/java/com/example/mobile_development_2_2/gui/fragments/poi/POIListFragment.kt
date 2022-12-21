@@ -3,6 +3,8 @@
 package com.example.mobile_development_2_2.gui.fragments.poi
 
 
+import android.app.Application
+import android.graphics.drawable.Drawable
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,6 +34,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.map.route.Route
@@ -82,9 +85,11 @@ fun MessageRow(poi: POI, onPOIClicked: () -> Unit) {
         backgroundColor = androidx.compose.ui.graphics.Color.White
     )
     {
-
+        val application = LocalContext.current.applicationContext as Application
+        val imageStream = application.assets.open(poi.img)
+        val imageDrawable = Drawable.createFromStream(imageStream, null)
         Image(
-            painter = painterResource(id = poi.imgId),
+            bitmap = imageDrawable!!.toBitmap().asImageBitmap(),
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             modifier = Modifier
