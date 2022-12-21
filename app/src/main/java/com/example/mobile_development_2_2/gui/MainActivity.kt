@@ -104,7 +104,6 @@ class MainActivity : ComponentActivity() {
                     MainScreen(openDialog)
 
 
-
                 }
             }
         }
@@ -141,7 +140,7 @@ class MainActivity : ComponentActivity() {
 
 
     fun CheckForDuplicateFragmentOnStack(navController: NavHostController) {
-        if(navController.previousBackStackEntry!!.destination.displayName == navController.currentBackStackEntry!!.destination.displayName){
+        if (navController.previousBackStackEntry!!.destination.displayName == navController.currentBackStackEntry!!.destination.displayName) {
             navController.popBackStack()
         }
     }
@@ -158,7 +157,7 @@ class MainActivity : ComponentActivity() {
         val osmViewModel = remember {
             OSMViewModel(GetLocationProvider(GPSLocationProvider(context = context)), this)
         }
-        osmViewModel.setGeofenceLocation(51.5948, 4.7820, "id")
+        osmViewModel.setGeofenceLocation(51.6948, 4.7820, "id")
         this.osmViewModel = osmViewModel
 
         // Get the name of the current screen
@@ -174,18 +173,19 @@ class MainActivity : ComponentActivity() {
                     navigateUp = { navController.navigateUp() },
                     onSettingsButtonClicked = { navController.navigate(Fragments.Settings.name) })
             },
-            bottomBar = { BottomNavigationBar(
-                onHomeButtonClicked = {
-                    navController.backQueue.clear()
-                    navController.navigate(Fragments.Home.name)
-                                      },
-                onHomePOIClicked = {
-                    navController.backQueue.clear()
-                    navController.navigate(Fragments.POIList.name)
-                                   },
-                onMapButtonClicked = {
-                    navController.backQueue.clear()
-                    navController.navigate(Fragments.Route.name)
+            bottomBar = {
+                BottomNavigationBar(
+                    onHomeButtonClicked = {
+                        navController.backQueue.clear()
+                        navController.navigate(Fragments.Home.name)
+                    },
+                    onHomePOIClicked = {
+                        navController.backQueue.clear()
+                        navController.navigate(Fragments.POIList.name)
+                    },
+                    onMapButtonClicked = {
+                        navController.backQueue.clear()
+                        navController.navigate(Fragments.Route.name)
 
                         Log.d("123", "map")
                     }
@@ -296,8 +296,10 @@ class MainActivity : ComponentActivity() {
             backgroundColor = MaterialTheme.colors.primary,
             contentColor = MaterialTheme.colors.onPrimary,
             actions = {
-                IconButton(onClick = { onSettingsButtonClicked() }) {
-                    Icon(painterResource(id = item.icon), contentDescription = item.title)
+                if (currentScreen.name != Fragments.Settings.name) {
+                    IconButton(onClick = { onSettingsButtonClicked() }) {
+                        Icon(painterResource(id = item.icon), contentDescription = item.title)
+                    }
                 }
 
             },
@@ -385,17 +387,25 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    var test = false
-
     @Composable
-    fun popUp(title: String, text: String, openDialog: MutableState<Boolean>, onYesButtonClicked: () -> Unit) {
+    fun popUp(
+        title: String,
+        text: String,
+        openDialog: MutableState<Boolean>,
+        onYesButtonClicked: () -> Unit
+    ) {
 
         Log.d("main", "opening popup")
 
         AlertDialog(
             onDismissRequest = { !openDialog.value },
             title = { Text(text = RouteManager.getSelectedPOI().name, color = Color.Black) },
-            text = { Text(text = RouteManager.getSelectedPOI().shortDescription, color = Color.Black) },
+            text = {
+                Text(
+                    text = RouteManager.getSelectedPOI().shortDescription,
+                    color = Color.Black
+                )
+            },
 
             confirmButton = {
                 TextButton(

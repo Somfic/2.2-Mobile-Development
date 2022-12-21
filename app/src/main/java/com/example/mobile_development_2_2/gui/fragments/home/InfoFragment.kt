@@ -133,7 +133,7 @@ fun MessageRow2(helpItem: HelpItem) {
     {
 
         TextField(
-            value = helpItem.title + helpItem.description,
+            value = helpItem.description,
             readOnly = true,
             onValueChange = { },
             label = { Text(text = "") },
