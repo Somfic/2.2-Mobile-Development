@@ -1,6 +1,7 @@
 package com.example.mobile_development_2_2.map.route
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import com.example.mobile_development_2_2.R
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -13,7 +14,8 @@ class Route(
     val imgId: Int,
     val shortDescription : String,
     val POIs: List<POI>,
-    val visited: Boolean?,
+    val finished: Boolean?,
+    var started: Boolean
 
 
 
@@ -149,6 +151,7 @@ class Route(
                 imgId = R.drawable.ic_map,
                 shortDescription = "A route for testing2",
                 POIs = cities
+                started = false
             )
 
         }

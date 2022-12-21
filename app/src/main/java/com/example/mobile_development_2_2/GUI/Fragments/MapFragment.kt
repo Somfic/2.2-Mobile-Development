@@ -59,8 +59,8 @@ class MapFragment : LocationListener {
     lateinit var myLocation: MyLocationNewOverlay
     lateinit var mapView: MapView
     lateinit var context: Context
-    var followRoute by mutableStateOf(false)
     lateinit var route: Route
+    //var followRoute by mutableStateOf(this.route.started)
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
@@ -106,11 +106,11 @@ class MapFragment : LocationListener {
 
 
             }
-            if(!followRoute){
+            if(!route.started){
 
                 Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center) {
                     Button(
-                        onClick = { followRoute = true },
+                        onClick = { route.started = true },
                         modifier = Modifier
                             .padding(bottom = 20.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -120,7 +120,7 @@ class MapFragment : LocationListener {
                                 ).dec()), contentColor = Color.White
                         )
                     ) {
-                        if(route.hasProgress())
+                        if(!route.hasProgress())
                             Text(text = "Start route")
                         else
                             Text(text = "Resume route")
@@ -128,7 +128,7 @@ class MapFragment : LocationListener {
 
                 }
             }
-            if (followRoute) {
+            if (route.started) {
                 Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.End) {
                     Button(
                         onClick = { myLocation.enableFollowLocation() },
@@ -148,7 +148,7 @@ class MapFragment : LocationListener {
                 
                 Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start) {
                     Button(
-                        onClick = { followRoute = false },
+                        onClick = { route.started = false },
                         modifier = Modifier
                             .padding(top = 20.dp, start = 30.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -290,7 +290,7 @@ class MapFragment : LocationListener {
             },
             modifier = modifier,
             update = {
-                if (followRoute) {
+                if (route.started) {
                     myLocation.disableFollowLocation()
                     myLocation.enableFollowLocation()
 
