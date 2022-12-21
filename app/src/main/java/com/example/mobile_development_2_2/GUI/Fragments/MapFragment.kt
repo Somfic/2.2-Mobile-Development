@@ -32,6 +32,7 @@ import androidx.core.graphics.drawable.toBitmap
 import com.example.mobile_development_2_2.map.RouteRequest
 
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.data.Client
 
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
@@ -289,7 +290,8 @@ class MapFragment() : LocationListener {
 
        runBlocking {
            GlobalScope.launch {
-
+               val client = Client("192.168.5.1",8000)
+               client.sendGeoLocation(GeoPoint(start.latitude,start.longitude))
                route = RouteRequest.getRoute(start, end)
                kmldocument.parseGeoJSON(route)
                val klmstyle = Style(
