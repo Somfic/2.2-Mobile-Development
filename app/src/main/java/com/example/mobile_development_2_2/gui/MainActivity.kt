@@ -42,9 +42,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mobile_development_2_2.R
 
 import com.example.mobile_development_2_2.data.Lang
-import com.example.mobile_development_2_2.data.LocationProvider
 import com.example.mobile_development_2_2.data.PopupHelper
-import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
 import com.example.mobile_development_2_2.gui.fragments.home.HomeScreen
 import com.example.mobile_development_2_2.gui.fragments.home.InfoScreen
@@ -158,7 +156,7 @@ class MainActivity : ComponentActivity() {
 
         val context = LocalContext.current
         val osmViewModel = remember {
-            OSMViewModel(GetLocationProvider(LocationProvider(context = context)), this)
+            OSMViewModel(GetLocationProvider(GPSLocationProvider(context = context)), this)
         }
         osmViewModel.setGeofenceLocation(51.5948, 4.7820, "id")
         this.osmViewModel = osmViewModel
