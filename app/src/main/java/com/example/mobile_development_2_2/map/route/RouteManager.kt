@@ -53,9 +53,5 @@ class RouteManager {
         fun getSelectedPOI(): POI{
             return Route.getSelectedPOI()
         }
-
-        fun getNextPOI(): POI? {
-            return Route.getNextPOI()
-        }
     }
 }
