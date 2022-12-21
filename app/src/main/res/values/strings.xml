@@ -39,7 +39,7 @@
     <string name="HelpItem3Description">When walking a route press the x button on the top left of the screen to stop progressing the  route.</string>
     <string name="HelpItem4">View a POI</string>
     <string name="HelpItem4Description">When walking a route you\'ll get a notification to view a POI when you\'re within 20 meters of it.</string>
-    <string name="HelpItem5">View a POI from th map</string>
+    <string name="HelpItem5">View a POI on the map</string>
     <string name="HelpItem5Description">While on the map you can press the icons to view that POI</string>
     <string name="HelpItem6">View all POIs</string>
     <string name="HelpItem6Description">If you want to see all the POIs in your selected route go to the POI button at the bottom right of your screen.</string>
