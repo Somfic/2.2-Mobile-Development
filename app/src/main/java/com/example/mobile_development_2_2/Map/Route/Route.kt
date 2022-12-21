@@ -89,11 +89,12 @@ class Route(
             return Route(
                 name = name,
                 cityName = "Breda",
-                visited = false,
                 length = 6234,
                 imgId = R.drawable.ic_map,
                 shortDescription = "A route for testing",
-                POIs = cities
+                POIs = cities,
+                finished = false,
+                started = false
             )
 
         }
@@ -146,11 +147,11 @@ class Route(
             return Route(
                 name = name,
                 cityName = "Breda2",
-                visited = false,
                 length = 6234,
                 imgId = R.drawable.ic_map,
                 shortDescription = "A route for testing2",
-                POIs = cities
+                POIs = cities,
+                finished = false,
                 started = false
             )
 

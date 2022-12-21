@@ -145,12 +145,12 @@ class MainActivity : ComponentActivity() {
             },
             bottomBar = { BottomNavigationBar(
                 onHomeButtonClicked = {
-                    navController.navigate(Fragments.Home.name)
                     navController.backQueue.clear()
+                    navController.navigate(Fragments.Home.name)
                                       },
                 onHomePOIClicked = {
-                    navController.navigate(Fragments.POIList.name)
                     navController.backQueue.clear()
+                    navController.navigate(Fragments.POIList.name)
                                    },
                 onMapButtonClicked = {
                     navController.backQueue.clear()
@@ -185,8 +185,6 @@ class MainActivity : ComponentActivity() {
                         },
                         onPOIClicked = {
                             navController.navigate(Fragments.POIList.name)
-
-                            navController.popBackStack()
                         }
                     )
                 }
