@@ -16,6 +16,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.SnackbarDefaults.backgroundColor
@@ -370,7 +371,8 @@ class MainActivity : ComponentActivity() {
                     icon = {
                         Icon(
                             painterResource(id = item.icon),
-                            contentDescription = item.title
+                            contentDescription = item.title,
+                            modifier = Modifier.size(25.dp)
                         )
                     },
                     label = { Text(text = item.title) },
@@ -378,7 +380,8 @@ class MainActivity : ComponentActivity() {
                     unselectedContentColor = MaterialTheme.colors.surface,
                     alwaysShowLabel = true,
                     selected = false,
-                    onClick = onClick
+                    onClick = onClick,
+                    modifier = Modifier
                     //premissions.launchMultiplePermissionRequest()
                 )
             }

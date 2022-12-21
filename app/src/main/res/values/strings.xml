@@ -30,4 +30,8 @@
     <string name="route_distance">Distance</string>
     <string name="routes_waypoints">Waypoints</string>
     <string name="map_no_location_permission">No location permissions</string>
+    <string name="map_copyright" translatable="false">© OpenStreetMap</string>
+    <string name="map_start">Start</string>
+    <string name="map_continue">Continue</string>
+    <string name="map_recenter">Recenter</string>
 </resources>
