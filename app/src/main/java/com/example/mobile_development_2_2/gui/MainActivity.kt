@@ -177,7 +177,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier,
                         routes = RouteManager.TestRoutes(),
                         onRouteClicked = {
-                            //osmViewModel.route = RouteManager.getSelectedRoute()
+                            Log.d("route", RouteManager.getSelectedRoute().name)
                             navController.navigate(Fragments.Map.name)
                         },
                         onPOIClicked = {
@@ -192,6 +192,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier,
                         route = RouteManager.getSelectedRoute(),
                         onPOIClicked = {
+                            navController.navigate(Fragments.POI.name)
                         }
                     )
                 }

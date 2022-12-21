@@ -39,12 +39,11 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
         started = SharingStarted.WhileSubscribed()
     )
 
-    val route = RouteManager.selectedItem
     val pois = getLocations()
 
 
     private fun getLocations(): List<POI> {
-
+        val route = RouteManager.getSelectedRoute()
         return route.POIs
 //        val avans = POI(
 //            name = "Avans",

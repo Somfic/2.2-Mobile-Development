@@ -81,9 +81,7 @@ class MapFragment() : LocationListener {
 
             }
             OSM(
-                route = viewModel.route,
                 modifier = modifier,
-                locations = viewModel.pois,
                 routePoints = viewModel.pois.map { it.location }.toMutableList(),
                 provider = viewModel.provider,
                 onPOIClicked = onPOIClicked
@@ -173,13 +171,12 @@ class MapFragment() : LocationListener {
     private fun OSM(
 
         modifier: Modifier = Modifier,
-        locations: List<POI> = listOf(),
-        route: Route,
         routePoints: MutableList<GeoPoint> = mutableListOf(),
         provider: IMyLocationProvider,
         onPOIClicked :() -> Unit,
     ) {
-        this.route = route
+        this.route = RouteManager.getSelectedRoute()
+        val locations = route.POIs
         val listener = object : ItemizedIconOverlay.OnItemGestureListener<POIItem> {
             override fun onItemSingleTapUp(index: Int, item: POIItem?): Boolean {
                 if (item != null) {
