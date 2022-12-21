@@ -3,6 +3,7 @@ package com.example.mobile_development_2_2.gui.fragments
 import android.Manifest
 import android.content.Context
 import android.location.Location
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -106,11 +107,15 @@ class MapFragment : LocationListener {
 
 
             }
-            if(!route.started){
+            if(!route.started.value){
 
                 Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center) {
                     Button(
-                        onClick = { route.started = true },
+                        onClick = {
+                            Log.d("f", "" + route.started.value)
+                            RouteManager.setRouteState(true);
+                            Log.d("f", "" + route.started.value)
+                                  },
                         modifier = Modifier
                             .padding(bottom = 20.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -128,7 +133,7 @@ class MapFragment : LocationListener {
 
                 }
             }
-            if (route.started) {
+            if (route.started.value) {
                 Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.End) {
                     Button(
                         onClick = { myLocation.enableFollowLocation() },
@@ -148,7 +153,8 @@ class MapFragment : LocationListener {
                 
                 Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start) {
                     Button(
-                        onClick = { route.started = false },
+                        onClick = {
+                            RouteManager.setRouteState(false); },
                         modifier = Modifier
                             .padding(top = 20.dp, start = 30.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -290,7 +296,7 @@ class MapFragment : LocationListener {
             },
             modifier = modifier,
             update = {
-                if (route.started) {
+                if (route.started.value) {
                     myLocation.disableFollowLocation()
                     myLocation.enableFollowLocation()
 

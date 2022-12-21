@@ -178,7 +178,7 @@ class MainActivity : ComponentActivity() {
                 composable(route = Fragments.Route.name) {
                     RouteListScreen(
                         modifier = Modifier,
-                        routes = RouteManager.TestRoutes(),
+                        routes = RouteManager.routes,
                         onRouteClicked = {
                             Log.d("route", RouteManager.getSelectedRoute().name)
                             navController.navigate(Fragments.Map.name)
