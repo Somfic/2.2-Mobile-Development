@@ -1,6 +1,9 @@
 package com.example.mobile_development_2_2.gui.fragments.poi
 
 
+import android.app.Application
+import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,6 +20,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -24,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.map.route.POI
 
@@ -58,23 +63,19 @@ fun MessageRow1(poi: POI) {
             .fillMaxWidth()
             .height(370.dp)
             .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                ), RectangleShape
+                MaterialTheme.colors.background, RectangleShape
             )
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
-        backgroundColor = Color.White
+        backgroundColor = MaterialTheme.colors.surface
     )
     {
-
+        val application = LocalContext.current.applicationContext as Application
+        val imageStream = application.assets.open(poi.img)
+        val imageDrawable = Drawable.createFromStream(imageStream, null)
         Image(
-            painter = painterResource(id = poi.imgId),
+            bitmap = imageDrawable!!.toBitmap().asImageBitmap(),
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
@@ -122,18 +123,12 @@ fun MessageRow2(poi: POI) {
             .fillMaxWidth()
             .fillMaxHeight()
             .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                ), RectangleShape
+                MaterialTheme.colors.background, RectangleShape
             )
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
-        backgroundColor = Color.White
+        backgroundColor = MaterialTheme.colors.surface
     )
     {
 
@@ -143,7 +138,7 @@ fun MessageRow2(poi: POI) {
             onValueChange = { },
             label = { Text(text = "") },
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color(0xFFFFFFFF)
+                backgroundColor = MaterialTheme.colors.background
             )
         )
 
@@ -157,22 +152,19 @@ fun MessageRow3(poi: POI) {
             .fillMaxWidth()
             .fillMaxHeight()
             .background(
-                Color(
-                    ContextCompat
-                        .getColor(
-                            LocalContext.current, R.color.lightGrey
-                        )
-                        .dec()
-                ), RectangleShape
+                MaterialTheme.colors.background, RectangleShape
             )
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
-        backgroundColor = Color.White
+        backgroundColor = MaterialTheme.colors.surface
     )
     {
+        val application = LocalContext.current.applicationContext as Application
+        val imageStream = application.assets.open(poi.imgMap)
+        val imageDrawable = Drawable.createFromStream(imageStream, null)
         Image(
-            painter = painterResource(id = poi.imgMap),
+            bitmap = imageDrawable!!.toBitmap().asImageBitmap(),
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
             modifier = Modifier

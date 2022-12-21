@@ -1,8 +1,12 @@
 package com.example.mobile_development_2_2.map.route
 
+import android.content.Context
+import android.content.res.Resources
 import android.util.Log
 import com.example.mobile_development_2_2.R
+import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
+import com.google.gson.Gson
 
 class RouteManager {
 
@@ -22,6 +26,23 @@ class RouteManager {
                 //testRoute3
             )
 
+            return routes
+        }
+        fun GetRoutes(resources: Resources): List<Route>{
+            val jsonString: String = resources.openRawResource(R.raw.historische_kilometer).bufferedReader().use { it.readText() }
+            val gson = Gson()
+            val routes =  gson.fromJson(jsonString, Array<Route>::class.java).toList()
+            for (it in routes) {
+                for(poi in it.POIs){
+                    poi.visited = false
+                    if (poi.imgMap == null){
+                        poi.imgMap = "image404.png"
+                    }
+                    if (poi.img == null){
+                        poi.img = "image404.png"
+                    }
+                }
+            }
             return routes
         }
         var selectedItem = TestRoutes().get(0)
@@ -58,6 +79,11 @@ class RouteManager {
 
         fun getNextPOI() : POI? {
             return Route.getNextPOI()
+        }
+        fun getStringById(context: Context, idName: String): String{
+            val resources = context.resources
+
+            return Lang.get(resources.getIdentifier(idName, "string", context.packageName))
         }
     }
 }

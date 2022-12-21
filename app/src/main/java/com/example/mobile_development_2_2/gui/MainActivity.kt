@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
@@ -26,7 +27,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key.Companion.N
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,6 +54,7 @@ import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.gui.fragments.settings.SettingsFragment
 import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
 import com.example.mobile_development_2_2.map.gps.GetLocationProvider
+import com.example.mobile_development_2_2.map.route.Route
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -86,9 +87,12 @@ class MainActivity : ComponentActivity() {
         getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
         Lang.setContext(this)
         Lang.onLanguageChanged { recreate() }
+        Lang.onColorblindChange { recreate() }
 
 
         setContent {
+
+            Log.d("Mainactivity", RouteManager.getStringById(this, "HelpItem1"))
 
             val openDialog = remember {
                 mutableStateOf(false)
@@ -99,7 +103,6 @@ class MainActivity : ComponentActivity() {
             MobileDevelopment2_2Theme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
                 ) {
                     MainScreen(openDialog)
 
@@ -157,7 +160,7 @@ class MainActivity : ComponentActivity() {
         val osmViewModel = remember {
             OSMViewModel(GetLocationProvider(GPSLocationProvider(context = context)), this)
         }
-        osmViewModel.setGeofenceLocation(51.5948, 4.7820, "id")
+        osmViewModel.setGeofenceLocation(51.6948, 4.7820, "id")
         this.osmViewModel = osmViewModel
 
         // Get the name of the current screen
@@ -191,7 +194,7 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             },
-            backgroundColor = colorResource(R.color.lightGrey)
+            backgroundColor = MaterialTheme.colors.background
         ) { innerpadding ->
             NavHost(
                 navController = navController,
@@ -211,7 +214,7 @@ class MainActivity : ComponentActivity() {
                 composable(route = Fragments.Route.name) {
                     RouteListScreen(
                         modifier = Modifier,
-                        routes = RouteManager.routes,
+                        routes = RouteManager.GetRoutes(resources),
                         onRouteClicked = {
                             Log.d("route", RouteManager.getSelectedRoute().name)
                             navController.navigate(Fragments.Map.name)
@@ -257,7 +260,6 @@ class MainActivity : ComponentActivity() {
 //                        modifier = Modifier
                     )
                 }
-
             }
 
             if (openDialog.value) {
@@ -292,16 +294,10 @@ class MainActivity : ComponentActivity() {
                     )
                 )
                 .background(
-                    Color(
-                        ContextCompat
-                            .getColor(
-                                LocalContext.current, R.color.lightGrey
-                            )
-                            .dec()
-                    )
+                    MaterialTheme.colors.background
                 ),
-            backgroundColor = colorResource(id = R.color.colorPrimary),
-            contentColor = Color.White,
+            backgroundColor = MaterialTheme.colors.primary,
+            contentColor = MaterialTheme.colors.onPrimary,
             actions = {
                 if (currentScreen.name != Fragments.Settings.name) {
                     IconButton(onClick = { onSettingsButtonClicked() }) {
@@ -348,8 +344,8 @@ class MainActivity : ComponentActivity() {
             )
         )
         BottomNavigation(
-            backgroundColor = colorResource(id = R.color.colorPrimary),
-            contentColor = Color.White,
+            backgroundColor = MaterialTheme.colors.primary,
+            contentColor = MaterialTheme.colors.onPrimary,
             modifier = Modifier
                 .clip(
                     RoundedCornerShape(
@@ -358,15 +354,8 @@ class MainActivity : ComponentActivity() {
                     )
                 )
                 .background(
-                    Color(
-                        ContextCompat
-                            .getColor(
-                                LocalContext.current, R.color.lightGrey
-                            )
-                            .dec()
-                    )
-                )
-                .height(70.dp),
+                    MaterialTheme.colors.background
+                ).height(70.dp),
         ) {
             items.forEach { item ->
                 var onClick = onHomeButtonClicked
@@ -390,8 +379,8 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     label = { Text(text = item.title) },
-                    selectedContentColor = Color.White.copy(0.4f),
-                    unselectedContentColor = Color.White,
+                    selectedContentColor = MaterialTheme.colors.primary,
+                    unselectedContentColor = MaterialTheme.colors.surface,
                     alwaysShowLabel = true,
                     selected = false,
                     onClick = onClick
@@ -400,8 +389,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    var test = false
 
     @Composable
     fun popUp(
