@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -22,11 +23,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -150,7 +153,7 @@ class MapFragment : LocationListener {
                     }
 
                 }
-                
+
                 Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start) {
                     Button(
                         onClick = {
@@ -169,6 +172,42 @@ class MapFragment : LocationListener {
                     }
 
                 }
+
+                Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.End) {
+                    Card(modifier = Modifier
+                        .padding(top = 20.dp, end = 30.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .height(60.dp)
+                        .width(120.dp),
+                        elevation = 10.dp,
+                        backgroundColor = Color(
+                            ContextCompat
+                                .getColor(
+                                    LocalContext.current, R.color.colorPrimary
+                                )
+                                .dec()
+                        )
+                    ) {
+                        Text(
+                            text = "" + route.totalPoisVisited.value + " / " + route.POIs.size + " points",
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.wrapContentHeight(Alignment.Top)
+                                .padding(top = 6.dp),
+                            color = Color.White
+
+                        )
+                        Text(
+                            text ="" + route.currentLength.value + " / " + route.length + " km",
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.wrapContentHeight(Alignment.Bottom)
+                                .padding(bottom = 8.dp),
+                            color = Color.White
+
+                        )
+                    }
+
+                }
+
             }
         }
     }

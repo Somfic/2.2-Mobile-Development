@@ -11,13 +11,14 @@ import org.osmdroid.views.overlay.Overlay
 class Route(
     val name : String,
     val cityName: String,
-    val length: Int,
+    val length: Double,
     val imgId: Int,
     val shortDescription : String,
     val POIs: List<POI>,
     var finished: MutableState<Boolean> = mutableStateOf(false),
-    var started: MutableState<Boolean> = mutableStateOf(false)
-
+    var started: MutableState<Boolean> = mutableStateOf(false),
+    var currentLength: MutableState<Double> = mutableStateOf(0.0),
+    var totalPoisVisited: MutableState<Int> = mutableStateOf(0)
 
 
     ) {
@@ -90,7 +91,7 @@ class Route(
             return Route(
                 name = name,
                 cityName = "Breda",
-                length = 6234,
+                length = 6.234,
                 imgId = R.drawable.ic_map,
                 shortDescription = "A route for testing",
                 POIs = cities,
@@ -147,7 +148,7 @@ class Route(
             return Route(
                 name = name,
                 cityName = "Breda2",
-                length = 6234,
+                length = 6.234,
                 imgId = R.drawable.ic_map,
                 shortDescription = "A route for testing2",
                 POIs = cities,
