@@ -38,8 +38,9 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
         replay = 1,
         started = SharingStarted.WhileSubscribed()
     )
-    val pois = getLocations()
+
     val route = RouteManager.selectedItem
+    val pois = getLocations()
 
 
     private fun getLocations(): List<POI> {
