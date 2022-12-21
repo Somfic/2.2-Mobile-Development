@@ -47,4 +47,33 @@
     <string name="HelpItem7Description">To change the language go to settings at the top right of the screen.</string>
     <string name="HelpItem8">Colorblind mode</string>
     <string name="HelpItem8Description">To change colorblind mode go to settings at the top right of the screen and press the button next to colorblind.</string>
+    
+    //POI strings
+    
+    <string name="poi1PlaceDescription">plstranslate</string>
+    <string name="poi1Description">plstranslate</string>
+
+    <string name="poi2PlaceDescription">plstranslate</string>
+    <string name="poi2Description">plstranslate</string>
+
+    <string name="poi3PlaceDescription">plstranslate</string>
+    <string name="poi3Description">plstranslate</string>
+
+    <string name="poi4PlaceDescription">plstranslate</string>
+    <string name="poi4Description">plstranslate</string>
+
+    <string name="poi5PlaceDescription">plstranslate</string>
+    <string name="poi5Description">plstranslate</string>
+
+    <string name="poi6PlaceDescription">plstranslate</string>
+    <string name="poi6Description">plstranslate</string>
+
+    <string name="poi7PlaceDescription">plstranslate</string>
+    <string name="poi7Description">plstranslate</string>
+
+    <string name="poi8PlaceDescription">plstranslate</string>
+    <string name="poi8Description">plstranslate</string>
+
+    <string name="poi9PlaceDescription">plstranslate</string>
+    <string name="poi9Description">plstranslate</string>
 </resources>
