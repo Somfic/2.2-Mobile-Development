@@ -3,7 +3,13 @@ package com.example.mobile_development_2_2.gui.fragments
 import android.Manifest
 import android.content.Context
 import android.location.Location
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+
+import androidx.compose.runtime.*
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -26,6 +34,8 @@ import androidx.core.graphics.drawable.toBitmap
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.map.route.POI
+import com.example.mobile_development_2_2.map.route.Route
+import com.example.mobile_development_2_2.map.route.RouteManager
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -40,6 +50,7 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import kotlin.math.roundToInt
 
 
 class MapFragment : LocationListener {
@@ -48,12 +59,14 @@ class MapFragment : LocationListener {
     lateinit var myLocation: MyLocationNewOverlay
     lateinit var mapView: MapView
     lateinit var context: Context
-
+    lateinit var route: Route
+    //var followRoute by mutableStateOf(this.route.started)
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
-    fun MapScreen(viewModel: OSMViewModel, modifier: Modifier) {
+    fun MapScreen(viewModel: OSMViewModel, modifier: Modifier, onPOIClicked :() -> Unit) {
         viewModel.provider.locationListener = this
+
         Surface(
             modifier = modifier.fillMaxSize()
         ) {
@@ -69,23 +82,15 @@ class MapFragment : LocationListener {
 
             }
             OSM(
-
                 modifier = modifier,
-                locations = viewModel.pois,
                 routePoints = viewModel.pois.map { it.location }.toMutableList(),
                 provider = viewModel.provider,
-                followRoute = true
+                onPOIClicked = onPOIClicked
             )
             if (!premissions.allPermissionsGranted) {
                 Column {
-                    Card(
-                        backgroundColor = MaterialTheme.colors.surface,
-                    ) {
-                        Text(
-                            text = Lang.get(R.string.map_no_location_permission),
-                            color = MaterialTheme.colors.error
-                        )
-                    }
+
+                    Text(text = Lang.get(R.string.map_no_location_permission), color = MaterialTheme.colors.error))
                 }
             }
             Row {
@@ -99,6 +104,69 @@ class MapFragment : LocationListener {
 
 
             }
+            if(!route.started.value){
+
+                Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center) {
+                    Button(
+                        onClick = {
+                            Log.d("f", "" + route.started.value)
+                            RouteManager.setRouteState(true);
+                            Log.d("f", "" + route.started.value)
+                                  },
+                        modifier = Modifier
+                            .padding(bottom = 20.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(
+                                ContextCompat.getColor(
+                                    LocalContext.current, R.color.colorPrimary
+                                ).dec()), contentColor = Color.White
+                        )
+                    ) {
+                        if(!route.hasProgress())
+                            Text(text = "Start route")
+                        else
+                            Text(text = "Resume route")
+                    }
+
+                }
+            }
+            if (route.started.value) {
+                Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.End) {
+                    Button(
+                        onClick = { myLocation.enableFollowLocation() },
+                        modifier = Modifier
+                            .padding(bottom = 20.dp, end = 30.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(
+                                ContextCompat.getColor(
+                                    LocalContext.current, R.color.colorPrimary
+                                ).dec()), contentColor = Color.White
+                        )
+                    ) {
+                        Text(text = "Recenter")
+                    }
+
+                }
+                
+                Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start) {
+                    Button(
+                        onClick = {
+                            RouteManager.setRouteState(false); },
+                        modifier = Modifier
+                            .padding(top = 20.dp, start = 30.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(
+                                ContextCompat.getColor(
+                                    LocalContext.current, R.color.colorPrimary
+                                ).dec()), contentColor = Color.White
+                        )
+
+                    ) {
+                        Icon(painter = painterResource(id = R.drawable.ic_baseline_close_24), contentDescription = "")
+                    }
+
+                }
+            }
         }
     }
 
@@ -107,23 +175,23 @@ class MapFragment : LocationListener {
     private fun OSM(
 
         modifier: Modifier = Modifier,
-        locations: List<POI> = listOf(),
         routePoints: MutableList<GeoPoint> = mutableListOf(),
         provider: IMyLocationProvider,
-        followRoute: Boolean,
+        onPOIClicked :() -> Unit,
     ) {
-
+        this.route = RouteManager.getSelectedRoute()
+        val locations = route.POIs
         val listener = object : ItemizedIconOverlay.OnItemGestureListener<POIItem> {
             override fun onItemSingleTapUp(index: Int, item: POIItem?): Boolean {
                 if (item != null) {
-                    clickedOnPoi(item.poi)
+                    clickedOnPoi(item.poi,onPOIClicked )
                 }
                 return true
             }
 
             override fun onItemLongPress(index: Int, item: POIItem?): Boolean {
                 if (item != null) {
-                    longClickOnPoi(item.poi)
+                    longClickOnPoi(item.poi, onPOIClicked)
                 }
                 return false
             }
@@ -208,10 +276,7 @@ class MapFragment : LocationListener {
                     val kmldocument = KmlDocument()
                     //get data/routes/historische_kilometer.geojson
 
-
-
-
-                    val resources = resources
+                    val resources = getResources()
                     //switch case voor verschillende routes
 
                     val inputStream = resources.openRawResource(R.raw.test_route)
@@ -228,7 +293,7 @@ class MapFragment : LocationListener {
             },
             modifier = modifier,
             update = {
-                if (followRoute) {
+                if (route.started.value) {
                     myLocation.disableFollowLocation()
                     myLocation.enableFollowLocation()
 
@@ -240,6 +305,7 @@ class MapFragment : LocationListener {
             }
 
         )
+
         LaunchedEffect(locations) {
             poiOverlay.removeAllItems()
             poiOverlay.addItems(
@@ -254,30 +320,19 @@ class MapFragment : LocationListener {
             )
             mapView.invalidate() // Ensures the map is updated on screen
         }
-        if (followRoute) {
-            Row(verticalAlignment = Alignment.Bottom) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
 
-                    Button(
-                        onClick = { myLocation.enableFollowLocation() },
-                        modifier = Modifier
-                            .size(50.dp)
-                            .align(Alignment.End),
-                    ) {
 
-                    }
-                }
-            }
-        }
+
 
     }
 
-    private fun clickedOnPoi(poi: POI) {
-        //todo
+    private fun clickedOnPoi(poi: POI, onPOIClicked :() -> Unit) {
+        RouteManager.selectPOI(poi)
+        onPOIClicked()
     }
 
-    private fun longClickOnPoi(poi: POI) {
+    private fun longClickOnPoi(poi: POI , onPOIClicked :() -> Unit) {
         //todo
     }
 
@@ -286,25 +341,14 @@ class MapFragment : LocationListener {
         if (myLocation.isFollowLocationEnabled) {
             mapView.mapOrientation = 360 - p0.bearing
             mapView.controller.setZoom(17.0)
-            mapView.setMapCenterOffset(0, 600)
-            myLocation.setDirectionIcon(
-                ContextCompat.getDrawable(
-                    context,
-                    org.osmdroid.library.R.drawable.round_navigation_white_48
-                )!!.toBitmap(150, 150)
-            )
+            mapView.setMapCenterOffset(0, 500)
+            myLocation.isDrawAccuracyEnabled = false
 
         } else {
             mapView.mapOrientation = 0f
             mapView.setMapCenterOffset(0, 0)
-            myLocation.setDirectionIcon(
-                ContextCompat.getDrawable(
-                    context,
-                    org.osmdroid.library.R.drawable.round_navigation_white_48
-                )!!.toBitmap(150, 150)
-            )
+            myLocation.isDrawAccuracyEnabled = true
         }
-        //myLocation.enableFollowLocation()
         mapView.invalidate()
     }
 
