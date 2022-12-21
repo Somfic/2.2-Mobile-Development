@@ -1,6 +1,8 @@
 package com.example.mobile_development_2_2.gui.fragments.route
 
 import android.Manifest
+import android.app.Application
+import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
@@ -18,6 +20,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -25,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.map.route.POI
@@ -72,9 +78,13 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
         elevation = 10.dp,
         backgroundColor = Color.White
     ) {
-
+        val application = LocalContext.current.applicationContext as Application
+        Log.d("image", route.name)
+        Log.d("image", route.img)
+        val imageStream = application.assets.open(route.img)
+        val imageDrawable = Drawable.createFromStream(imageStream, null)
         Image(
-            painter = painterResource(id = route.imgId),
+            bitmap = imageDrawable!!.toBitmap().asImageBitmap(),
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
