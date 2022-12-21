@@ -47,7 +47,7 @@ class Route(
                 streetName = "street1",
                 shortDescription = "description of Avans",
                 longDescription = "safasda",
-                imgMap = R.drawable.img_map1
+                imgMap = R.drawable.ic_map
 
 
             )
@@ -61,7 +61,7 @@ class Route(
                 streetName = "street2",
                 shortDescription = "description of Breda",
                 longDescription = "safasda",
-                imgMap = R.drawable.img_map1
+                imgMap = R.drawable.ic_map
             )
 
             // TODO: Move to POI repository
@@ -73,7 +73,7 @@ class Route(
                 streetName = "street3",
                 shortDescription = "description of Amsterdam 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15",
                 longDescription = "safasda",
-                imgMap = R.drawable.img_map1
+                imgMap = R.drawable.ic_map
             )
 
             // TODO: Move to POI repository
@@ -89,7 +89,7 @@ class Route(
                 cityName = "Breda",
                 visited = false,
                 length = 6234,
-                imgId = R.drawable.img_map1,
+                imgId = R.drawable.ic_map,
                 shortDescription = "A route for testing",
                 POIs = cities
             )
@@ -104,7 +104,7 @@ class Route(
                 streetName = "street2.1",
                 shortDescription = "description of Avans2",
                 longDescription = "safasda2",
-                imgMap = R.drawable.img_map1
+                imgMap = R.drawable.ic_map
 
 
             )
@@ -118,7 +118,7 @@ class Route(
                 streetName = "street2.2",
                 shortDescription = "description of Breda2",
                 longDescription = "safasda2",
-                imgMap = R.drawable.img_map1
+                imgMap = R.drawable.ic_map
             )
 
             // TODO: Move to POI repository
@@ -130,7 +130,7 @@ class Route(
                 streetName = "street2.3",
                 shortDescription = "description of Amsterdam 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15",
                 longDescription = "safasda2",
-                imgMap = R.drawable.img_map1
+                imgMap = R.drawable.ic_map
             )
 
             // TODO: Move to POI repository
@@ -146,7 +146,7 @@ class Route(
                 cityName = "Breda2",
                 visited = false,
                 length = 6234,
-                imgId = R.drawable.img_map1,
+                imgId = R.drawable.ic_map,
                 shortDescription = "A route for testing2",
                 POIs = cities
             )
