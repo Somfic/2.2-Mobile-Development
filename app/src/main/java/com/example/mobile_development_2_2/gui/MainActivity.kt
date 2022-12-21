@@ -18,10 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -32,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
@@ -43,6 +41,7 @@ import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.GetLocationProvider
 import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.data.LocationProvider
+import com.example.mobile_development_2_2.data.PopupHelper
 import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
 import com.example.mobile_development_2_2.gui.fragments.home.HomeScreen
@@ -85,24 +84,35 @@ class MainActivity : ComponentActivity() {
         Lang.setContext(this)
         Lang.onLanguageChanged { recreate() }
 
+
         setContent {
+
+            val openDialog = remember {
+                mutableStateOf(false)
+            }
+
+            PopupHelper.SetState(openDialog)
+
             MobileDevelopment2_2Theme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen()
+                    MainScreen(openDialog)
+
+
+
                 }
             }
         }
     }
+
     override fun onUserLeaveHint() {
-        if(!isPipSupported)
+        if (!isPipSupported)
             return
         super.onUserLeaveHint()
         enterPictureInPictureMode()
     }
-
 
 
     @SuppressLint("MissingSuperCall")
@@ -127,18 +137,19 @@ class MainActivity : ComponentActivity() {
     }
 
 
-
-
     @Composable
-    fun MainScreen(navController: NavHostController = rememberNavController()) {
+    fun MainScreen(
+        openDialog: MutableState<Boolean>,
+        navController: NavHostController = rememberNavController()
+    ) {
         // Get current back stack entry
         val backStackEntry by navController.currentBackStackEntryAsState()
 
         val context = LocalContext.current
         val osmViewModel = remember {
-            OSMViewModel(GetLocationProvider(LocationProvider(context = context)),  this)
+            OSMViewModel(GetLocationProvider(LocationProvider(context = context)), this)
         }
-        osmViewModel.setGeofenceLocation(51.5856, 4.7925)
+        osmViewModel.setGeofenceLocation(51.5948, 4.77820, "id")
         this.osmViewModel = osmViewModel
 
         // Get the name of the current screen
@@ -154,23 +165,26 @@ class MainActivity : ComponentActivity() {
                     navigateUp = { navController.navigateUp() },
                     onSettingsButtonClicked = { navController.navigate(Fragments.Settings.name) })
             },
-            bottomBar = { BottomNavigationBar(
-                onHomeButtonClicked = {
-                    navController.backQueue.clear()
-                    navController.navigate(Fragments.Home.name)
+            bottomBar = {
+                BottomNavigationBar(
+                    onHomeButtonClicked = {
+                        navController.backQueue.clear()
+                        navController.navigate(Fragments.Home.name)
 
-                },
-                onHomePOIClicked = {
-                    navController.backQueue.clear()
-                    navController.navigate(Fragments.POIList.name)
+                    },
+                    onHomePOIClicked = {
+                        navController.backQueue.clear()
+                        navController.navigate(Fragments.POIList.name)
 
-                },
-                onMapButtonClicked = {
-                    navController.backQueue.clear()
-                    navController.navigate(Fragments.Route.name)
+                    },
+                    onMapButtonClicked = {
+                        navController.backQueue.clear()
+                        navController.navigate(Fragments.Route.name)
 
-                    Log.d("123", "map")}
-            ) },
+                        Log.d("123", "map")
+                    }
+                )
+            },
             backgroundColor = colorResource(R.color.lightGrey)
         ) { innerpadding ->
             NavHost(
@@ -197,8 +211,6 @@ class MainActivity : ComponentActivity() {
                         },
                         onPOIClicked = {
                             navController.navigate(Fragments.POIList.name)
-
-                            navController.popBackStack()
                         }
                     )
                 }
@@ -207,28 +219,29 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier,
                         route = RouteManager.getSelectedRoute(),
                         onPOIClicked = {
+                            navController.navigate(Fragments.POI.name)
                         }
                     )
                 }
-                composable(route = Fragments.Info.name){
+                composable(route = Fragments.Info.name) {
                     InfoScreen(
                         modifier = Modifier,
                         helpItem = HelpItem.getSelectedItem()
                     )
                 }
-                composable(route = Fragments.POI.name){
+                composable(route = Fragments.POI.name) {
                     POIDetailScreen(
                         modifier = Modifier,
                         poi = RouteManager.getSelectedPOI()
                     )
                 }
-                composable(route = Fragments.Map.name){
+                composable(route = Fragments.Map.name) {
                     map.MapScreen(
                         viewModel = osmViewModel,
                         modifier = Modifier
                     )
                 }
-                composable(route = Fragments.Settings.name){
+                composable(route = Fragments.Settings.name) {
                     SettingsFragment(
 //                        viewModel = osmViewModel,
 //                        modifier = Modifier
@@ -236,15 +249,19 @@ class MainActivity : ComponentActivity() {
                 }
 
             }
+
+            if (openDialog.value) {
+                popUp("e", "e", openDialog) { navController.navigate(Fragments.POI.name) }
+            }
         }
 
     }
 
-    @Preview(showBackground = true)
+/*    @Preview(showBackground = true)
     @Composable
     fun MainScreenPreview() {
         MainScreen()
-    }
+    }*/
 
     @Composable
     fun TopBar(
@@ -341,13 +358,13 @@ class MainActivity : ComponentActivity() {
             items.forEach { item ->
                 var onClick = onHomeButtonClicked
 
-                if(item.route.equals("map")){
+                if (item.route.equals("map")) {
                     onClick = onMapButtonClicked
 
-                } else if(item.route.equals("home")){
+                } else if (item.route.equals("home")) {
                     onClick = onHomeButtonClicked
 
-                } else if(item.route.equals("POIs")){
+                } else if (item.route.equals("POIs")) {
                     onClick = onHomePOIClicked
 
                 }
@@ -370,39 +387,42 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    @Composable
-    fun popUp(title : String, text : String) {
-        val openDialog = remember {
-            mutableStateOf(true)
-        }
-        if (openDialog.value) {
-            AlertDialog(
-                onDismissRequest = { !openDialog.value },
-                title = { Text(text = title, color = Color.Black) },
-                text = { Text(text = text, color = Color.Black) },
 
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            openDialog.value = false
-                        }
-                    ) {
-                        Text(text = "Yes", color = Color.Blue)
+    var test = false
+
+    @Composable
+    fun popUp(title: String, text: String, openDialog: MutableState<Boolean>, onYesButtonClicked: () -> Unit) {
+
+        Log.d("main", "opening popup")
+
+        AlertDialog(
+            onDismissRequest = { !openDialog.value },
+            title = { Text(text = RouteManager.getSelectedPOI().name, color = Color.Black) },
+            text = { Text(text = RouteManager.getSelectedPOI().shortDescription, color = Color.Black) },
+
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                        onYesButtonClicked()
                     }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = {
-                            openDialog.value = false
-                        }
-                    ) {
-                        Text(text = "No", color = Color.Blue)
+                ) {
+                    Text(text = "Yes", color = Color.Blue)
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
                     }
-                },
-                backgroundColor = Color.White,
-                contentColor = Color.Black
-            )
-        }
+                ) {
+                    Text(text = "No", color = Color.Blue)
+                }
+            },
+            backgroundColor = Color.White,
+            contentColor = Color.Black
+        )
+
     }
 }
 

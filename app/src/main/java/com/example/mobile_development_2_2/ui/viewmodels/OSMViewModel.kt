@@ -6,6 +6,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.location.Location
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mobile_development_2_2.data.GeofenceHelper
