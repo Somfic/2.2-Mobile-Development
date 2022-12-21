@@ -167,6 +167,17 @@ class Route(
         fun getSelectedPOI(): POI {
             return selectedItem
         }
+
+        fun getNextPOI(): POI? {
+            for(poi in TestRoute().POIs){
+                if(!poi.visited){
+                    selectedItem = poi
+                    return poi
+                }
+            }
+
+            return null
+        }
     }
 
 }
