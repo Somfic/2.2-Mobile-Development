@@ -20,6 +20,7 @@ class Lang {
             if(!this::context.isInitialized) {
                 this.context = context
                 this.locale = context.resources.configuration.locale
+                this.language = languages.find { it.second == locale.language } ?: languages[0]
             }
         }
 

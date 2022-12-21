@@ -1,6 +1,7 @@
 package com.example.mobile_development_2_2.gui.fragments.route
 
 import android.Manifest
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -141,6 +142,7 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
             Button(
                 onClick = {
                     RouteManager.selectItem(route)
+                    Log.d("route", route.name)
                     premissions.launchMultiplePermissionRequest()
                     onRouteClicked()
                 },

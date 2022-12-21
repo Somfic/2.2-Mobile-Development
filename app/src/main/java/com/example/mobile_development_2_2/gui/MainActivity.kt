@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Build.VERSION_CODES.N
+import android.location.LocationProvider
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -13,6 +14,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -38,7 +40,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mobile_development_2_2.R
-import com.example.mobile_development_2_2.data.GetLocationProvider
+
 import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.data.LocationProvider
 import com.example.mobile_development_2_2.data.PopupHelper
@@ -49,8 +51,11 @@ import com.example.mobile_development_2_2.gui.fragments.home.InfoScreen
 import com.example.mobile_development_2_2.gui.fragments.poi.POIDetailScreen
 import com.example.mobile_development_2_2.gui.fragments.poi.POIListScreen
 import com.example.mobile_development_2_2.gui.fragments.route.RouteListScreen
-import com.example.mobile_development_2_2.gui.fragments.settings.SettingsFragment
 import com.example.mobile_development_2_2.map.route.RouteManager
+import com.example.mobile_development_2_2.gui.fragments.MapFragment
+import com.example.mobile_development_2_2.gui.fragments.settings.SettingsFragment
+import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
+import com.example.mobile_development_2_2.map.gps.GetLocationProvider
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -137,6 +142,12 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    fun CheckForDuplicateFragmentOnStack(navController: NavHostController) {
+        if(navController.previousBackStackEntry!!.destination.displayName == navController.currentBackStackEntry!!.destination.displayName){
+            navController.popBackStack()
+        }
+    }
+
     @Composable
     fun MainScreen(
         openDialog: MutableState<Boolean>,
@@ -165,21 +176,18 @@ class MainActivity : ComponentActivity() {
                     navigateUp = { navController.navigateUp() },
                     onSettingsButtonClicked = { navController.navigate(Fragments.Settings.name) })
             },
-            bottomBar = {
-                BottomNavigationBar(
-                    onHomeButtonClicked = {
-                        navController.backQueue.clear()
-                        navController.navigate(Fragments.Home.name)
-
-                    },
-                    onHomePOIClicked = {
-                        navController.backQueue.clear()
-                        navController.navigate(Fragments.POIList.name)
-
-                    },
-                    onMapButtonClicked = {
-                        navController.backQueue.clear()
-                        navController.navigate(Fragments.Route.name)
+            bottomBar = { BottomNavigationBar(
+                onHomeButtonClicked = {
+                    navController.backQueue.clear()
+                    navController.navigate(Fragments.Home.name)
+                                      },
+                onHomePOIClicked = {
+                    navController.backQueue.clear()
+                    navController.navigate(Fragments.POIList.name)
+                                   },
+                onMapButtonClicked = {
+                    navController.backQueue.clear()
+                    navController.navigate(Fragments.Route.name)
 
                         Log.d("123", "map")
                     }
@@ -205,8 +213,9 @@ class MainActivity : ComponentActivity() {
                 composable(route = Fragments.Route.name) {
                     RouteListScreen(
                         modifier = Modifier,
-                        routes = RouteManager.TestRoutes(),
+                        routes = RouteManager.routes,
                         onRouteClicked = {
+                            Log.d("route", RouteManager.getSelectedRoute().name)
                             navController.navigate(Fragments.Map.name)
                         },
                         onPOIClicked = {
@@ -238,7 +247,10 @@ class MainActivity : ComponentActivity() {
                 composable(route = Fragments.Map.name) {
                     map.MapScreen(
                         viewModel = osmViewModel,
-                        modifier = Modifier
+                        modifier = Modifier,
+                        onPOIClicked = {
+                            navController.navigate(Fragments.POI.name)
+                        }
                     )
                 }
                 composable(route = Fragments.Settings.name) {
@@ -353,7 +365,7 @@ class MainActivity : ComponentActivity() {
                             )
                             .dec()
                     )
-                ),
+                ).height(70.dp),
         ) {
             items.forEach { item ->
                 var onClick = onHomeButtonClicked
