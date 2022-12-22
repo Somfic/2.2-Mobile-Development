@@ -139,8 +139,11 @@ class MapFragment : LocationListener {
                             route.started.value
                             var lat: Double = route.POIs[0].location.latitude
                             var lng: Double = route.POIs[0].location.longitude
-                            if (!route.hasProgress())
+                            if (!route.hasProgress()){
+                                Log.d("MainActivity", "Starting route")
                                 RouteManager.getRouteManager(context).setGeofenceLocation(lat, lng)
+                            }
+
                         },
                         modifier = Modifier
                             .padding(bottom = 20.dp),
@@ -341,7 +344,6 @@ class MapFragment : LocationListener {
 
 
 
-
                 }
             },
             modifier = modifier,
@@ -398,7 +400,7 @@ class MapFragment : LocationListener {
            GlobalScope.launch {
 //               val client = Client("192.168.5.1",8000)
 //               client.sendGeoLocation(GeoPoint(start.latitude,start.longitude))
-               route = RouteRequest.getRoute(start, end)
+               route = RouteRequest.getRoute(start, end,null)
                kmldocument.parseGeoJSON(route)
                val klmstyle = Style(
                    null,Color.Red.hashCode(),20f,Color.White.hashCode())

@@ -24,14 +24,15 @@ class RouteManager {
 
     var context: Context?
     lateinit var selectedRoute: Route
-    lateinit var currentPoi : POI
+    lateinit var targetPOI: POI
+    lateinit var previousTargetPOI: POI
 
     private constructor(context: Context?) {
         Log.d(LOG_TAG, "constructor")
         this.context = context
         routes = GenerateRoutes()
         selectedRoute = routes.get(0)
-        currentPoi = selectedRoute.POIs.get(0)
+        previousTargetPOI = routes.get(0).POIs.get(0)
     }
 
 
@@ -52,11 +53,11 @@ class RouteManager {
 
                 //poi.shortDescription = getStringById(poi.shortDescription)
 
-                if (poi.imgMap == null) {
-                    poi.imgMap = "image404.png"
+                if (poi.imgMap == null){
+                    poi.imgMap = "ic_logo.png"
                 }
-                if (poi.img == null) {
-                    poi.img = "image404.png"
+                if (poi.img == null){
+                    poi.img = "notfound404.png"
                 }
             }
         }
@@ -83,8 +84,14 @@ class RouteManager {
         return null
     }
 
-    fun selectItem(route: Route) {
-        Log.d("a", "route selected")
+    fun selectRoute(route: Route) {
+        Log.d(LOG_TAG, "route selected")
+        for (poi in route.POIs) {
+            if(!poi.visited){
+                targetPOI = poi
+                break
+            }
+        }
         selectedRoute = route
     }
 
@@ -96,7 +103,7 @@ class RouteManager {
 
     fun get_CurrentPoi(): POI {
         Log.d(LOG_TAG, "giving current poi")
-        return currentPoi
+        return targetPOI
     }
 
     fun selectPOI(poi: POI) {
@@ -109,15 +116,28 @@ class RouteManager {
         return Route.getSelectedPOI()
     }
 
-    fun getStringById(idName: String): String {
+    @JvmName("getTargetPOI1")
+    fun getTargetPOI(): POI{
+        Log.d(LOG_TAG, "giving target poi")
+        return targetPOI
+    }
+
+    @JvmName("setTargetPOI1")
+    fun setTargetPOI(poi: POI){
+        Log.d(LOG_TAG, "setting target poi")
+        targetPOI = poi
+    }
+
+    fun getStringByName(idName: String): String {
         Log.d(LOG_TAG, "getting strtring resource by name")
         return Lang.get(context?.resources!!.getIdentifier(idName, "string", context?.packageName))
     }
 
     fun triggeredGeofence() {
-
+        Log.d(LOG_TAG, "Geofence triggered")
         //set visited poi true
         for (poi in selectedRoute.POIs) {
+            Log.d(LOG_TAG, "checking poi status first")
             if (!poi.visited) {
                 poi.visited = true
                 break
@@ -125,15 +145,18 @@ class RouteManager {
         }
 
         //get next poi in route
-        var routeFinished: Boolean = true
+        var routeFinished = true
 
         for (poi in selectedRoute.POIs) {
+            Log.d(LOG_TAG, "checking poi status")
             if (!poi.visited) {
-                currentPoi = poi
+                Log.d(LOG_TAG, "unfinished poi found")
+                targetPOI = poi
                 setGeofenceLocation(poi.location.latitude, poi.location.longitude)
                 routeFinished = false
                 break
             }
+            previousTargetPOI = poi
         }
         if(routeFinished) {
             //route finished
@@ -141,6 +164,7 @@ class RouteManager {
     }
 
     fun setGeofenceLocation(lat: Double, lng: Double) {
+        Log.d(LOG_TAG, "Setting geofence $lat $lng")
         var geofence: Geofence? = geofenceHelper?.getGeofence(lat, lng)
 
         var geofencingRequest: GeofencingRequest? = geofence?.let {
@@ -154,7 +178,7 @@ class RouteManager {
                 geofencingClient?.addGeofences(geofencingRequest, pendingIntent)
                     ?.addOnSuccessListener {
                         Log.d(
-                            ContentValues.TAG,
+                            LOG_TAG,
                             "Geofence added " + geofencingRequest.geofences[0].latitude + " " + geofencingRequest.geofences[0].longitude
                         )
                     }
