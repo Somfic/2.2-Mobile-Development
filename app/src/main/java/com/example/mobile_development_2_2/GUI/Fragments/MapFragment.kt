@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -131,8 +132,9 @@ class MapFragment : LocationListener {
                     Button(
                         onClick = {
                             Log.d("f", "" + route.started.value)
-                            currentDestination = route.POIs.get(0).location
+
                             RouteManager.getRouteManager(context).setRouteState(true);
+                            currentDestination = RouteManager.getRouteManager(context).getSelectedPOI().location
                             Log.d("f", "" + route.started.value)
                             route.started.value
                             var lat: Double = route.POIs[0].location.latitude
@@ -146,17 +148,16 @@ class MapFragment : LocationListener {
                         modifier = Modifier
                             .padding(bottom = 20.dp),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(
-                                ContextCompat.getColor(
-                                    LocalContext.current, R.color.colorPrimary
-                                ).dec()
-                            ), contentColor = Color.White
+                            backgroundColor = MaterialTheme.colors.primary, 
+                            contentColor = Color.White
                         )
                     ) {
                         if (!route.hasProgress())
-                            Text(text = Lang.get(R.string.map_start))
+                            Text(text = Lang.get(R.string.map_start), color = MaterialTheme.colors.onPrimary)
                         else
-                            Text(text = Lang.get(R.string.map_continue))
+                            Text(text = Lang.get(R.string.map_continue),
+                                color = MaterialTheme.colors.onPrimary
+                            )
                     }
 
                 }
@@ -168,14 +169,13 @@ class MapFragment : LocationListener {
                         modifier = Modifier
                             .padding(bottom = 20.dp, end = 30.dp),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(
-                                ContextCompat.getColor(
-                                    LocalContext.current, R.color.colorPrimary
-                                ).dec()
-                            ), contentColor = Color.White
+                            backgroundColor = MaterialTheme.colors.primary
                         )
                     ) {
-                        Text(text = Lang.get(R.string.map_recenter))
+                        Text(
+                            text = Lang.get(R.string.map_recenter),
+                            color = MaterialTheme.colors.onPrimary
+                        )
                     }
 
                 }
@@ -189,11 +189,8 @@ class MapFragment : LocationListener {
                         modifier = Modifier
                             .padding(top = 20.dp, start = 30.dp),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(
-                                ContextCompat.getColor(
-                                    LocalContext.current, R.color.colorPrimary
-                                ).dec()
-                            ), contentColor = Color.White
+                            backgroundColor = MaterialTheme.colors.primary,
+                            contentColor = MaterialTheme.colors.onPrimary
                         )
 
                     ) {
@@ -204,6 +201,36 @@ class MapFragment : LocationListener {
                     }
 
                 }
+
+                Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.End) {
+                    Card(modifier = Modifier
+                        .padding(top = 20.dp, end = 30.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .height(60.dp)
+                        .width(120.dp),
+                        elevation = 10.dp,
+                        backgroundColor = MaterialTheme.colors.primary
+
+                    ) {
+                        Text(
+                            text = "" + route.totalPoisVisited.value + " / " + route.POIs.size + " " +  Lang.get(R.string.map_points),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.wrapContentHeight(Alignment.Top)
+                                .padding(top = 6.dp),
+                            color = MaterialTheme.colors.onPrimary
+
+                        )
+                        Text(
+                            text ="" + route.currentLength.value + " / " + route.length + " km",
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.wrapContentHeight(Alignment.Bottom)
+                                .padding(bottom = 8.dp),
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                    }
+
+                }
+
             }
         }
     }
@@ -241,6 +268,7 @@ class MapFragment : LocationListener {
             MapView(context)
         }
         this.mapView = mapView
+        mapView.setMultiTouchControls(true)
 
 
         //FIXME poilayer kan toegevoegd worden als er point of interest zijn
@@ -310,22 +338,11 @@ class MapFragment : LocationListener {
 
                     mapView.overlays.add(myLocation)
 
-                    mapView.overlays.add(currentRoute)
-                    val kmldocument = KmlDocument()
-                    //get data/routes/historische_kilometer.geojson
-
-                    val resources = getResources()
-                    //switch case voor verschillende routes
-
-                    val inputStream = resources.openRawResource(R.raw.test_route)
-                    kmldocument.parseGeoJSONStream(inputStream)
-
-                    val klmstyle = kmldocument.getStyle("route")
+//                    mapView.overlays.add(currentRoute)
 
 
-                    val feature = kmldocument.mKmlRoot.buildOverlay(mapView, klmstyle, null, kmldocument)
-                    mapView.overlays.add(feature)
-                    mapView.invalidate()
+
+
 
                 }
             },
@@ -383,7 +400,7 @@ class MapFragment : LocationListener {
            GlobalScope.launch {
 //               val client = Client("192.168.5.1",8000)
 //               client.sendGeoLocation(GeoPoint(start.latitude,start.longitude))
-               route = RouteRequest.getRoute(start, end)
+               route = RouteRequest.getRoute(start, end,null)
                kmldocument.parseGeoJSON(route)
                val klmstyle = Style(
                    null,Color.Red.hashCode(),20f,Color.White.hashCode())
@@ -473,7 +490,12 @@ class MapFragment : LocationListener {
       if (System.currentTimeMillis() - lastrouterequest > 1800) {
 
           lastrouterequest = System.currentTimeMillis()
-          if(::currentDestination.isInitialized){
+          if(::currentDestination.isInitialized ){
+              if (currentDestination != RouteManager.getRouteManager(context).get_CurrentPoi().location) {
+                  currentDestination = RouteManager.getRouteManager(context).get_CurrentPoi().location
+//                  setRoute(myLocation.myLocation, currentDestination)
+              }
+
               setRoute(GeoPoint(p0.latitude,p0.longitude), currentDestination)
 
           }

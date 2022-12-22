@@ -103,7 +103,7 @@ fun MessageRow(poi: POI, onPOIClicked: () -> Unit) {
             onValueChange = { },
             label = { Text(text = "") },
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color(0xFFFFFFFF)
+                backgroundColor = MaterialTheme.colors.surface
             )
         )
 

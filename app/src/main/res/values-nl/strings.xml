@@ -221,4 +221,5 @@ vanuit Breda naar Oosterhout verdreven.
     <string name="map_start">Begin</string>
     <string name="map_continue">Vervolg</string>
     <string name="map_recenter">Centreren</string>
+    <string name="map_points">punten</string>
 </resources>

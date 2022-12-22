@@ -234,4 +234,5 @@ expelled from Breda to Oosterhout.
     <string name="map_start">Start</string>
     <string name="map_continue">Continue</string>
     <string name="map_recenter">Recenter</string>
+    <string name="map_points">points</string>
 </resources>
