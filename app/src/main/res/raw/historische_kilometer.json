@@ -23,8 +23,8 @@
           "mLongitude": 4.7772
         },
         "streetName": "",
-        "shortDescription": "poiNoDescription",
-        "longDescription": "poiNoDescription"
+        "shortDescription": "poi7PlaceDescription",
+        "longDescription": "poi7Description"
       },
       {
         "name": "Bibliotheek",
@@ -33,8 +33,8 @@
           "mLongitude": 4.7789
         },
         "streetName": "",
-        "shortDescription": "poiNoDescription",
-        "longDescription": "poiNoDescription"
+        "shortDescription": "poi8PlaceDescription",
+        "longDescription": "poi8Description"
       },
       {
         "name": "Kloosterkazerne",
@@ -43,8 +43,8 @@
           "mLongitude": 4.781
         },
         "streetName": "",
-        "shortDescription": "poiNoDescription",
-        "longDescription": "poiNoDescription"
+        "shortDescription": "poi9PlaceDescription",
+        "longDescription": "poi9Description"
       },
       {
         "name": "Chasse theater",
@@ -123,8 +123,8 @@
         },
         "img": "poi4.jpg",
         "streetName": "",
-        "shortDescription": "poiNoDescription",
-        "longDescription": "poiNoDescription"
+        "shortDescription": "poi1PlaceDescription",
+        "longDescription": "poi1Description"
       },
       {
         "name": "The Light House",
@@ -134,8 +134,8 @@
         },
         "img": "poi5.jpg",
         "streetName": "",
-        "shortDescription": "poiNoDescription",
-        "longDescription": "poiNoDescription"
+        "shortDescription": "poi2PlaceDescription",
+        "longDescription": "po2Description"
       },
       {
         "name": "Kasteel van Breda",
@@ -156,8 +156,8 @@
         },
         "img": "poi11.jpg",
         "streetName": "",
-        "shortDescription": "poiNoDescription",
-        "longDescription": "poiNoDescription"
+        "shortDescription": "poi5PlaceDescription",
+        "longDescription": "poi5Description"
       },
       {
         "name": "Huis van Brecht",
@@ -178,8 +178,8 @@
         },
         "img": "poi22.jpg",
         "streetName": "",
-        "shortDescription": "poiNoDescription",
-        "longDescription": "poiNoDescription"
+        "shortDescription": "poi3PlaceDescription",
+        "longDescription": "poi4PlaceDescription"
       },
       {
         "name": "Vismarkt",
@@ -211,8 +211,8 @@
         },
         "img": "poi10.jpg",
         "streetName": "",
-        "shortDescription": "poiNoDescription",
-        "longDescription": "poiNoDescription"
+        "shortDescription": "poi4PlaceDescription",
+        "longDescription": "poi4Description"
       },
       {
         "name": "Het Poortje",
@@ -243,8 +243,8 @@
         },
         "img": "poi17.jpg",
         "streetName": "",
-        "shortDescription": "poiNoDescription",
-        "longDescription": "poiNoDescription"
+        "shortDescription": "poi6PlaceDescription",
+        "longDescription": "poi6PlaceDescription"
       },
       {
         "name": "Bevrijdingsmonument",
