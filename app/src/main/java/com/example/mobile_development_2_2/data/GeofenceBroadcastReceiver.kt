@@ -41,7 +41,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             for (geofence in geofenceList) {
                 Log.d(TAG, "onReceive: " + geofence.requestId + " triggered ")
                 PopupHelper.SetState(true)
-                notificationHelper.sendHighPriorityNotification("Geofence triggered",geofence.requestId, MainActivity::class.java)
+                notificationHelper.sendHighPriorityNotification(RouteManager.getRouteManager(null).getStringByName("notification"),"", MainActivity::class.java)
                 RouteManager.getRouteManager(null).triggeredGeofence()
 
             }
