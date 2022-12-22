@@ -217,4 +217,7 @@ zusterklooster St. Catharinadal, dat hier sinds 1295 gevestigd was. Het
 huidige gebouw dateert uit 1504. In 1645 werden de zusters Norbertinessen
 vanuit Breda naar Oosterhout verdreven.
     </string>
+    <string name="map_start">Begin</string>
+    <string name="map_continue">Vervolg</string>
+    <string name="map_recenter">Centreren</string>
 </resources>
