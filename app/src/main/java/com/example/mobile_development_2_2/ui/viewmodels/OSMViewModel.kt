@@ -55,39 +55,7 @@ class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) 
         locationFlow = lastLocations,
     )
 
-    fun invoke () {
-        for (it in pois) {
-            setGeofenceLocation(it.location.latitude,it.location.longitude)
-        }
-        //this method changes the location of the geofence,
-        //keep in mind there is always 1 active geofence which should be the next geofence in the route,
-        setGeofenceLocation(51.5856, 4.7925)
-    }
 
-    fun setGeofenceLocation(lat: Double, lng: Double) {
-        var geofence: Geofence? = geofenceHelper.getGeofence(lat, lng)
-
-        var geofencingRequest: GeofencingRequest? = geofence?.let {
-            geofenceHelper.geofencingRequest(
-                it
-            )
-        }
-        var pendingIntent: PendingIntent? = geofenceHelper.getPendingIntent()
-        if (geofencingRequest != null) {
-            if (pendingIntent != null) {
-                geofencingClient.addGeofences(geofencingRequest, pendingIntent)
-                    .addOnSuccessListener {
-                        Log.d(
-                            ContentValues.TAG,
-                            "Geofence added " + geofencingRequest.geofences[0].latitude + " " + geofencingRequest.geofences[0].longitude
-                        )
-                    }
-                    .addOnFailureListener { e ->
-                        Log.d(ContentValues.TAG, "onFailure: " + geofenceHelper.getErrorString(e))
-                    }
-            }
-        }
-    }
 
     class Provider(
         private val coroutineScope: CoroutineScope,

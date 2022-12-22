@@ -41,12 +41,8 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             for (geofence in geofenceList) {
                 Log.d(TAG, "onReceive: " + geofence.requestId + " triggered ")
                 notificationHelper.sendHighPriorityNotification("Geofence triggered",geofence.requestId, MainActivity::class.java)
-
-                //RouteManager.SelectPOI()
+                RouteManager.getRouteManager(null).triggeredGeofence()
                 PopupHelper.SetState(true)
-
-                Route.getNextPOI()
-
             }
         }
     }

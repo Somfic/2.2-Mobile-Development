@@ -155,7 +155,6 @@ class MainActivity : ComponentActivity() {
         val osmViewModel = remember {
             OSMViewModel(GetLocationProvider(GPSLocationProvider(context = context)), this)
         }
-        osmViewModel.setGeofenceLocation(51.6948, 4.7820, "id")
         this.osmViewModel = osmViewModel
 
         // Get the name of the current screen

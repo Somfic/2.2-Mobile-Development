@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.example.mobile_development_2_2.R
-import com.example.mobile_development_2_2.map.route.RouteManager.Companion.getSelectedRoute
+
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Overlay
@@ -167,16 +167,6 @@ data class Route(
         @JvmName("getSelectedItem1")
         fun getSelectedPOI(): POI {
             return selectedItem
-        }
-
-        fun getNextPOI(): POI? {
-            for(poi in TestRoute().POIs){
-                if(!poi.visited){
-                    selectedItem = poi
-                    return poi
-                }
-            }
-            return null
         }
     }
 

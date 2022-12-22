@@ -63,7 +63,7 @@ class MapFragment : LocationListener {
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
-    fun MapScreen(viewModel: OSMViewModel, modifier: Modifier, onPOIClicked :() -> Unit) {
+    fun MapScreen(viewModel: OSMViewModel, modifier: Modifier, onPOIClicked: () -> Unit) {
         viewModel.provider.locationListener = this
 
         Surface(
@@ -89,7 +89,10 @@ class MapFragment : LocationListener {
             if (!premissions.allPermissionsGranted) {
                 Column {
 
-                    Text(text = Lang.get(R.string.map_no_location_permission), color = MaterialTheme.colors.error)
+                    Text(
+                        text = Lang.get(R.string.map_no_location_permission),
+                        color = MaterialTheme.colors.error
+                    )
                 }
             }
             Row {
@@ -101,25 +104,34 @@ class MapFragment : LocationListener {
                         .align(Alignment.Bottom)
                 )
             }
-            if(!RouteManager.getRouteManager(null).getSelectedRoute().started.value){
+            if (!RouteManager.getRouteManager(null).getSelectedRoute().started.value) {
 
-                Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center) {
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Center
+                ) {
                     Button(
                         onClick = {
                             Log.d("f", "" + route.started.value)
                             RouteManager.getRouteManager(context).setRouteState(true);
                             Log.d("f", "" + route.started.value)
-                                  },
+                            route.started.value
+                            var lat: Double = route.POIs[0].location.latitude
+                            var lng: Double = route.POIs[0].location.longitude
+                            if (!route.hasProgress())
+                                RouteManager.getRouteManager(context).setGeofenceLocation(lat, lng)
+                        },
                         modifier = Modifier
                             .padding(bottom = 20.dp),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color(
                                 ContextCompat.getColor(
                                     LocalContext.current, R.color.colorPrimary
-                                ).dec()), contentColor = Color.White
+                                ).dec()
+                            ), contentColor = Color.White
                         )
                     ) {
-                        if(!route.hasProgress())
+                        if (!route.hasProgress())
                             Text(text = Lang.get(R.string.map_start))
                         else
                             Text(text = Lang.get(R.string.map_continue))
@@ -137,29 +149,35 @@ class MapFragment : LocationListener {
                             backgroundColor = Color(
                                 ContextCompat.getColor(
                                     LocalContext.current, R.color.colorPrimary
-                                ).dec()), contentColor = Color.White
+                                ).dec()
+                            ), contentColor = Color.White
                         )
                     ) {
                         Text(text = Lang.get(R.string.map_recenter))
                     }
 
                 }
-                
+
                 Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start) {
                     Button(
                         onClick = {
-                            RouteManager.getRouteManager(context).setRouteState(false); },
+                            RouteManager.getRouteManager(context).setRouteState(false);
+                        },
                         modifier = Modifier
                             .padding(top = 20.dp, start = 30.dp),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color(
                                 ContextCompat.getColor(
                                     LocalContext.current, R.color.colorPrimary
-                                ).dec()), contentColor = Color.White
+                                ).dec()
+                            ), contentColor = Color.White
                         )
 
                     ) {
-                        Icon(painter = painterResource(id = R.drawable.ic_baseline_close_24), contentDescription = "")
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_baseline_close_24),
+                            contentDescription = ""
+                        )
                     }
 
                 }
@@ -174,14 +192,14 @@ class MapFragment : LocationListener {
         modifier: Modifier = Modifier,
         routePoints: MutableList<GeoPoint> = mutableListOf(),
         provider: IMyLocationProvider,
-        onPOIClicked :() -> Unit,
+        onPOIClicked: () -> Unit,
     ) {
         this.route = RouteManager.getRouteManager(null).getSelectedRoute()
         val locations = route.POIs
         val listener = object : ItemizedIconOverlay.OnItemGestureListener<POIItem> {
             override fun onItemSingleTapUp(index: Int, item: POIItem?): Boolean {
                 if (item != null) {
-                    clickedOnPoi(item.poi,onPOIClicked )
+                    clickedOnPoi(item.poi, onPOIClicked)
                 }
                 return true
             }
@@ -282,7 +300,8 @@ class MapFragment : LocationListener {
                     val klmstyle = kmldocument.getStyle("route")
 
 
-                    val feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument)
+                    val feature =
+                        kmldocument.mKmlRoot.buildOverlay(mapView, klmstyle, null, kmldocument)
                     mapView.overlays.add(feature)
                     mapView.invalidate()
 
@@ -319,17 +338,14 @@ class MapFragment : LocationListener {
         }
 
 
-
-
-
     }
 
-    private fun clickedOnPoi(poi: POI, onPOIClicked :() -> Unit) {
+    private fun clickedOnPoi(poi: POI, onPOIClicked: () -> Unit) {
         RouteManager.getRouteManager(context).selectPOI(poi)
         onPOIClicked()
     }
 
-    private fun longClickOnPoi(poi: POI , onPOIClicked :() -> Unit) {
+    private fun longClickOnPoi(poi: POI, onPOIClicked: () -> Unit) {
         //todo
     }
 
