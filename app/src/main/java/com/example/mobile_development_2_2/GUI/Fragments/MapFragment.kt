@@ -374,7 +374,7 @@ class MapFragment : LocationListener {
            GlobalScope.launch {
 //               val client = Client("192.168.5.1",8000)
 //               client.sendGeoLocation(GeoPoint(start.latitude,start.longitude))
-               route = RouteRequest.getRoute(start, end)
+               route = RouteRequest.getRoute(start, end,null)
                kmldocument.parseGeoJSON(route)
                val klmstyle = Style(
                    null,Color.Red.hashCode(),20f,Color.White.hashCode())
