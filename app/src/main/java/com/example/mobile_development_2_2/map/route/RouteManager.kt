@@ -3,8 +3,9 @@ package com.example.mobile_development_2_2.map.route
 import android.app.PendingIntent
 import android.content.ContentValues
 import android.content.Context
-import android.content.res.Resources
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.GeofenceHelper
 import com.example.mobile_development_2_2.data.Lang
@@ -14,15 +15,101 @@ import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
+import java.security.AccessController.getContext
 
-class RouteManager(context: Context) {
+class RouteManager {
+    val LOG_TAG = "RouteManager"
+
+    var routes : List<Route>
+    var context: Context?
+
+    private constructor(context: Context?){
+        Log.d(LOG_TAG, "constructor")
+        this.context = context
+        routes = GenerateRoutes()
+    }
 
 
-    companion object {
-        var targetPOI: POI? = null
 
-        var routes = TestRoutes()
-        private fun TestRoutes(): List<Route> {
+    fun GenerateRoutes(): List<Route>{
+        Log.d(LOG_TAG, "generating routes")
+        val jsonString: String = context?.resources!!.openRawResource(R.raw.historische_kilometer).bufferedReader().use { it.readText() }
+        val gson = Gson()
+        val routes =  gson.fromJson(jsonString, Array<Route>::class.java).toList()
+        for (it in routes) {
+            it.started = mutableStateOf(false)
+            for(poi in it.POIs){
+                poi.visited = false
+
+                //poi.shortDescription = getStringById(poi.shortDescription)
+
+                if (poi.imgMap == null){
+                    poi.imgMap = "image404.png"
+                }
+                if (poi.img == null){
+                    poi.img = "image404.png"
+                }
+            }
+        }
+        return routes
+    }
+
+    fun GetRoutes(): List<Route>{
+        Log.d(LOG_TAG, "giving routes")
+        return routes
+    }
+
+    private var selectedItem = TestRoutes().get(0)
+
+    fun setRouteState(started: Boolean){
+        Log.d(LOG_TAG, "setting route state")
+        getRouteByName(selectedItem.name)?.started?.value = started
+    }
+
+    fun getRouteByName(name : String) : Route?{
+        Log.d(LOG_TAG, "giving route by name")
+        for (route in routes){
+            if(route.name == name)
+                return route
+        }
+        return null
+    }
+
+    fun selectItem(route: Route){
+        Log.d("a", "route selected")
+        selectedItem = route
+    }
+
+    @JvmName("getSelectedItem1")
+    fun getSelectedRoute(): Route {
+        Log.d(LOG_TAG, "gicing selected route")
+        return selectedItem
+    }
+
+    fun selectPOI(poi:POI){
+        Log.d(LOG_TAG, "selecting poi")
+        Route.selectItem(poi)
+    }
+
+    fun getSelectedPOI(): POI{
+        Log.d(LOG_TAG, "giving selected poi")
+        return Route.getSelectedPOI()
+    }
+
+    fun getStringById(idName: String): String{
+        Log.d(LOG_TAG, "getting strtring resource by name")
+        return Lang.get(context?.resources!!.getIdentifier(idName, "string", context?.resources!!.getResourcePackageName(1)))
+    }
+
+
+
+
+
+    companion object{
+        private var routeManager : RouteManager? = null
+
+         private fun TestRoutes(): List<Route>{
+             Log.d("RouteManager", "testroutes")
             var testRoute1 = Route.TestRoute("testRoute1")
             var testRoute2 = Route.TestRoute2("testRoute2")
             //var testRoute3 = Route.TestRoute("testRoute3")
@@ -36,68 +123,18 @@ class RouteManager(context: Context) {
             return routes
         }
 
-        fun GetRoutes(resources: Resources): List<Route> {
-            val jsonString: String =
-                resources.openRawResource(R.raw.historische_kilometer).bufferedReader()
-                    .use { it.readText() }
-            val gson = Gson()
-            val routes = gson.fromJson(jsonString, Array<Route>::class.java).toList()
-            for (it in routes) {
-                for (poi in it.POIs) {
-                    poi.visited = false
-                    if (poi.imgMap == null) {
-                        poi.imgMap = "image404.png"
-                    }
-                    if (poi.img == null) {
-                        poi.img = "image404.png"
-                    }
-                }
+        fun getRouteManager(context: Context?): RouteManager{
+            Log.d("RouteManager", "getroutemanager")
+
+            if(routeManager == null){
+                Log.d("RouteManager", "making routemanager")
+                routeManager = RouteManager(context)
             }
-            return routes
+
+
+            return routeManager as RouteManager
         }
 
-        var selectedItem = TestRoutes().get(0)
 
-        fun setRouteState(started: Boolean) {
-            getRouteByName(selectedItem.name)?.started?.value = started
-        }
-
-        fun getRouteByName(name: String): Route? {
-            for (route in routes) {
-                if (route.name == name)
-                    return route
-            }
-            return null
-        }
-
-        fun selectItem(route: Route) {
-            Log.d("a", "Item selected")
-            selectedItem = route
-        }
-
-        @JvmName("getSelectedItem1")
-        fun getSelectedRoute(): Route {
-            return selectedItem
-        }
-
-        fun selectPOI(poi: POI) {
-            Route.selectItem(poi)
-        }
-
-        fun getSelectedPOI(): POI {
-            return Route.getSelectedPOI()
-        }
-
-        fun getNextPOI(): POI? {
-            return Route.getNextPOI()
-        }
-
-        fun getStringById(context: Context, idName: String): String {
-            val resources = context.resources
-
-            return Lang.get(resources.getIdentifier(idName, "string", context.packageName))
-        }
-
-}
-
+    }
 }

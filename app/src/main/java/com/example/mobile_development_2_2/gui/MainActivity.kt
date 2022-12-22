@@ -3,9 +3,6 @@ package com.example.mobile_development_2_2.gui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Build.VERSION_CODES.N
-import android.location.LocationProvider
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -16,24 +13,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.N
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -54,7 +47,6 @@ import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.gui.fragments.settings.SettingsFragment
 import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
 import com.example.mobile_development_2_2.map.gps.GetLocationProvider
-import com.example.mobile_development_2_2.map.route.Route
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -89,10 +81,12 @@ class MainActivity : ComponentActivity() {
         Lang.onLanguageChanged { recreate() }
         Lang.onColorblindChange { recreate() }
 
+        RouteManager.getRouteManager(this)
+
 
         setContent {
 
-            Log.d("Mainactivity", RouteManager.getStringById(this, "HelpItem1"))
+            //Log.d("Mainactivity", RouteManager.getrouteManager(this).getStringById("HelpItem1"))
 
             val openDialog = remember {
                 mutableStateOf(false)
@@ -214,9 +208,9 @@ class MainActivity : ComponentActivity() {
                 composable(route = Fragments.Route.name) {
                     RouteListScreen(
                         modifier = Modifier,
-                        routes = RouteManager.GetRoutes(resources),
+                        routes = RouteManager.getRouteManager(baseContext).GetRoutes(),
                         onRouteClicked = {
-                            Log.d("route", RouteManager.getSelectedRoute().name)
+                            Log.d("route", RouteManager.getRouteManager(baseContext).getSelectedRoute().name)
                             navController.navigate(Fragments.Map.name)
                         },
                         onPOIClicked = {
@@ -227,7 +221,7 @@ class MainActivity : ComponentActivity() {
                 composable(route = Fragments.POIList.name) {
                     POIListScreen(
                         modifier = Modifier,
-                        route = RouteManager.getSelectedRoute(),
+                        route = RouteManager.getRouteManager(baseContext).getSelectedRoute(),
                         onPOIClicked = {
                             navController.navigate(Fragments.POI.name)
                         }
@@ -242,7 +236,7 @@ class MainActivity : ComponentActivity() {
                 composable(route = Fragments.POI.name) {
                     POIDetailScreen(
                         modifier = Modifier,
-                        poi = RouteManager.getSelectedPOI()
+                        poi = RouteManager.getRouteManager(baseContext).getSelectedPOI()
                     )
                 }
                 composable(route = Fragments.Map.name) {
@@ -375,7 +369,8 @@ class MainActivity : ComponentActivity() {
                     icon = {
                         Icon(
                             painterResource(id = item.icon),
-                            contentDescription = item.title
+                            contentDescription = item.title,
+                            modifier = Modifier.size(40.dp)
                         )
                     },
                     label = { Text(text = item.title) },
@@ -402,10 +397,10 @@ class MainActivity : ComponentActivity() {
 
         AlertDialog(
             onDismissRequest = { !openDialog.value },
-            title = { Text(text = RouteManager.getSelectedPOI().name, color = Color.Black) },
+            title = { Text(text = RouteManager.getRouteManager(baseContext).getSelectedPOI().name, color = Color.Black) },
             text = {
                 Text(
-                    text = RouteManager.getSelectedPOI().shortDescription,
+                    text = RouteManager.getRouteManager(baseContext).getSelectedPOI().shortDescription,
                     color = Color.Black
                 )
             },
