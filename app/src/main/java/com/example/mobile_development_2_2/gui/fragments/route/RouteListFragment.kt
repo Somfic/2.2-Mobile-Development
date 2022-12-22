@@ -116,7 +116,7 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
         ) {
             Button(
                 onClick = {
-                    RouteManager.getRouteManager(application.baseContext).selectItem(route)
+                    RouteManager.getRouteManager(application.baseContext).selectRoute(route)
                     onPOIClicked()
                 },
                 colors = ButtonDefaults.buttonColors(
@@ -139,7 +139,7 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
             )
             Button(
                 onClick = {
-                    RouteManager.getRouteManager(application.baseContext).selectItem(route)
+                    RouteManager.getRouteManager(application.baseContext).selectRoute(route)
                     Log.d("route", route.name)
                     premissions.launchMultiplePermissionRequest()
                     onRouteClicked()

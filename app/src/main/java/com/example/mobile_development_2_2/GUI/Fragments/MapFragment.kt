@@ -138,8 +138,11 @@ class MapFragment : LocationListener {
                             route.started.value
                             var lat: Double = route.POIs[0].location.latitude
                             var lng: Double = route.POIs[0].location.longitude
-                            if (!route.hasProgress())
+                            if (!route.hasProgress()){
+                                Log.d("MainActivity", "Starting route")
                                 RouteManager.getRouteManager(context).setGeofenceLocation(lat, lng)
+                            }
+
                         },
                         modifier = Modifier
                             .padding(bottom = 20.dp),
@@ -311,8 +314,13 @@ class MapFragment : LocationListener {
 
 //                    mapView.overlays.add(currentRoute)
 
+                    val resources = getResources()
+                    //switch case voor verschillende routes
 
+                    val inputStream = resources.openRawResource(R.raw.test_route)
+                    kmldocument.parseGeoJSONStream(inputStream)
 
+                    val klmstyle = kmldocument.getStyle("route")
 
 
 
