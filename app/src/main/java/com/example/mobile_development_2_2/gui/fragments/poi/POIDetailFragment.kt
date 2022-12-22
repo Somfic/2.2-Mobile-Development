@@ -31,6 +31,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.map.route.POI
+import com.example.mobile_development_2_2.map.route.RouteManager
 
 @Composable
 fun POIDetailScreen(modifier: Modifier, poi: POI) {
@@ -133,7 +134,7 @@ fun MessageRow2(poi: POI) {
     {
 
         TextField(
-            value = poi.longDescription,
+            value = RouteManager.getRouteManager(null).getStringById(poi.longDescription),
             readOnly = true,
             onValueChange = { },
             label = { Text(text = "") },

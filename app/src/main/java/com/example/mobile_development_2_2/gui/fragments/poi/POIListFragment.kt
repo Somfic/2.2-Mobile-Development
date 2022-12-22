@@ -95,7 +95,7 @@ fun MessageRow(poi: POI, onPOIClicked: () -> Unit) {
         )
 
         TextField(
-            value = poi.shortDescription,
+            value = RouteManager.getRouteManager(null).getStringById(poi.shortDescription),
             modifier = Modifier
                 .padding(start = 200.dp, bottom = 24.dp, top = 65.dp, end = 24.dp)
                 .width(50.dp),
