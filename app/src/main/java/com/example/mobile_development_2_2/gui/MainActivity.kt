@@ -155,7 +155,6 @@ class MainActivity : ComponentActivity() {
         val osmViewModel = remember {
             OSMViewModel(GetLocationProvider(GPSLocationProvider(context = context)), this)
         }
-        osmViewModel.setGeofenceLocation(51.6948, 4.7820, "id")
         this.osmViewModel = osmViewModel
 
         // Get the name of the current screen
@@ -214,6 +213,8 @@ class MainActivity : ComponentActivity() {
                         onRouteClicked = {
                             Log.d("route", RouteManager.getRouteManager(baseContext).getSelectedRoute().name)
                             navController.navigate(Fragments.Map.name)
+
+
                         },
                         onPOIClicked = {
                             navController.navigate(Fragments.POIList.name)
@@ -243,12 +244,16 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(route = Fragments.Map.name) {
                     map.MapScreen(
+
                         viewModel = osmViewModel,
                         modifier = Modifier,
                         onPOIClicked = {
                             navController.navigate(Fragments.POI.name)
                         }
                     )
+//                   map.setRoute(RouteManager.getSelectedRoute().name)
+
+
                 }
                 composable(route = Fragments.Settings.name) {
                     SettingsFragment(
@@ -273,7 +278,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun TopBar(
-        currentScreen: Fragments,
+        currentScreen: MainActivity.Fragments,
         canNavigateBack: Boolean,
         navigateUp: () -> Unit,
         modifier: Modifier = Modifier,
