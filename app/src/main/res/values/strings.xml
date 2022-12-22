@@ -77,4 +77,8 @@
 
     <string name="poi9PlaceDescription">plstranslate</string>
     <string name="poi9Description">plstranslate</string>
+    <string name="map_copyright" translatable="false">© OpenStreetMap</string>
+    <string name="map_start">Start</string>
+    <string name="map_continue">Continue</string>
+    <string name="map_recenter">Recenter</string>
 </resources>
