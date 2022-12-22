@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.example.mobile_development_2_2.R
+
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Overlay
@@ -157,7 +158,7 @@ data class Route(
 
         }
 
-        var selectedItem = TestRoute().POIs.get(0)
+        var selectedItem = TestRoute().POIs[0]
 
         fun selectItem(poi: POI){
             Log.d("a", "Item selected")
@@ -169,6 +170,5 @@ data class Route(
             return selectedItem
         }
     }
-
 
 }
