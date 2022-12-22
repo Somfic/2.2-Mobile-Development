@@ -69,8 +69,8 @@
       {
         "name": "Beyerd",
         "location": {
-          "mLatitude": 4.781,
-          "mLongitude": 51.5896
+          "mLatitude": 51.5896,
+          "mLongitude": 4.781
         },
         "streetName": "",
         "shortDescription": "poiNoDescription",
@@ -107,15 +107,6 @@
         "longDescription": "poiNoDescription"
       },
       {
-        "name": "Einde stadswandeling",
-        "location": {
-          "mLatitude": 0,
-          "mLongitude": 0
-        },
-        "streetName": "",
-        "shortDescription": "poiNoDescription",
-        "longDescription": "poiNoDescription"
-      },{
         "name": "Nassau Baronie Monument",
         "location": {
           "mLatitude": 51.5925,
