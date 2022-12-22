@@ -3,5 +3,6 @@
 
     <style name="Theme.MobileDevelopment2_2" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
     </style>
 </resources>

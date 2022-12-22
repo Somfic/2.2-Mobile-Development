@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
         getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
         Lang.setContext(this)
         Lang.onLanguageChanged { recreate() }
-        Lang.onColorblindChange { recreate() }
+        Lang.onColorblindChange {  }
 
         RouteManager.getRouteManager(this)
 
@@ -252,7 +252,7 @@ class MainActivity : ComponentActivity() {
                 composable(route = Fragments.Settings.name) {
                     SettingsFragment(
 //                        viewModel = osmViewModel,
-//                        modifier = Modifier
+                        modifier = Modifier
                     )
                 }
             }
@@ -371,16 +371,22 @@ class MainActivity : ComponentActivity() {
                         Icon(
                             painterResource(id = item.icon),
                             contentDescription = item.title,
-                            modifier = Modifier.size(40.dp)
+                            modifier = Modifier.size(40.dp),
+                            tint = MaterialTheme.colors.onPrimary
                         )
                     },
-                    label = { Text(text = item.title) },
+                    label = { Text(
+                        text = item.title,
+                        color = MaterialTheme.colors.onPrimary
+                    ) },
                     selectedContentColor = MaterialTheme.colors.primary,
                     unselectedContentColor = MaterialTheme.colors.surface,
                     alwaysShowLabel = true,
                     selected = false,
                     onClick = onClick,
                     modifier = Modifier
+
+
                     //premissions.launchMultiplePermissionRequest()
                 )
             }
