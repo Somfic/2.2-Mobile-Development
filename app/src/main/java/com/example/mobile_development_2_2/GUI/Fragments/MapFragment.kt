@@ -26,15 +26,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.map.route.POI
@@ -54,7 +53,6 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
-import kotlin.math.roundToInt
 
 
 class MapFragment : LocationListener {
@@ -94,29 +92,27 @@ class MapFragment : LocationListener {
             if (!premissions.allPermissionsGranted) {
                 Column {
 
-                    Text(text = Lang.get(R.string.map_no_location_permission), color = Color(ContextCompat.getColor(context,R.color.colorPrimary).dec()))
+                    Text(text = Lang.get(R.string.map_no_location_permission), color = MaterialTheme.colors.error)
                 }
             }
             Row {
-
-
                 Text(
                     text = "Â© OpenStreetMap contributors",
                     fontSize = 8.sp,
                     modifier = Modifier
-                        .background(Color.White, RectangleShape)
+                        .background(MaterialTheme.colors.surface, RectangleShape)
                         .align(Alignment.Bottom)
                 )
 
 
             }
-            if(!route.started.value){
+            if(!RouteManager.getRouteManager(null).getSelectedRoute().started.value){
 
                 Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center) {
                     Button(
                         onClick = {
                             Log.d("f", "" + route.started.value)
-                            RouteManager.setRouteState(true);
+                            RouteManager.getRouteManager(context).setRouteState(true);
                             Log.d("f", "" + route.started.value)
                                   },
                         modifier = Modifier
@@ -157,7 +153,7 @@ class MapFragment : LocationListener {
                 Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start) {
                     Button(
                         onClick = {
-                            RouteManager.setRouteState(false); },
+                            RouteManager.getRouteManager(context).setRouteState(false); },
                         modifier = Modifier
                             .padding(top = 20.dp, start = 30.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -221,7 +217,7 @@ class MapFragment : LocationListener {
         provider: IMyLocationProvider,
         onPOIClicked :() -> Unit,
     ) {
-        this.route = RouteManager.getSelectedRoute()
+        this.route = RouteManager.getRouteManager(null).getSelectedRoute()
         val locations = route.POIs
         val listener = object : ItemizedIconOverlay.OnItemGestureListener<POIItem> {
             override fun onItemSingleTapUp(index: Int, item: POIItem?): Boolean {
@@ -275,8 +271,8 @@ class MapFragment : LocationListener {
         val currentRoute = remember {
             Polyline()
         }
-        currentRoute.outlinePaint.color = ContextCompat.getColor(context, R.color.purple_200)
-        ContextCompat.getColor(context, R.color.purple_200).dec()
+        currentRoute.outlinePaint.color = MaterialTheme.colors.primary.toArgb()
+
         currentRoute.setPoints(routePoints)
         //todo Als we willen dat de gelopen route wordt getekend en/of een correctieroute wordt getekend
 //        val walkedRoute = remember {
@@ -370,7 +366,7 @@ class MapFragment : LocationListener {
     }
 
     private fun clickedOnPoi(poi: POI, onPOIClicked :() -> Unit) {
-        RouteManager.selectPOI(poi)
+        RouteManager.getRouteManager(context).selectPOI(poi)
         onPOIClicked()
     }
 

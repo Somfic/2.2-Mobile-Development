@@ -30,4 +30,51 @@
     <string name="route_distance">Distance</string>
     <string name="routes_waypoints">Waypoints</string>
     <string name="map_no_location_permission">No location permissions</string>
+
+    <string name="HelpItem1">Select a route</string>
+    <string name="HelpItem1Description">Press the middle map button at the button of the screen to go to the available routes. There press the map button on the wanted route."</string>
+    <string name="HelpItem2">Walk a route</string>
+    <string name="HelpItem2Description">After selecting a route press the start route button to start walking the route.</string>
+    <string name="HelpItem3">Pause a route</string>
+    <string name="HelpItem3Description">When walking a route press the x button on the top left of the screen to stop progressing the  route.</string>
+    <string name="HelpItem4">View a POI</string>
+    <string name="HelpItem4Description">When walking a route you\'ll get a notification to view a POI when you\'re within 20 meters of it.</string>
+    <string name="HelpItem5">View a POI on the map</string>
+    <string name="HelpItem5Description">While on the map you can press the icons to view that POI</string>
+    <string name="HelpItem6">View all POIs</string>
+    <string name="HelpItem6Description">If you want to see all the POIs in your selected route go to the POI button at the bottom right of your screen.</string>
+    <string name="HelpItem7">Change language</string>
+    <string name="HelpItem7Description">To change the language go to settings at the top right of the screen.</string>
+    <string name="HelpItem8">Colorblind mode</string>
+    <string name="HelpItem8Description">To change colorblind mode go to settings at the top right of the screen and press the button next to colorblind.</string>
+    
+    //POI strings
+    <string name="poiNoDescription">no description available</string>
+    
+    <string name="poi1PlaceDescription">plstranslate</string>
+    <string name="poi1Description">plstranslate</string>
+
+    <string name="poi2PlaceDescription">plstranslate</string>
+    <string name="poi2Description">plstranslate</string>
+
+    <string name="poi3PlaceDescription">plstranslate</string>
+    <string name="poi3Description">plstranslate</string>
+
+    <string name="poi4PlaceDescription">plstranslate</string>
+    <string name="poi4Description">plstranslate</string>
+
+    <string name="poi5PlaceDescription">plstranslate</string>
+    <string name="poi5Description">plstranslate</string>
+
+    <string name="poi6PlaceDescription">plstranslate</string>
+    <string name="poi6Description">plstranslate</string>
+
+    <string name="poi7PlaceDescription">plstranslate</string>
+    <string name="poi7Description">plstranslate</string>
+
+    <string name="poi8PlaceDescription">plstranslate</string>
+    <string name="poi8Description">plstranslate</string>
+
+    <string name="poi9PlaceDescription">plstranslate</string>
+    <string name="poi9Description">plstranslate</string>
 </resources>

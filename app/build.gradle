@@ -6,7 +6,6 @@ plugins {
 android {
     namespace 'com.example.mobile_development_2_2'
     compileSdk 33
-
     lintOptions {
         abortOnError false
     }

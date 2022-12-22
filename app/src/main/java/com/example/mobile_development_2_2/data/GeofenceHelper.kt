@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import androidx.compose.runtime.MutableState
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofenceStatusCodes
@@ -33,7 +34,7 @@ class GeofenceHelper(base: Context?) : ContextWrapper(base) {
     fun getPendingIntent() : PendingIntent? {
         //Toast.makeText(this, "not init", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, GeofenceBroadcastReceiver::class.java)
-        pendingIntent = PendingIntent.getBroadcast(this, 6969, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        pendingIntent = PendingIntent.getBroadcast(this, 6969, intent, PendingIntent.FLAG_MUTABLE)
 
         return pendingIntent
     }
