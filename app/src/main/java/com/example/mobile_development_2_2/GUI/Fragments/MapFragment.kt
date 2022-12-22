@@ -114,16 +114,17 @@ class MapFragment : LocationListener {
                         modifier = Modifier
                             .padding(bottom = 20.dp),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(
-                                ContextCompat.getColor(
-                                    LocalContext.current, R.color.colorPrimary
-                                ).dec()), contentColor = Color.White
+                            backgroundColor = MaterialTheme.colors.primary
                         )
                     ) {
                         if(!route.hasProgress())
-                            Text(text = Lang.get(R.string.map_start))
+                            Text(text = Lang.get(R.string.map_start),
+                                color = MaterialTheme.colors.onPrimary
+                            )
                         else
-                            Text(text = Lang.get(R.string.map_continue))
+                            Text(text = Lang.get(R.string.map_continue),
+                                color = MaterialTheme.colors.onPrimary
+                            )
                     }
 
                 }
@@ -135,13 +136,13 @@ class MapFragment : LocationListener {
                         modifier = Modifier
                             .padding(bottom = 20.dp, end = 30.dp),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(
-                                ContextCompat.getColor(
-                                    LocalContext.current, R.color.colorPrimary
-                                ).dec()), contentColor = Color.White
+                            backgroundColor = MaterialTheme.colors.primary
                         )
                     ) {
-                        Text(text = Lang.get(R.string.map_recenter))
+                        Text(
+                            text = Lang.get(R.string.map_recenter),
+                            color = MaterialTheme.colors.onPrimary
+                        )
                     }
 
                 }
@@ -153,10 +154,7 @@ class MapFragment : LocationListener {
                         modifier = Modifier
                             .padding(top = 20.dp, start = 30.dp),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(
-                                ContextCompat.getColor(
-                                    LocalContext.current, R.color.colorPrimary
-                                ).dec()), contentColor = Color.White
+                            backgroundColor = MaterialTheme.colors.primary
                         )
 
                     ) {
@@ -172,20 +170,15 @@ class MapFragment : LocationListener {
                         .height(60.dp)
                         .width(120.dp),
                         elevation = 10.dp,
-                        backgroundColor = Color(
-                            ContextCompat
-                                .getColor(
-                                    LocalContext.current, R.color.colorPrimary
-                                )
-                                .dec()
-                        )
+                        backgroundColor = MaterialTheme.colors.primary
+
                     ) {
                         Text(
-                            text = "" + route.totalPoisVisited.value + " / " + route.POIs.size + " points",
+                            text = "" + route.totalPoisVisited.value + " / " + route.POIs.size + " " +  Lang.get(R.string.map_points),
                             textAlign = TextAlign.Center,
                             modifier = Modifier.wrapContentHeight(Alignment.Top)
                                 .padding(top = 6.dp),
-                            color = Color.White
+                            color = MaterialTheme.colors.onPrimary
 
                         )
                         Text(
@@ -193,8 +186,7 @@ class MapFragment : LocationListener {
                             textAlign = TextAlign.Center,
                             modifier = Modifier.wrapContentHeight(Alignment.Bottom)
                                 .padding(bottom = 8.dp),
-                            color = Color.White
-
+                            color = MaterialTheme.colors.onPrimary
                         )
                     }
 
