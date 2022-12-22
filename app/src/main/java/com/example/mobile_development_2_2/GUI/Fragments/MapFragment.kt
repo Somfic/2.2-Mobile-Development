@@ -13,11 +13,15 @@ import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.toArgb
@@ -90,14 +94,12 @@ class MapFragment : LocationListener {
             }
             Row {
                 Text(
-                    text = "Â© OpenStreetMap contributors",
+                    text = Lang.get(R.string.map_copyright),
                     fontSize = 8.sp,
                     modifier = Modifier
                         .background(MaterialTheme.colors.surface, RectangleShape)
                         .align(Alignment.Bottom)
                 )
-
-
             }
             if(!RouteManager.getRouteManager(null).getSelectedRoute().started.value){
 
@@ -118,9 +120,9 @@ class MapFragment : LocationListener {
                         )
                     ) {
                         if(!route.hasProgress())
-                            Text(text = "Start route")
+                            Text(text = Lang.get(R.string.map_start))
                         else
-                            Text(text = "Resume route")
+                            Text(text = Lang.get(R.string.map_continue))
                     }
 
                 }
@@ -138,7 +140,7 @@ class MapFragment : LocationListener {
                                 ).dec()), contentColor = Color.White
                         )
                     ) {
-                        Text(text = "Recenter")
+                        Text(text = Lang.get(R.string.map_recenter))
                     }
 
                 }
