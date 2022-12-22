@@ -30,6 +30,9 @@ class RouteManager {
         val routes =  gson.fromJson(jsonString, Array<Route>::class.java).toList()
         for (it in routes) {
             it.started = mutableStateOf(false)
+            it.totalPoisVisited = mutableStateOf(0)
+            it.currentLength = mutableStateOf(0.0)
+            it.finished = mutableStateOf(false)
             for(poi in it.POIs){
                 poi.visited = false
 
