@@ -19,7 +19,6 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
     private val TAG = "GeofenceBroadcastReceiver"
 
-    // ...
     override fun onReceive(context: Context, intent: Intent) {
         var notificationHelper = NotificationHelper(context)
 
