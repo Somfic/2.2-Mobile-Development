@@ -13,11 +13,15 @@ import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.toArgb
@@ -76,7 +80,7 @@ class MapFragment : LocationListener {
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
-    fun MapScreen(viewModel: OSMViewModel, modifier: Modifier, onPOIClicked :() -> Unit) {
+    fun MapScreen(viewModel: OSMViewModel, modifier: Modifier, onPOIClicked: () -> Unit) {
         viewModel.provider.locationListener = this
 
         Surface(
@@ -103,43 +107,54 @@ class MapFragment : LocationListener {
             if (!premissions.allPermissionsGranted) {
                 Column {
 
-                    Text(text = Lang.get(R.string.map_no_location_permission), color = MaterialTheme.colors.error)
+                    Text(
+                        text = Lang.get(R.string.map_no_location_permission),
+                        color = MaterialTheme.colors.error
+                    )
                 }
             }
             Row {
                 Text(
-                    text = "Â© OpenStreetMap contributors",
+                    text = Lang.get(R.string.map_copyright),
                     fontSize = 8.sp,
                     modifier = Modifier
                         .background(MaterialTheme.colors.surface, RectangleShape)
                         .align(Alignment.Bottom)
                 )
-
-
             }
-            if(!RouteManager.getRouteManager(null).getSelectedRoute().started.value){
+            if (!RouteManager.getRouteManager(null).getSelectedRoute().started.value) {
 
-                Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center) {
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Center
+                ) {
                     Button(
                         onClick = {
                             Log.d("f", "" + route.started.value)
-                            currentDestination = route.POIs.get(0).location
+
                             RouteManager.getRouteManager(context).setRouteState(true);
+                            currentDestination = RouteManager.getRouteManager(context).getSelectedPOI().location
                             Log.d("f", "" + route.started.value)
-                                  },
+                            route.started.value
+                            var lat: Double = route.POIs[0].location.latitude
+                            var lng: Double = route.POIs[0].location.longitude
+                            if (!route.hasProgress())
+                                RouteManager.getRouteManager(context).setGeofenceLocation(lat, lng)
+                        },
                         modifier = Modifier
                             .padding(bottom = 20.dp),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color(
                                 ContextCompat.getColor(
                                     LocalContext.current, R.color.colorPrimary
-                                ).dec()), contentColor = Color.White
+                                ).dec()
+                            ), contentColor = Color.White
                         )
                     ) {
-                        if(!route.hasProgress())
-                            Text(text = "Start route")
+                        if (!route.hasProgress())
+                            Text(text = Lang.get(R.string.map_start))
                         else
-                            Text(text = "Resume route")
+                            Text(text = Lang.get(R.string.map_continue))
                     }
 
                 }
@@ -154,14 +169,15 @@ class MapFragment : LocationListener {
                             backgroundColor = Color(
                                 ContextCompat.getColor(
                                     LocalContext.current, R.color.colorPrimary
-                                ).dec()), contentColor = Color.White
+                                ).dec()
+                            ), contentColor = Color.White
                         )
                     ) {
-                        Text(text = "Recenter")
+                        Text(text = Lang.get(R.string.map_recenter))
                     }
 
                 }
-                
+
                 Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start) {
                     Button(
                         onClick = {
@@ -174,11 +190,15 @@ class MapFragment : LocationListener {
                             backgroundColor = Color(
                                 ContextCompat.getColor(
                                     LocalContext.current, R.color.colorPrimary
-                                ).dec()), contentColor = Color.White
+                                ).dec()
+                            ), contentColor = Color.White
                         )
 
                     ) {
-                        Icon(painter = painterResource(id = R.drawable.ic_baseline_close_24), contentDescription = "")
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_baseline_close_24),
+                            contentDescription = ""
+                        )
                     }
 
                 }
@@ -193,14 +213,14 @@ class MapFragment : LocationListener {
         modifier: Modifier = Modifier,
         routePoints: MutableList<GeoPoint> = mutableListOf(),
         provider: IMyLocationProvider,
-        onPOIClicked :() -> Unit,
+        onPOIClicked: () -> Unit,
     ) {
         this.route = RouteManager.getRouteManager(null).getSelectedRoute()
         val locations = route.POIs
         val listener = object : ItemizedIconOverlay.OnItemGestureListener<POIItem> {
             override fun onItemSingleTapUp(index: Int, item: POIItem?): Boolean {
                 if (item != null) {
-                    clickedOnPoi(item.poi,onPOIClicked )
+                    clickedOnPoi(item.poi, onPOIClicked)
                 }
                 return true
             }
@@ -219,6 +239,7 @@ class MapFragment : LocationListener {
             MapView(context)
         }
         this.mapView = mapView
+        mapView.setMultiTouchControls(true)
 
 
         //FIXME poilayer kan toegevoegd worden als er point of interest zijn
@@ -288,7 +309,7 @@ class MapFragment : LocationListener {
 
                     mapView.overlays.add(myLocation)
 
-                    mapView.overlays.add(currentRoute)
+//                    mapView.overlays.add(currentRoute)
 
 
 
@@ -326,9 +347,6 @@ class MapFragment : LocationListener {
             )
             mapView.invalidate() // Ensures the map is updated on screen
         }
-
-
-
 
 
     }
@@ -411,7 +429,7 @@ class MapFragment : LocationListener {
         onPOIClicked()
     }
 
-    private fun longClickOnPoi(poi: POI , onPOIClicked :() -> Unit) {
+    private fun longClickOnPoi(poi: POI, onPOIClicked: () -> Unit) {
         //todo
     }
 
@@ -444,7 +462,12 @@ class MapFragment : LocationListener {
       if (System.currentTimeMillis() - lastrouterequest > 1800) {
 
           lastrouterequest = System.currentTimeMillis()
-          if(::currentDestination.isInitialized){
+          if(::currentDestination.isInitialized ){
+              if (currentDestination != RouteManager.getRouteManager(context).get_CurrentPoi().location) {
+                  currentDestination = RouteManager.getRouteManager(context).get_CurrentPoi().location
+//                  setRoute(myLocation.myLocation, currentDestination)
+              }
+
               setRoute(GeoPoint(p0.latitude,p0.longitude), currentDestination)
 
           }

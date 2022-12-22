@@ -22,6 +22,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -154,7 +155,6 @@ class MainActivity : ComponentActivity() {
         val osmViewModel = remember {
             OSMViewModel(GetLocationProvider(GPSLocationProvider(context = context)), this)
         }
-        osmViewModel.setGeofenceLocation(51.6948, 4.7820, "id")
         this.osmViewModel = osmViewModel
 
         // Get the name of the current screen
@@ -188,12 +188,13 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             },
-            backgroundColor = MaterialTheme.colors.background
+            backgroundColor = MaterialTheme.colors.background,
+            contentColor = MaterialTheme.colors.background
         ) { innerpadding ->
             NavHost(
                 navController = navController,
                 startDestination = Fragments.Home.name,
-                modifier = Modifier.padding(innerpadding)
+                modifier = Modifier.padding(innerpadding).background(MaterialTheme.colors.background, RectangleShape)
             ) {
                 composable(route = Fragments.Home.name) {
                     HomeScreen(
@@ -384,7 +385,8 @@ class MainActivity : ComponentActivity() {
                     unselectedContentColor = MaterialTheme.colors.surface,
                     alwaysShowLabel = true,
                     selected = false,
-                    onClick = onClick
+                    onClick = onClick,
+                    modifier = Modifier
                     //premissions.launchMultiplePermissionRequest()
                 )
             }

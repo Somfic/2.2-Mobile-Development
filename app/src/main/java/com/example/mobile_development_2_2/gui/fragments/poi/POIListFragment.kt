@@ -29,9 +29,13 @@ import com.example.mobile_development_2_2.map.route.RouteManager
 @Composable
 fun POIListScreen(modifier: Modifier, route: Route, onPOIClicked: () -> Unit) {
     Surface(
-        modifier = modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colors.background,
+        contentColor = MaterialTheme.colors.background
+
+
     ) {
-        LazyColumn {
+        LazyColumn() {
             items(route.POIs) { poi ->
                 MessageRow(poi, onPOIClicked)
             }
@@ -54,9 +58,6 @@ fun MessageRow(poi: POI, onPOIClicked: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .background(
-                MaterialTheme.colors.surface, RectangleShape
-            )
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp)),
         elevation = 10.dp,
@@ -95,13 +96,16 @@ fun MessageRow(poi: POI, onPOIClicked: () -> Unit) {
         )
 
         TextField(
-            value = poi.shortDescription,
+            value = RouteManager.getRouteManager(null).getStringById(poi.shortDescription),
             modifier = Modifier
                 .padding(start = 200.dp, bottom = 24.dp, top = 65.dp, end = 24.dp)
                 .width(50.dp),
             readOnly = true,
             onValueChange = { },
             label = { Text(text = "") },
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color(0xFFFFFFFF)
+            )
         )
 
     }

@@ -1,6 +1,8 @@
 package com.example.mobile_development_2_2.data
 
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
@@ -9,14 +11,14 @@ import android.widget.Toast
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.gui.MainActivity
 import com.example.mobile_development_2_2.gui.fragments.MapFragment
+import com.example.mobile_development_2_2.map.route.Route
 import com.example.mobile_development_2_2.map.route.RouteManager
-import com.google.android.gms.location.Geofence
-import com.google.android.gms.location.GeofenceStatusCodes
-import com.google.android.gms.location.GeofencingEvent
+import com.google.android.gms.location.*
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
 
     private val TAG = "GeofenceBroadcastReceiver"
+
     // ...
     override fun onReceive(context: Context, intent: Intent) {
         var notificationHelper = NotificationHelper(context)
@@ -39,8 +41,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             for (geofence in geofenceList) {
                 Log.d(TAG, "onReceive: " + geofence.requestId + " triggered ")
                 notificationHelper.sendHighPriorityNotification("Geofence triggered",geofence.requestId, MainActivity::class.java)
-
-                //RouteManager.SelectPOI()
+                RouteManager.getRouteManager(null).triggeredGeofence()
                 PopupHelper.SetState(true)
             }
         }
