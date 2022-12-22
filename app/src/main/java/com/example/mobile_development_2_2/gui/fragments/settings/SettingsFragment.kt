@@ -26,15 +26,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
-
-    val languages = arrayOf("English", "Nederlands")
-
     @Composable
     fun SettingsFragment() {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Settings()
-            AgsLogo()
-            Copyright()
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            Card(
+                backgroundColor = MaterialTheme.colors.surface
+            ) {
+                Settings()
+            }
+                Card(
+                    backgroundColor = MaterialTheme.colors.surface
+                ) {
+                    AgsLogo()
+                }
+                    Card(
+                        backgroundColor = MaterialTheme.colors.surface
+                    ) {
+                        Copyright()
+                    }
         }
     }
 
@@ -42,7 +51,6 @@ import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
     @Composable
     fun Settings() {
         var expanded by remember { mutableStateOf(false)}
-        var language by remember {mutableStateOf(languages[0])}
 
         Column() {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -51,19 +59,19 @@ import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
                     modifier = Modifier.padding(8.dp),
                 )
                 Row(Modifier.clickable { expanded = !expanded }, verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = language) // City name label
+                    Text(text = Lang.language.first)
                     Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
                         properties = PopupProperties(focusable = false)
                     ) {
-                        languages.forEach { l ->
+                        Lang.languages.forEach { l ->
                             DropdownMenuItem(onClick = {
                                 expanded = false
-                                language = l
+                                Lang.setLang(l)
                             }) {
-                                Text(text = l)
+                                Text(text = l.first)
                             }
                         }
                     }
@@ -75,11 +83,10 @@ import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
                     text = Lang.get(R.string.settings_colour_blind),
                     modifier = Modifier.padding(8.dp),
                 )
-                val checkedState = remember { mutableStateOf(true) }
                 Switch(
-                    checked = checkedState.value,
+                    checked = Lang.colorblind,
                     onCheckedChange = {
-                        checkedState.value = it; },
+                        Lang.setColor(it); },
                 )
             }
         }
@@ -88,7 +95,7 @@ import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
     @Composable
     fun AgsLogo() {
         Image(
-            painter = painterResource(id =R.drawable.ic_logo),
+            painter = painterResource(id = R.drawable.ic_logo),
             contentDescription = null,
             modifier = Modifier
                 //.align(Alignment.CenterStart)

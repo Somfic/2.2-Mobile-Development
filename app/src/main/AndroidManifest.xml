@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <application
         android:allowBackup="true"
@@ -13,7 +12,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/project_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/image404"
         android:supportsRtl="true"
         android:theme="@style/Theme.MobileDevelopment2_2"
         tools:targetApi="31">
@@ -21,6 +20,7 @@
 
         <activity
             android:name=".gui.MainActivity"
+            android:supportsPictureInPicture="true"
             android:exported="true"
             android:label="@string/project_name"
             android:theme="@style/Theme.MobileDevelopment2_2">
