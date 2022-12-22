@@ -36,10 +36,10 @@ class RouteManager {
                 //poi.shortDescription = getStringById(poi.shortDescription)
 
                 if (poi.imgMap == null){
-                    poi.imgMap = "image404.png"
+                    poi.imgMap = "ic_logo.png"
                 }
                 if (poi.img == null){
-                    poi.img = "image404.png"
+                    poi.img = "notfound404.png"
                 }
             }
         }
