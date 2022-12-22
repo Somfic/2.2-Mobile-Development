@@ -67,9 +67,11 @@ class MapFragment : LocationListener {
     lateinit var myLocation: MyLocationNewOverlay
     lateinit var mapView: MapView
     lateinit var context: Context
-     var lastrouterequest = System.currentTimeMillis()
+    var lastrouterequest = System.currentTimeMillis()
      var feature = FolderOverlay()
     lateinit var route: Route
+    lateinit var currentDestination: GeoPoint
+    lateinit var lastLocation: GeoPoint
 
 
     @OptIn(ExperimentalPermissionsApi::class)
@@ -121,6 +123,7 @@ class MapFragment : LocationListener {
                     Button(
                         onClick = {
                             Log.d("f", "" + route.started.value)
+                            currentDestination = route.POIs.get(0).location
                             RouteManager.getRouteManager(context).setRouteState(true);
                             Log.d("f", "" + route.started.value)
                                   },
@@ -162,7 +165,9 @@ class MapFragment : LocationListener {
                 Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start) {
                     Button(
                         onClick = {
-                            RouteManager.getRouteManager(context).setRouteState(false); },
+                            RouteManager.getRouteManager(context).setRouteState(false);
+
+                                  },
                         modifier = Modifier
                             .padding(top = 20.dp, start = 30.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -359,7 +364,8 @@ class MapFragment : LocationListener {
 
 
                 if(feature != null){
-                  feature.closeAllInfoWindows()
+//                  feature.closeAllInfoWindows()
+
                     mapView.overlays.remove(feature)
                 }
 
@@ -411,16 +417,22 @@ class MapFragment : LocationListener {
 
     override fun onLocationChanged(p0: Location) {
 
+
+
+
         if (myLocation.isFollowLocationEnabled) {
+
             mapView.mapOrientation = 360 - p0.bearing
+
+
             mapView.controller.setZoom(17.0)
             mapView.setMapCenterOffset(0, 600)
+
             myLocation.setDirectionIcon(
                 ContextCompat.getDrawable(
                     context,
                     org.osmdroid.library.R.drawable.round_navigation_white_48
                 )!!.toBitmap(150, 150)
-
             )
 
         } else {
@@ -432,12 +444,16 @@ class MapFragment : LocationListener {
       if (System.currentTimeMillis() - lastrouterequest > 1800) {
 
           lastrouterequest = System.currentTimeMillis()
-          setRoute(GeoPoint(51.58703, 4.773187), GeoPoint(p0.latitude, p0.longitude))
+          if(::currentDestination.isInitialized){
+              setRoute(GeoPoint(p0.latitude,p0.longitude), currentDestination)
+
+          }
       }
         mapView.invalidate()
-    }
 
+    }
 }
+
 
 private class POIItem(
     val poi: POI //FIXME add poiClass,
