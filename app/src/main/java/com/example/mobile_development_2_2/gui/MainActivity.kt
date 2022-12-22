@@ -3,9 +3,6 @@ package com.example.mobile_development_2_2.gui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Build.VERSION_CODES.N
-import android.location.LocationProvider
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -19,22 +16,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.N
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -89,8 +82,12 @@ class MainActivity : ComponentActivity() {
         Lang.onLanguageChanged { recreate() }
         Lang.onColorblindChange { recreate() }
 
+        RouteManager.getRouteManager(this)
+
 
         setContent {
+
+            //Log.d("Mainactivity", RouteManager.getrouteManager(this).getStringById("HelpItem1"))
 
             val openDialog = remember {
                 mutableStateOf(false)
@@ -103,7 +100,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     MainScreen(openDialog)
-
 
 
                 }
@@ -142,7 +138,7 @@ class MainActivity : ComponentActivity() {
 
 
     fun CheckForDuplicateFragmentOnStack(navController: NavHostController) {
-        if(navController.previousBackStackEntry!!.destination.displayName == navController.currentBackStackEntry!!.destination.displayName){
+        if (navController.previousBackStackEntry!!.destination.displayName == navController.currentBackStackEntry!!.destination.displayName) {
             navController.popBackStack()
         }
     }
@@ -159,7 +155,6 @@ class MainActivity : ComponentActivity() {
         val osmViewModel = remember {
             OSMViewModel(GetLocationProvider(GPSLocationProvider(context = context)), this)
         }
-        osmViewModel.setGeofenceLocation(51.5948, 4.7820, "id")
         this.osmViewModel = osmViewModel
 
         // Get the name of the current screen
@@ -175,29 +170,31 @@ class MainActivity : ComponentActivity() {
                     navigateUp = { navController.navigateUp() },
                     onSettingsButtonClicked = { navController.navigate(Fragments.Settings.name) })
             },
-            bottomBar = { BottomNavigationBar(
-                onHomeButtonClicked = {
-                    navController.backQueue.clear()
-                    navController.navigate(Fragments.Home.name)
-                                      },
-                onHomePOIClicked = {
-                    navController.backQueue.clear()
-                    navController.navigate(Fragments.POIList.name)
-                                   },
-                onMapButtonClicked = {
-                    navController.backQueue.clear()
-                    navController.navigate(Fragments.Route.name)
+            bottomBar = {
+                BottomNavigationBar(
+                    onHomeButtonClicked = {
+                        navController.backQueue.clear()
+                        navController.navigate(Fragments.Home.name)
+                    },
+                    onHomePOIClicked = {
+                        navController.backQueue.clear()
+                        navController.navigate(Fragments.POIList.name)
+                    },
+                    onMapButtonClicked = {
+                        navController.backQueue.clear()
+                        navController.navigate(Fragments.Route.name)
 
                         Log.d("123", "map")
                     }
                 )
             },
-            backgroundColor = MaterialTheme.colors.background
+            backgroundColor = MaterialTheme.colors.background,
+            contentColor = MaterialTheme.colors.background
         ) { innerpadding ->
             NavHost(
                 navController = navController,
                 startDestination = Fragments.Home.name,
-                modifier = Modifier.padding(innerpadding)
+                modifier = Modifier.padding(innerpadding).background(MaterialTheme.colors.background, RectangleShape)
             ) {
                 composable(route = Fragments.Home.name) {
                     HomeScreen(
@@ -212,9 +209,9 @@ class MainActivity : ComponentActivity() {
                 composable(route = Fragments.Route.name) {
                     RouteListScreen(
                         modifier = Modifier,
-                        routes = RouteManager.routes,
+                        routes = RouteManager.getRouteManager(baseContext).GetRoutes(),
                         onRouteClicked = {
-                            Log.d("route", RouteManager.getSelectedRoute().name)
+                            Log.d("route", RouteManager.getRouteManager(baseContext).getSelectedRoute().name)
                             navController.navigate(Fragments.Map.name)
                         },
                         onPOIClicked = {
@@ -225,7 +222,7 @@ class MainActivity : ComponentActivity() {
                 composable(route = Fragments.POIList.name) {
                     POIListScreen(
                         modifier = Modifier,
-                        route = RouteManager.getSelectedRoute(),
+                        route = RouteManager.getRouteManager(baseContext).getSelectedRoute(),
                         onPOIClicked = {
                             navController.navigate(Fragments.POI.name)
                         }
@@ -240,7 +237,7 @@ class MainActivity : ComponentActivity() {
                 composable(route = Fragments.POI.name) {
                     POIDetailScreen(
                         modifier = Modifier,
-                        poi = RouteManager.getSelectedPOI()
+                        poi = RouteManager.getRouteManager(baseContext).getSelectedPOI()
                     )
                 }
                 composable(route = Fragments.Map.name) {
@@ -297,8 +294,10 @@ class MainActivity : ComponentActivity() {
             backgroundColor = MaterialTheme.colors.primary,
             contentColor = MaterialTheme.colors.onPrimary,
             actions = {
-                IconButton(onClick = { onSettingsButtonClicked() }) {
-                    Icon(painterResource(id = item.icon), contentDescription = item.title)
+                if (currentScreen.name != Fragments.Settings.name) {
+                    IconButton(onClick = { onSettingsButtonClicked() }) {
+                        Icon(painterResource(id = item.icon), contentDescription = item.title)
+                    }
                 }
 
             },
@@ -372,7 +371,7 @@ class MainActivity : ComponentActivity() {
                         Icon(
                             painterResource(id = item.icon),
                             contentDescription = item.title,
-                            modifier = Modifier.size(25.dp)
+                            modifier = Modifier.size(40.dp)
                         )
                     },
                     label = { Text(text = item.title) },
@@ -388,17 +387,25 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    var test = false
-
     @Composable
-    fun popUp(title: String, text: String, openDialog: MutableState<Boolean>, onYesButtonClicked: () -> Unit) {
+    fun popUp(
+        title: String,
+        text: String,
+        openDialog: MutableState<Boolean>,
+        onYesButtonClicked: () -> Unit
+    ) {
 
         Log.d("main", "opening popup")
 
         AlertDialog(
             onDismissRequest = { !openDialog.value },
-            title = { Text(text = RouteManager.getSelectedPOI().name, color = Color.Black) },
-            text = { Text(text = RouteManager.getSelectedPOI().shortDescription, color = Color.Black) },
+            title = { Text(text = RouteManager.getRouteManager(baseContext).getSelectedPOI().name, color = Color.Black) },
+            text = {
+                Text(
+                    text = RouteManager.getRouteManager(baseContext).getSelectedPOI().shortDescription,
+                    color = Color.Black
+                )
+            },
 
             confirmButton = {
                 TextButton(
