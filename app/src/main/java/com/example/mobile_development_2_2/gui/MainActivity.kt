@@ -48,6 +48,7 @@ import com.example.mobile_development_2_2.gui.fragments.MapFragment
 import com.example.mobile_development_2_2.gui.fragments.settings.SettingsFragment
 import com.example.mobile_development_2_2.map.gps.GPSLocationProvider
 import com.example.mobile_development_2_2.map.gps.GetLocationProvider
+import com.example.mobile_development_2_2.map.route.Route
 import com.example.mobile_development_2_2.ui.theme.MobileDevelopment2_2Theme
 import com.example.mobile_development_2_2.ui.viewmodels.OSMViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -213,6 +214,8 @@ class MainActivity : ComponentActivity() {
                         onRouteClicked = {
                             Log.d("route", RouteManager.getRouteManager(baseContext).getSelectedRoute().name)
                             navController.navigate(Fragments.Map.name)
+
+
                         },
                         onPOIClicked = {
                             navController.navigate(Fragments.POIList.name)
@@ -242,12 +245,16 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(route = Fragments.Map.name) {
                     map.MapScreen(
+
                         viewModel = osmViewModel,
                         modifier = Modifier,
                         onPOIClicked = {
                             navController.navigate(Fragments.POI.name)
                         }
                     )
+//                   map.setRoute(RouteManager.getSelectedRoute().name)
+
+
                 }
                 composable(route = Fragments.Settings.name) {
                     SettingsFragment(
@@ -272,7 +279,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun TopBar(
-        currentScreen: Fragments,
+        currentScreen: MainActivity.Fragments,
         canNavigateBack: Boolean,
         navigateUp: () -> Unit,
         modifier: Modifier = Modifier,
@@ -405,10 +412,10 @@ class MainActivity : ComponentActivity() {
 
         AlertDialog(
             onDismissRequest = { !openDialog.value },
-            title = { Text(text = RouteManager.getRouteManager(baseContext).getSelectedPOI().name, color = Color.Black) },
+            title = { Text(text = RouteManager.getRouteManager(baseContext).previousTargetPOI.name, color = Color.Black) },
             text = {
                 Text(
-                    text = RouteManager.getRouteManager(baseContext).getSelectedPOI().shortDescription,
+                    text = RouteManager.getRouteManager(null).getStringByName(RouteManager.getRouteManager(baseContext).previousTargetPOI.shortDescription),
                     color = Color.Black
                 )
             },
@@ -417,6 +424,7 @@ class MainActivity : ComponentActivity() {
                 TextButton(
                     onClick = {
                         openDialog.value = false
+                        RouteManager.getRouteManager(null).selectPOI(RouteManager.getRouteManager(null).previousTargetPOI)
                         onYesButtonClicked()
                     }
                 ) {
