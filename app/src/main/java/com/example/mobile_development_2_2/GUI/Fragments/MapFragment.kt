@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -144,17 +145,16 @@ class MapFragment : LocationListener {
                         modifier = Modifier
                             .padding(bottom = 20.dp),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(
-                                ContextCompat.getColor(
-                                    LocalContext.current, R.color.colorPrimary
-                                ).dec()
-                            ), contentColor = Color.White
+                            backgroundColor = MaterialTheme.colors.primary, 
+                            contentColor = Color.White
                         )
                     ) {
                         if (!route.hasProgress())
-                            Text(text = Lang.get(R.string.map_start))
+                            Text(text = Lang.get(R.string.map_start), color = MaterialTheme.colors.onPrimary)
                         else
-                            Text(text = Lang.get(R.string.map_continue))
+                            Text(text = Lang.get(R.string.map_continue),
+                                color = MaterialTheme.colors.onPrimary
+                            )
                     }
 
                 }
@@ -166,14 +166,13 @@ class MapFragment : LocationListener {
                         modifier = Modifier
                             .padding(bottom = 20.dp, end = 30.dp),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(
-                                ContextCompat.getColor(
-                                    LocalContext.current, R.color.colorPrimary
-                                ).dec()
-                            ), contentColor = Color.White
+                            backgroundColor = MaterialTheme.colors.primary
                         )
                     ) {
-                        Text(text = Lang.get(R.string.map_recenter))
+                        Text(
+                            text = Lang.get(R.string.map_recenter),
+                            color = MaterialTheme.colors.onPrimary
+                        )
                     }
 
                 }
@@ -187,11 +186,8 @@ class MapFragment : LocationListener {
                         modifier = Modifier
                             .padding(top = 20.dp, start = 30.dp),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(
-                                ContextCompat.getColor(
-                                    LocalContext.current, R.color.colorPrimary
-                                ).dec()
-                            ), contentColor = Color.White
+                            backgroundColor = MaterialTheme.colors.primary,
+                            contentColor = MaterialTheme.colors.onPrimary
                         )
 
                     ) {
@@ -202,6 +198,36 @@ class MapFragment : LocationListener {
                     }
 
                 }
+
+                Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.End) {
+                    Card(modifier = Modifier
+                        .padding(top = 20.dp, end = 30.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .height(60.dp)
+                        .width(120.dp),
+                        elevation = 10.dp,
+                        backgroundColor = MaterialTheme.colors.primary
+
+                    ) {
+                        Text(
+                            text = "" + route.totalPoisVisited.value + " / " + route.POIs.size + " " +  Lang.get(R.string.map_points),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.wrapContentHeight(Alignment.Top)
+                                .padding(top = 6.dp),
+                            color = MaterialTheme.colors.onPrimary
+
+                        )
+                        Text(
+                            text ="" + route.currentLength.value + " / " + route.length + " km",
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.wrapContentHeight(Alignment.Bottom)
+                                .padding(bottom = 8.dp),
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                    }
+
+                }
+
             }
         }
     }

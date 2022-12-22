@@ -7,15 +7,17 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.example.mobile_development_2_2.data.Lang
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
-    primary = Primary
+    primary = Primary,
+    onPrimary = Color(0xFFFFFFFF),
 )
 
 private val LightColorPalette = lightColors(
     primary = Primary,
     surface = Surface,
-    background = Background
+    background = Background,
 )
 
 private val DarkColorBlindPalette = darkColors(
@@ -26,7 +28,7 @@ private val DarkColorBlindPalette = darkColors(
     onBackground = Color(0xFFFFFFFF),
 
     surface = Color(0xFF141414),
-    onSurface = Color(0xFFFFFFFF),
+    onSurface = Color(0xFFFFFFFF)
 )
 
 private val LightColorBlindPalette = lightColors(
@@ -59,6 +61,11 @@ fun MobileDevelopment2_2Theme(
     } else {
         LightColorPalette
     }
+
+    val systemUiController = rememberSystemUiController()
+        systemUiController.setSystemBarsColor(
+            color = colors.primary
+        )
 
     MaterialTheme(
         colors = colors,
