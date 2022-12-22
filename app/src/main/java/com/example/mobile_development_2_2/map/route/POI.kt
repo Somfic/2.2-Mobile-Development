@@ -7,8 +7,8 @@ data class POI (
     val location: GeoPoint,
     var img : String,
     val streetName: String,
-    val shortDescription: String,
-    val longDescription: String,
+    var shortDescription: String,
+    var longDescription: String,
     var imgMap : String = "ic_map.png",
     var visited : Boolean =false
 )

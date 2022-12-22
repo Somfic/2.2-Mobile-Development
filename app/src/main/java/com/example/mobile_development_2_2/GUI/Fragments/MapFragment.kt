@@ -13,8 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -24,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,7 +59,6 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
-import kotlin.math.roundToInt
 
 
 class MapFragment : LocationListener {
@@ -119,13 +115,13 @@ class MapFragment : LocationListener {
 
 
             }
-            if(!route.started.value){
+            if(!RouteManager.getRouteManager(null).getSelectedRoute().started.value){
 
                 Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center) {
                     Button(
                         onClick = {
                             Log.d("f", "" + route.started.value)
-                            RouteManager.setRouteState(true);
+                            RouteManager.getRouteManager(context).setRouteState(true);
                             Log.d("f", "" + route.started.value)
                                   },
                         modifier = Modifier
@@ -166,7 +162,7 @@ class MapFragment : LocationListener {
                 Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start) {
                     Button(
                         onClick = {
-                            RouteManager.setRouteState(false); },
+                            RouteManager.getRouteManager(context).setRouteState(false); },
                         modifier = Modifier
                             .padding(top = 20.dp, start = 30.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -194,7 +190,7 @@ class MapFragment : LocationListener {
         provider: IMyLocationProvider,
         onPOIClicked :() -> Unit,
     ) {
-        this.route = RouteManager.getSelectedRoute()
+        this.route = RouteManager.getRouteManager(null).getSelectedRoute()
         val locations = route.POIs
         val listener = object : ItemizedIconOverlay.OnItemGestureListener<POIItem> {
             override fun onItemSingleTapUp(index: Int, item: POIItem?): Boolean {
@@ -405,7 +401,7 @@ class MapFragment : LocationListener {
     }
 
     private fun clickedOnPoi(poi: POI, onPOIClicked :() -> Unit) {
-        RouteManager.selectPOI(poi)
+        RouteManager.getRouteManager(context).selectPOI(poi)
         onPOIClicked()
     }
 
