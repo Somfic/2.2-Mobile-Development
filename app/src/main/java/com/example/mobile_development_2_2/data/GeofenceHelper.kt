@@ -22,10 +22,10 @@ class GeofenceHelper(base: Context?) : ContextWrapper(base) {
             .build()
     }
 
-    fun getGeofence(id : String, lat : Double, lng : Double) : Geofence? {
+    fun getGeofence(lat : Double, lng : Double) : Geofence? {
         return Geofence.Builder()
-            .setRequestId(id)
-            .setCircularRegion(lat, lng, 1000f)
+            .setRequestId("geo")
+            .setCircularRegion(lat, lng, 20f)
             .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
             .setExpirationDuration(Geofence.NEVER_EXPIRE)
             .build()
@@ -34,7 +34,7 @@ class GeofenceHelper(base: Context?) : ContextWrapper(base) {
     fun getPendingIntent() : PendingIntent? {
         //Toast.makeText(this, "not init", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, GeofenceBroadcastReceiver::class.java)
-        pendingIntent = PendingIntent.getBroadcast(this, 6969, intent, PendingIntent.FLAG_MUTABLE)
+        pendingIntent = PendingIntent.getBroadcast(this, 6969, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         return pendingIntent
     }
