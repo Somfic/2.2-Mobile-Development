@@ -49,6 +49,7 @@
     <string name="HelpItem8Description">To change colorblind mode go to settings at the top right of the screen and press the button next to colorblind.</string>
     
     //POI strings
+    <string name="poiNoDescription">no description available</string>
     
     <string name="poi1PlaceDescription">plstranslate</string>
     <string name="poi1Description">plstranslate</string>
