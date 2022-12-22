@@ -117,7 +117,7 @@ class RouteManager {
         for (poi in selectedRoute.POIs) {
             if (!poi.visited) {
                 poi.visited = true
-                continue
+                break
             }
         }
 
@@ -129,7 +129,7 @@ class RouteManager {
                 currentPoi = poi
                 setGeofenceLocation(poi.location.latitude, poi.location.longitude)
                 routeFinished = false
-                continue
+                break
             }
         }
         if(routeFinished) {
