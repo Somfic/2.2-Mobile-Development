@@ -406,10 +406,10 @@ class MainActivity : ComponentActivity() {
 
         AlertDialog(
             onDismissRequest = { !openDialog.value },
-            title = { Text(text = RouteManager.getRouteManager(baseContext).getTargetPOI().name, color = Color.Black) },
+            title = { Text(text = RouteManager.getRouteManager(baseContext).previousTargetPOI.name, color = Color.Black) },
             text = {
                 Text(
-                    text = RouteManager.getRouteManager(baseContext).getTargetPOI().shortDescription,
+                    text = RouteManager.getRouteManager(null).getStringByName(RouteManager.getRouteManager(baseContext).previousTargetPOI.shortDescription),
                     color = Color.Black
                 )
             },
@@ -418,7 +418,7 @@ class MainActivity : ComponentActivity() {
                 TextButton(
                     onClick = {
                         openDialog.value = false
-                        RouteManager.getRouteManager(null).selectPOI(RouteManager.getRouteManager(null).getTargetPOI())
+                        RouteManager.getRouteManager(null).selectPOI(RouteManager.getRouteManager(null).previousTargetPOI)
                         onYesButtonClicked()
                     }
                 ) {

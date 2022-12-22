@@ -23,12 +23,14 @@ class RouteManager {
     var context: Context?
     lateinit var selectedRoute: Route
     lateinit var targetPOI: POI
+    lateinit var previousTargetPOI: POI
 
     private constructor(context: Context?) {
         Log.d(LOG_TAG, "constructor")
         this.context = context
         routes = GenerateRoutes()
         selectedRoute = routes.get(0)
+        previousTargetPOI = routes.get(0).POIs.get(0)
     }
 
 
@@ -144,6 +146,7 @@ class RouteManager {
                 routeFinished = false
                 break
             }
+            previousTargetPOI = poi
         }
         if(routeFinished) {
             //route finished
