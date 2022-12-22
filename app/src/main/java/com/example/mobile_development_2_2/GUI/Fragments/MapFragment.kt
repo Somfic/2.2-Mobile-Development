@@ -314,13 +314,7 @@ class MapFragment : LocationListener {
 
 //                    mapView.overlays.add(currentRoute)
 
-                    val resources = getResources()
-                    //switch case voor verschillende routes
 
-                    val inputStream = resources.openRawResource(R.raw.test_route)
-                    kmldocument.parseGeoJSONStream(inputStream)
-
-                    val klmstyle = kmldocument.getStyle("route")
 
 
 

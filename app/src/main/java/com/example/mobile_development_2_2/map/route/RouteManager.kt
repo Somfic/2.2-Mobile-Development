@@ -100,7 +100,7 @@ class RouteManager {
 
     fun get_CurrentPoi(): POI {
         Log.d(LOG_TAG, "giving current poi")
-        return currentPoi
+        return targetPOI
     }
 
     fun selectPOI(poi: POI) {
