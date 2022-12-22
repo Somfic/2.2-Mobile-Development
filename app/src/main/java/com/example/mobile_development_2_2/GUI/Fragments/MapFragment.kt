@@ -271,7 +271,7 @@ class MapFragment() : LocationListener {
 
     }
 
-   fun setRoute(start : GeoPoint, end : GeoPoint){
+   fun setRoute(start : GeoPoint, end : Geo Point){
 
 
 
@@ -290,15 +290,15 @@ class MapFragment() : LocationListener {
 
        runBlocking {
            GlobalScope.launch {
-               val client = Client("192.168.5.1",8000)
-               client.sendGeoLocation(GeoPoint(start.latitude,start.longitude))
+//               val client = Client("192.168.5.1",8000)
+//               client.sendGeoLocation(GeoPoint(start.latitude,start.longitude))
                route = RouteRequest.getRoute(start, end)
                kmldocument.parseGeoJSON(route)
                val klmstyle = Style(
                    null,Color.Red.hashCode(),20f,Color.White.hashCode())
 
 
-               //	public Style(Bitmap icon, int lineColor, float lineWidth, int fillColor){ )
+
 
 
                 if(feature != null){
