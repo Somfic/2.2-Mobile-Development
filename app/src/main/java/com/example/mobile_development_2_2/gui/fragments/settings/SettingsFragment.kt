@@ -92,6 +92,12 @@ import com.example.mobile_development_2_2.gui.fragments.home.HelpItem
                     checked = Lang.colorblind,
                     onCheckedChange = {
                         Lang.setColor(it); },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colors.primary,
+                        uncheckedThumbColor = MaterialTheme.colors.primary,
+                        checkedTrackColor = MaterialTheme.colors.onPrimary,
+                        uncheckedTrackColor = MaterialTheme.colors.primary,
+                    )
                 )
             }
         }
