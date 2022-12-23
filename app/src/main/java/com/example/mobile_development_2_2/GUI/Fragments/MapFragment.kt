@@ -340,7 +340,7 @@ class MapFragment : LocationListener {
                     mapView.overlays.add(poiOverlay)
                     mapView.overlays.add(visitedOverlay)
 
-                    mapView.overlays.add(myLocation)
+                    //mapView.overlays.add(myLocation)
 
 //                    mapView.overlays.add(currentRoute)
 
@@ -439,6 +439,7 @@ class MapFragment : LocationListener {
                    }
                }
                 mapView.overlays.add(feature)
+               mapView.overlays.add(myLocation)
                mapView.invalidate()
 
 
