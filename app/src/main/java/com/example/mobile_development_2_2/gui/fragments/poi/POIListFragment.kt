@@ -6,7 +6,6 @@ package com.example.mobile_development_2_2.gui.fragments.poi
 import android.app.Application
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -96,7 +95,7 @@ fun MessageRow(poi: POI, onPOIClicked: () -> Unit) {
         )
 
         TextField(
-            value = RouteManager.getRouteManager(null).getStringById(poi.shortDescription),
+            value = RouteManager.getRouteManager(null).getStringByName(poi.shortDescription),
             modifier = Modifier
                 .padding(start = 200.dp, bottom = 24.dp, top = 65.dp, end = 24.dp)
                 .width(50.dp),

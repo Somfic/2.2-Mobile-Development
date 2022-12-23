@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.Geofence
@@ -16,30 +17,34 @@ class GeofenceHelper(base: Context?) : ContextWrapper(base) {
     private lateinit var pendingIntent: PendingIntent
 
     fun geofencingRequest  (geofence : Geofence) : GeofencingRequest? {
+        Log.d(TAG, "requesting geofence")
         return GeofencingRequest.Builder()
             .addGeofence(geofence)
             .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
             .build()
     }
 
-    fun getGeofence(id : String, lat : Double, lng : Double) : Geofence? {
+    fun getGeofence(lat : Double, lng : Double) : Geofence? {
+        Log.d(TAG, "giving geofence")
         return Geofence.Builder()
-            .setRequestId(id)
-            .setCircularRegion(lat, lng, 1000f)
+            .setRequestId("geo")
+            .setCircularRegion(lat, lng, 20f)
             .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
             .setExpirationDuration(Geofence.NEVER_EXPIRE)
             .build()
     }
 
     fun getPendingIntent() : PendingIntent? {
+        Log.d(TAG, "pending intent")
         //Toast.makeText(this, "not init", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, GeofenceBroadcastReceiver::class.java)
-        pendingIntent = PendingIntent.getBroadcast(this, 6969, intent, PendingIntent.FLAG_MUTABLE)
+        pendingIntent = PendingIntent.getBroadcast(this, 6969, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         return pendingIntent
     }
 
     fun getErrorString(e : Exception) : String? {
+        Log.d(TAG, "geofence error")
         if (e is ApiException) {
             var apiException : ApiException = e
             when(apiException.statusCode) {

@@ -10,6 +10,7 @@ data class POI (
     var shortDescription: String,
     var longDescription: String,
     var imgMap : String = "ic_map.png",
-    var visited : Boolean =false
+    var visited : Boolean =false,
+    var length: Double
 )
 

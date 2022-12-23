@@ -93,7 +93,7 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
         )
 
         Text(
-            text = Lang.get(R.string.route_distance) + ": ${route.length}m",
+            text = Lang.get(R.string.route_distance) + ": ${route.getTotalLength()} km",
             textAlign = TextAlign.Start,
             modifier = Modifier
                 .padding(bottom = 80.dp, top = 80.dp, start = 12.dp)
@@ -116,7 +116,7 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
         ) {
             Button(
                 onClick = {
-                    RouteManager.getRouteManager(application.baseContext).selectItem(route)
+                    RouteManager.getRouteManager(application.baseContext).selectRoute(route)
                     onPOIClicked()
                 },
                 colors = ButtonDefaults.buttonColors(
@@ -139,7 +139,7 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
             )
             Button(
                 onClick = {
-                    RouteManager.getRouteManager(application.baseContext).selectItem(route)
+                    RouteManager.getRouteManager(application.baseContext).selectRoute(route)
                     Log.d("route", route.name)
                     premissions.launchMultiplePermissionRequest()
                     onRouteClicked()
