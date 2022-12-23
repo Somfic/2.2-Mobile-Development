@@ -141,12 +141,8 @@ class MapFragment : LocationListener {
 
                             var lat: Double = route.POIs[0].location.latitude
                             var lng: Double = route.POIs[0].location.longitude
-                            if (!route.hasProgress()){
-                                Log.d("MainActivity", "Starting route")
-                                RouteManager.getRouteManager(context).setGeofenceLocation(lat, lng)
-                            } else {
-                                RouteManager.getRouteManager(null).goToNextGeofence()
-                            }
+
+                            RouteManager.getRouteManager(null).goToNextGeofence()
 
                         },
                         modifier = Modifier
