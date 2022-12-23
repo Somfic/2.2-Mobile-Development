@@ -28,3 +28,12 @@ jobs:
       
     - name: Test
       run: ./gradlew test
+      
+    - name: Pack
+      run: ./gradlew assembleDebug --stacktrace
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: apk
+        path: app/build/outputs/apk/debug/app-debug.apk 
