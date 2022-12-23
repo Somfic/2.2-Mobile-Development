@@ -44,6 +44,7 @@
     <string name="HelpItem8">Kleurenblinde modus</string>
     <string name="HelpItem8Description">Als u moeite heeft met kleuren kunt u naar instellingen recht boven. Daar kunt u op het knopje naast kleurenblinde modus klikken om de app zwart-wit te maken.</string>
 
+    <string name="notification">Je bent in de buurt van een trekplijster!</string>
 
     <string name="poiNoDescription">Geen beschrijving beschikbaar</string>
 
@@ -220,4 +221,5 @@ vanuit Breda naar Oosterhout verdreven.
     <string name="map_start">Begin</string>
     <string name="map_continue">Vervolg</string>
     <string name="map_recenter">Centreren</string>
+    <string name="map_points">punten</string>
 </resources>

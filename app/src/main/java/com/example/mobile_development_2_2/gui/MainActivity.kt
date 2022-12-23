@@ -3,6 +3,7 @@ package com.example.mobile_development_2_2.gui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -59,6 +60,7 @@ class MainActivity : ComponentActivity() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
     lateinit var osmViewModel: OSMViewModel
     var map = MapFragment()
+    private val TAG = "MainActivity"
 
     private val isPipSupported by lazy {
         packageManager.hasSystemFeature(
@@ -81,7 +83,7 @@ class MainActivity : ComponentActivity() {
         getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
         Lang.setContext(this)
         Lang.onLanguageChanged { recreate() }
-        Lang.onColorblindChange { recreate() }
+        Lang.onColorblindChange {  }
 
         RouteManager.getRouteManager(this)
 
@@ -107,13 +109,24 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
     override fun onUserLeaveHint() {
         if (!isPipSupported)
             return
         super.onUserLeaveHint()
         enterPictureInPictureMode()
+
     }
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration
+    ) {
+        if(isInPictureInPictureMode) {
+            
+        } else {
+
+        }
+    }
+
 
 
     @SuppressLint("MissingSuperCall")
@@ -203,7 +216,9 @@ class MainActivity : ComponentActivity() {
             NavHost(
                 navController = navController,
                 startDestination = Fragments.Home.name,
-                modifier = Modifier.padding(innerpadding).background(MaterialTheme.colors.background, RectangleShape)
+                modifier = Modifier
+                    .padding(innerpadding)
+                    .background(MaterialTheme.colors.background, RectangleShape)
             ) {
                 composable(route = Fragments.Home.name) {
                     HomeScreen(
@@ -267,7 +282,7 @@ class MainActivity : ComponentActivity() {
                 composable(route = Fragments.Settings.name) {
                     SettingsFragment(
 //                        viewModel = osmViewModel,
-//                        modifier = Modifier
+                        modifier = Modifier
                     )
                 }
             }
@@ -360,7 +375,8 @@ class MainActivity : ComponentActivity() {
                 )
                 .background(
                     MaterialTheme.colors.background
-                ).height(70.dp),
+                )
+                .height(70.dp),
         ) {
             items.forEach { item ->
                 var onClick = onHomeButtonClicked
@@ -381,9 +397,14 @@ class MainActivity : ComponentActivity() {
                         Icon(
                             painterResource(id = item.icon),
                             contentDescription = item.title,
-                            modifier = Modifier.size(40.dp)
-                        ) },
-                    label = { Text(text = item.title) },
+                            modifier = Modifier.size(40.dp),
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    },
+                    label = { Text(
+                        text = item.title,
+                        color = MaterialTheme.colors.onPrimary
+                    ) },
                     selectedContentColor = MaterialTheme.colors.primary,
                     unselectedContentColor = MaterialTheme.colors.surface,
                     alwaysShowLabel = true,

@@ -8,6 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.mobile_development_2_2.R
 import com.example.mobile_development_2_2.data.GeofenceHelper
 import com.example.mobile_development_2_2.data.Lang
+import com.example.mobile_development_2_2.gui.MainActivity
+import com.example.mobile_development_2_2.map.route.Route.Companion.TestRoute
 
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
@@ -43,7 +45,10 @@ class RouteManager {
         val routes = gson.fromJson(jsonString, Array<Route>::class.java).toList()
         for (it in routes) {
             it.started = mutableStateOf(false)
-            for (poi in it.POIs) {
+            it.totalPoisVisited = mutableStateOf(0)
+            it.currentLength = mutableStateOf(0.0)
+            it.finished = mutableStateOf(false)
+            for(poi in it.POIs){
                 poi.visited = false
 
                 //poi.shortDescription = getStringById(poi.shortDescription)
@@ -94,6 +99,11 @@ class RouteManager {
     fun getSelectedRoute(): Route {
         Log.d(LOG_TAG, "gicing selected route")
         return selectedRoute
+    }
+
+    fun get_CurrentPoi(): POI {
+        Log.d(LOG_TAG, "giving current poi")
+        return targetPOI
     }
 
     fun selectPOI(poi: POI) {
