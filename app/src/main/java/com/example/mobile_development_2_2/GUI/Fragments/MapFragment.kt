@@ -68,7 +68,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 class MapFragment : LocationListener {
 
-
+    val LOG_TAG = "MapFragment"
     lateinit var myLocation: MyLocationNewOverlay
     lateinit var mapView: MapView
     lateinit var context: Context
@@ -76,7 +76,7 @@ class MapFragment : LocationListener {
      var feature = FolderOverlay()
     lateinit var route: Route
     lateinit var currentDestination: GeoPoint
-    lateinit var lastLocation: GeoPoint
+    var lastLocation: GeoPoint = GeoPoint(0.0, 0.0)
 
 
     @OptIn(ExperimentalPermissionsApi::class)
@@ -138,11 +138,14 @@ class MapFragment : LocationListener {
                             currentDestination = RouteManager.getRouteManager(context).getSelectedPOI().location
                             Log.d("f", "" + route.started.value)
                             route.started.value
+
                             var lat: Double = route.POIs[0].location.latitude
                             var lng: Double = route.POIs[0].location.longitude
                             if (!route.hasProgress()){
                                 Log.d("MainActivity", "Starting route")
                                 RouteManager.getRouteManager(context).setGeofenceLocation(lat, lng)
+                            } else {
+                                RouteManager.getRouteManager(null).goToNextGeofence()
                             }
 
                         },
@@ -184,8 +187,8 @@ class MapFragment : LocationListener {
                 Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start) {
                     Button(
                         onClick = {
-                            RouteManager.getRouteManager(context).setRouteState(false);
-
+                            RouteManager.getRouteManager(context).setRouteState(false)
+                            RouteManager.getRouteManager(null).removeGeofence()
                                   },
                         modifier = Modifier
                             .padding(top = 20.dp, start = 30.dp),
@@ -222,7 +225,7 @@ class MapFragment : LocationListener {
 
                         )
                         Text(
-                            text ="" + route.currentLength.value + " / " + route.length + " km",
+                            text ="" + route.currentLength.value + " / " + route.getTotalLength() + " km",
                             textAlign = TextAlign.Center,
                             modifier = Modifier.wrapContentHeight(Alignment.Bottom)
                                 .padding(bottom = 8.dp),
@@ -337,7 +340,7 @@ class MapFragment : LocationListener {
                     mapView.overlays.add(poiOverlay)
                     mapView.overlays.add(visitedOverlay)
 
-                    mapView.overlays.add(myLocation)
+                    //mapView.overlays.add(myLocation)
 
 //                    mapView.overlays.add(currentRoute)
 
@@ -401,20 +404,28 @@ class MapFragment : LocationListener {
            GlobalScope.launch {
 //               val client = Client("192.168.5.1",8000)
 //               client.sendGeoLocation(GeoPoint(start.latitude,start.longitude))
-               route = RouteRequest.getRoute(start, end,null)
-               kmldocument.parseGeoJSON(route)
+               Log.d(LOG_TAG, "requesting route")
                val klmstyle = Style(
                    null,Color.Red.hashCode(),20f,Color.White.hashCode())
 
+                    route = RouteRequest.getRoute(start, end,null)
+
+                    kmldocument.parseGeoJSON(route)
 
 
 
 
-                if(feature != null){
-//                  feature.closeAllInfoWindows()
 
-                    mapView.overlays.remove(feature)
-                }
+
+
+
+
+
+              if (feature != null) {
+                  mapView.overlays.remove(feature)
+
+              }
+               lastLocation = start
 
                feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument) as FolderOverlay;
                var count = 0
@@ -428,6 +439,7 @@ class MapFragment : LocationListener {
                    }
                }
                 mapView.overlays.add(feature)
+               mapView.overlays.add(myLocation)
                mapView.invalidate()
 
 
@@ -468,6 +480,8 @@ class MapFragment : LocationListener {
 
 
         if (myLocation.isFollowLocationEnabled) {
+            route.updateLength()
+
 
             mapView.mapOrientation = 360 - p0.bearing
 

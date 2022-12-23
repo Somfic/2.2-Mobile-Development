@@ -31,7 +31,7 @@
     <string name="routes_waypoints">Waypoints</string>
     <string name="map_no_location_permission">No location permissions</string>
 
-    <string name="notification">You have arrived near a point of interest!</string>
+    <string name="notification">You have arrived at</string>
 
     <string name="HelpItem1">Select a route</string>
     <string name="HelpItem1Description">Press the middle map button at the button of the screen to go to the available routes. There press the map button on the wanted route."</string>
