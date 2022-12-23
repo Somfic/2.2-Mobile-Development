@@ -13,9 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -33,10 +31,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.alpha
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.MutableLiveData
 import com.example.mobile_development_2_2.map.RouteRequest
 import com.example.mobile_development_2_2.R
-import com.example.mobile_development_2_2.data.Client
 import com.example.mobile_development_2_2.data.Lang
 import com.example.mobile_development_2_2.map.route.POI
 import com.example.mobile_development_2_2.map.route.Route
@@ -46,24 +45,22 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.*
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.json.JSONObject
 import org.osmdroid.bonuspack.kml.KmlDocument
-import org.osmdroid.bonuspack.kml.KmlGeometry
 import org.osmdroid.bonuspack.kml.Style
-import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.ItemizedIconOverlay
-import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import kotlin.math.absoluteValue
 
 
 class MapFragment : LocationListener {
@@ -76,7 +73,8 @@ class MapFragment : LocationListener {
      var feature = FolderOverlay()
     lateinit var route: Route
     lateinit var currentDestination: GeoPoint
-    var lastLocation: GeoPoint = GeoPoint(0.0, 0.0)
+    var oldFeature = FolderOverlay()
+    var distanceToPoi = MutableLiveData<Double>(0.0)!!
 
 
     @OptIn(ExperimentalPermissionsApi::class)
@@ -207,7 +205,7 @@ class MapFragment : LocationListener {
                         .padding(top = 20.dp, end = 30.dp)
                         .clip(RoundedCornerShape(12.dp))
                         .height(60.dp)
-                        .width(120.dp),
+                        .width(200.dp),
                         elevation = 10.dp,
                         backgroundColor = MaterialTheme.colors.primary
 
@@ -221,7 +219,7 @@ class MapFragment : LocationListener {
 
                         )
                         Text(
-                            text ="" + route.currentLength.value + " / " + route.getTotalLength() + " km",
+                            text ="" + (route.currentLength.value) + " / " + route.getTotalLength() + " km",
                             textAlign = TextAlign.Center,
                             modifier = Modifier.wrapContentHeight(Alignment.Bottom)
                                 .padding(bottom = 8.dp),
@@ -401,19 +399,14 @@ class MapFragment : LocationListener {
 
    fun setRoute(start : GeoPoint, end : GeoPoint){
 
+        var distance = 0.0
 
-
-       var route: String
+       var route_L: String
 
         val resources = mapView.resources
 
 
-//        val inputStream = resources.openRawResource(R.raw.test_route)
-
-//        val inputStream = resources.openRawResource(R.raw.test_route)
-
         val kmldocument = KmlDocument()
-//        kmldocument.parseGeoJSONStream(inputStream)
 
 
        runBlocking {
@@ -422,38 +415,46 @@ class MapFragment : LocationListener {
 //               client.sendGeoLocation(GeoPoint(start.latitude,start.longitude))
                Log.d(LOG_TAG, "requesting route")
                val klmstyle = Style(
-                   null,Color.Red.hashCode(),20f,Color.White.hashCode())
-
-                    route = RouteRequest.getRoute(start, end,null)
-
-                    kmldocument.parseGeoJSON(route)
+                   null,Color.hsl(237f, 1f, 0.5f, 0.5f).hashCode(),20f,Color.White.hashCode())
 
 
 
 
+                    route_L = RouteRequest.getRoute(start, end,null)
+//               var jsonObject = JSONObject(route_L)
+//               val segmentsArray = jsonObject.getJSONArray("features").getJSONObject(0).getJSONObject("properties").getJSONArray("segments")
+//               distance = segmentsArray.getJSONObject(0).getDouble("distance") / 1000
+////
+
+
+                    kmldocument.parseGeoJSON(route_L)
 
 
 
 
 
 
-              if (feature != null) {
+
+
+
+
+              if (feature != null && !feature.equals(oldFeature)) {
                   mapView.overlays.remove(feature)
-
+                  feature = oldFeature
               }
-               lastLocation = start
+
 
                feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument) as FolderOverlay;
                var count = 0
               println( "(feature.items.size) heuu")
-               feature.items.forEach {
-                   if (it is Polyline) {
-                       it.outlinePaint.color = ColorUtils.HSLToColor(floatArrayOf(count.toFloat(), 1f, 0.5f))
-
-                       it.outlinePaint.strokeWidth = 20f
-                       count += 10
-                   }
-               }
+//               feature.items.forEach {
+//                   if (it is Polyline) {
+//                       it.outlinePaint.color = ColorUtils.HSLToColor(floatArrayOf(count.toFloat(), 1f, 0.5f))
+//
+//                       it.outlinePaint.strokeWidth = 20f
+//                       count += 10
+//                   }
+//               }
                 mapView.overlays.add(feature)
                mapView.overlays.add(myLocation)
                mapView.invalidate()
@@ -461,20 +462,13 @@ class MapFragment : LocationListener {
 
 
 
-//                if (mapView.overlays.contains(feature)){
-//                    mapView.overlays.remove(feature)
-//                    mapView.invalidate()
-//                    mapView.overlays.add(feature)
-//
-//                }else{
-//                    mapView.overlays.add(feature)
-//                }
+
 
 
            }
+          
        }
 
-//        val kmlIcon = BitmapDrawable(resources, BitmapFactory.decodeResource(resources, R.drawable.marker_node))
 
 
 
