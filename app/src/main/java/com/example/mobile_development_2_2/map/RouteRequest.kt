@@ -17,10 +17,10 @@ class RouteRequest {
 
     companion object {
         val LOG_TAG = "RouteRequest"
-        var apikeys = arrayOf(  "5b3ce3597851110001cf6248b735223061bc413a910d3479e9b2ce91",
+        var apikeys = arrayOf(  "5b3ce3597851110001cf6248907d6528bd58464f813ae78086085f48",
+                                "5b3ce3597851110001cf6248b735223061bc413a910d3479e9b2ce91",
                                 "5b3ce3597851110001cf62482fbd8d2e62ee41aab8811bbd5ae52f6a",
                                 "5b3ce3597851110001cf62488c22c42514ed4d91876ac149c5e56b15",
-                                "5b3ce3597851110001cf6248907d6528bd58464f813ae78086085f48",
                                 "5b3ce3597851110001cf62489aa6cbff57bc434dab2b62f3bd5b7861"
 
         )
@@ -49,7 +49,7 @@ class RouteRequest {
             conn.doOutput = true
 //
 //
-            val payload: String = """{"coordinates":[[${origin.longitude},${origin.latitude}],[${destination.longitude},${destination.latitude}]]}"""
+            val payload: String = """{"coordinates":[[${origin.longitude},${origin.latitude}],[${destination.longitude},${destination.latitude}]],"geometry_simplify":"true"}"""
             Log.d(LOG_TAG, payload)
             val dataOutputStream = DataOutputStream(conn.outputStream)
             dataOutputStream.writeBytes(payload)
@@ -60,8 +60,7 @@ class RouteRequest {
             val responseCode: Int = conn.responseCode
             if(responseCode != 200){
                 Log.e(LOG_TAG, "Error: $responseCode")
-                 var apikey__ = "5b3ce3597851110001cf62482fbd8d2e62ee41aab8811bbd5ae52f6a"
-                delay(1000)
+
                 if(u_number == apikeys.size){
                     return("")
                 }

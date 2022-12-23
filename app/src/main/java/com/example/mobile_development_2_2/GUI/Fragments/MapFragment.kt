@@ -73,8 +73,8 @@ class MapFragment : LocationListener {
      var feature = FolderOverlay()
     lateinit var route: Route
     lateinit var currentDestination: GeoPoint
-    var oldFeature = FolderOverlay()
     var distanceToPoi = MutableLiveData<Double>(0.0)!!
+    val lijncolor = Color.hsl(237f, 1f, 0.5f, 0.5f).hashCode()
 
 
     @OptIn(ExperimentalPermissionsApi::class)
@@ -415,7 +415,9 @@ class MapFragment : LocationListener {
 //               client.sendGeoLocation(GeoPoint(start.latitude,start.longitude))
                Log.d(LOG_TAG, "requesting route")
                val klmstyle = Style(
-                   null,Color.hsl(237f, 1f, 0.5f, 0.5f).hashCode(),20f,Color.White.hashCode())
+                   null,lijncolor,20f,Color.White.hashCode())
+               klmstyle.outlinePaint.pathEffect
+
 
 
 
@@ -438,9 +440,9 @@ class MapFragment : LocationListener {
 
 
 
-              if (feature != null && !feature.equals(oldFeature)) {
+              if (feature != null) {
                   mapView.overlays.remove(feature)
-                  feature = oldFeature
+
               }
 
 
