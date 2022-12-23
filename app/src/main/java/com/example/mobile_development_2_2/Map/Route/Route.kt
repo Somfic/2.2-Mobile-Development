@@ -36,6 +36,28 @@ data class Route(
         return false
     }
 
+    fun updateLength(){
+        currentLength.value = 0.0
+
+        for(poi in POIs){
+            if(poi.visited){
+                //Log.d("Route", "${currentLength.value} en ${poi.length} en ${poi.name}")
+                currentLength.value += poi.length
+            }
+        }
+    }
+
+    fun getTotalLength(): Double{
+        var length = 0.0
+
+        for(poi in POIs){
+            length += poi.length
+
+        }
+
+        return length
+    }
+
 
     companion object{
         fun TestRoute(): Route{
@@ -52,7 +74,8 @@ data class Route(
                 streetName = "street1",
                 shortDescription = "description of Avans",
                 longDescription = "safasda",
-                imgMap = "ic_map.png"
+                imgMap = "ic_map.png",
+                length = 1.0
             )
 
             // TODO: Move to POI repository
@@ -64,7 +87,8 @@ data class Route(
                 streetName = "street2",
                 shortDescription = "description of Breda",
                 longDescription = "safasda",
-                imgMap = "ic_map.png"
+                imgMap = "ic_map.png",
+                length = 1.0
 
             )
 
@@ -77,7 +101,8 @@ data class Route(
                 streetName = "street3",
                 shortDescription = "description of Amsterdam 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15",
                 longDescription = "safasda",
-                imgMap = "ic_map.png"
+                imgMap = "ic_map.png",
+                length = 1.0
 
             )
 
@@ -109,7 +134,8 @@ data class Route(
                 streetName = "street2.1",
                 shortDescription = "description of Avans2",
                 longDescription = "safasda2",
-                imgMap = "ic_map.png"
+                imgMap = "ic_map.png",
+                length = 1.0
 
 
             )
@@ -123,7 +149,8 @@ data class Route(
                 streetName = "street2.2",
                 shortDescription = "description of Breda2",
                 longDescription = "safasda2",
-                imgMap = "ic_map.png"
+                imgMap = "ic_map.png",
+                length = 1.0
             )
 
             // TODO: Move to POI repository
@@ -135,7 +162,8 @@ data class Route(
                 streetName = "street2.3",
                 shortDescription = "description of Amsterdam 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15",
                 longDescription = "safasda2",
-                imgMap = "ic_map.png"
+                imgMap = "ic_map.png",
+                length = 1.0
             )
 
             // TODO: Move to POI repository

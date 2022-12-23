@@ -93,7 +93,7 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
         )
 
         Text(
-            text = Lang.get(R.string.route_distance) + ": ${route.length}m",
+            text = Lang.get(R.string.route_distance) + ": ${route.getTotalLength()} km",
             textAlign = TextAlign.Start,
             modifier = Modifier
                 .padding(bottom = 80.dp, top = 80.dp, start = 12.dp)
