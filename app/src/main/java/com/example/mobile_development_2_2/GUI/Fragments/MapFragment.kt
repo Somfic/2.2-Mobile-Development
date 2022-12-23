@@ -91,6 +91,7 @@ class MapFragment : LocationListener {
                 listOf(
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
                 )
             )
 
@@ -224,7 +225,7 @@ class MapFragment : LocationListener {
 
                         )
                         Text(
-                            text ="" + route.currentLength.value + " / " + route.length + " km",
+                            text ="" + route.currentLength.value + " / " + route.getTotalLength() + " km",
                             textAlign = TextAlign.Center,
                             modifier = Modifier.wrapContentHeight(Alignment.Bottom)
                                 .padding(bottom = 8.dp),
@@ -478,6 +479,8 @@ class MapFragment : LocationListener {
 
 
         if (myLocation.isFollowLocationEnabled) {
+            route.updateLength()
+
 
             mapView.mapOrientation = 360 - p0.bearing
 
