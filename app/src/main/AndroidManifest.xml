@@ -22,6 +22,7 @@
         <activity
             android:name=".gui.MainActivity"
             android:supportsPictureInPicture="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="true"
             android:label="@string/project_name"
             android:theme="@style/Theme.MobileDevelopment2_2">

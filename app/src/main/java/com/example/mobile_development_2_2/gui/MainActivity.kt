@@ -3,6 +3,7 @@ package com.example.mobile_development_2_2.gui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -59,6 +60,7 @@ class MainActivity : ComponentActivity() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
     lateinit var osmViewModel: OSMViewModel
     var map = MapFragment()
+    private val TAG = "MainActivity"
 
     private val isPipSupported by lazy {
         packageManager.hasSystemFeature(
@@ -107,13 +109,24 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
     override fun onUserLeaveHint() {
         if (!isPipSupported)
             return
         super.onUserLeaveHint()
         enterPictureInPictureMode()
+
     }
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration
+    ) {
+        if(isInPictureInPictureMode) {
+            
+        } else {
+
+        }
+    }
+
 
 
     @SuppressLint("MissingSuperCall")
@@ -144,11 +157,19 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalPermissionsApi::class)
     @Composable
     fun MainScreen(
         openDialog: MutableState<Boolean>,
         navController: NavHostController = rememberNavController()
     ) {
+        val premissions = rememberMultiplePermissionsState(
+            listOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            )
+        )
         // Get current back stack entry
         val backStackEntry by navController.currentBackStackEntryAsState()
 
@@ -184,7 +205,7 @@ class MainActivity : ComponentActivity() {
                     onMapButtonClicked = {
                         navController.backQueue.clear()
                         navController.navigate(Fragments.Route.name)
-
+                        premissions.launchMultiplePermissionRequest()
                         Log.d("123", "map")
                     }
                 )
@@ -195,7 +216,9 @@ class MainActivity : ComponentActivity() {
             NavHost(
                 navController = navController,
                 startDestination = Fragments.Home.name,
-                modifier = Modifier.padding(innerpadding).background(MaterialTheme.colors.background, RectangleShape)
+                modifier = Modifier
+                    .padding(innerpadding)
+                    .background(MaterialTheme.colors.background, RectangleShape)
             ) {
                 composable(route = Fragments.Home.name) {
                     HomeScreen(
@@ -327,7 +350,7 @@ class MainActivity : ComponentActivity() {
         TopBar(true, {})
     }*/
 
-    @OptIn(ExperimentalPermissionsApi::class)
+
     @Composable
     fun BottomNavigationBar(
         onHomeButtonClicked: () -> Unit,
@@ -339,12 +362,7 @@ class MainActivity : ComponentActivity() {
             NavigationItem.Map,
             NavigationItem.POIs,
         )
-        val premissions = rememberMultiplePermissionsState(
-            listOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-            )
-        )
+
         BottomNavigation(
             backgroundColor = MaterialTheme.colors.primary,
             contentColor = MaterialTheme.colors.onPrimary,
@@ -357,7 +375,8 @@ class MainActivity : ComponentActivity() {
                 )
                 .background(
                     MaterialTheme.colors.background
-                ).height(70.dp),
+                )
+                .height(70.dp),
         ) {
             items.forEach { item ->
                 var onClick = onHomeButtonClicked
@@ -393,8 +412,6 @@ class MainActivity : ComponentActivity() {
                     onClick = onClick,
                     modifier = Modifier
 
-
-                    //premissions.launchMultiplePermissionRequest()
                 )
             }
         }
