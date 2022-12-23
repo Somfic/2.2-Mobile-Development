@@ -40,7 +40,14 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             for (geofence in geofenceList) {
                 Log.d(TAG, "onReceive: " + geofence.requestId + " triggered ")
                 PopupHelper.SetState(true)
-                notificationHelper.sendHighPriorityNotification(RouteManager.getRouteManager(null).getStringByName("notification"),"", MainActivity::class.java)
+
+                val poi = RouteManager.getRouteManager(null).get_CurrentPoi()
+                var description = poi.shortDescription
+
+                if(description == "poiNoDescription")
+                    description = ""
+
+                notificationHelper.sendHighPriorityNotification(RouteManager.getRouteManager(null).getStringByName("notification") + " " + poi.name, description, MainActivity::class.java)
                 RouteManager.getRouteManager(null).triggeredGeofence()
                 RouteManager.getRouteManager(null).selectedRoute.totalPoisVisited.value++
 
