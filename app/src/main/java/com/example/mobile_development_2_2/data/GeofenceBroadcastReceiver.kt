@@ -42,6 +42,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
                 PopupHelper.SetState(true)
                 notificationHelper.sendHighPriorityNotification(RouteManager.getRouteManager(null).getStringByName("notification"),"", MainActivity::class.java)
                 RouteManager.getRouteManager(null).triggeredGeofence()
+                RouteManager.getRouteManager(null).selectedRoute.totalPoisVisited.value++
 
             }
         }
