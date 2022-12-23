@@ -141,12 +141,8 @@ class MapFragment : LocationListener {
 
                             var lat: Double = route.POIs[0].location.latitude
                             var lng: Double = route.POIs[0].location.longitude
-                            if (!route.hasProgress()){
-                                Log.d("MainActivity", "Starting route")
-                                RouteManager.getRouteManager(context).setGeofenceLocation(lat, lng)
-                            } else {
-                                RouteManager.getRouteManager(null).goToNextGeofence()
-                            }
+
+                            RouteManager.getRouteManager(null).goToNextGeofence()
 
                         },
                         modifier = Modifier
@@ -281,7 +277,7 @@ class MapFragment : LocationListener {
                 mutableListOf<POIItem>(),
                 ContextCompat.getDrawable(
                     context,
-                    org.osmdroid.library.R.drawable.ic_menu_mylocation
+                    R.drawable.red_point
                 ),
                 listener,
                 context
@@ -292,7 +288,18 @@ class MapFragment : LocationListener {
                 mutableListOf<POIItem>(),
                 ContextCompat.getDrawable(
                     context,
-                    org.osmdroid.library.R.drawable.person
+                    R.drawable.green_point
+                ),
+                listener,
+                context
+            )
+        }
+        val currentOverlay = remember {
+            ItemizedIconOverlay(
+                mutableListOf<POIItem>(),
+                ContextCompat.getDrawable(
+                    context,
+                    R.drawable.blue_point
                 ),
                 listener,
                 context
@@ -339,6 +346,7 @@ class MapFragment : LocationListener {
 
                     mapView.overlays.add(poiOverlay)
                     mapView.overlays.add(visitedOverlay)
+                    mapView.overlays.add(currentOverlay)
 
                     //mapView.overlays.add(myLocation)
 
@@ -368,14 +376,22 @@ class MapFragment : LocationListener {
         LaunchedEffect(locations) {
             poiOverlay.removeAllItems()
             poiOverlay.addItems(
-                locations.filter { !it.visited }.map { POIItem(it) }
+                locations.filter { !it.visited }.filterIndexed{index, poi -> index!=0 }.map { POIItem(it) }
             )
+
             mapView.invalidate() // Ensures the map is updated on screen
         }
         LaunchedEffect(locations) {
             visitedOverlay.removeAllItems()
             visitedOverlay.addItems(
                 locations.filter { it.visited }.map { POIItem(it) }
+            )
+            mapView.invalidate() // Ensures the map is updated on screen
+        }
+        LaunchedEffect(locations) {
+            currentOverlay.removeAllItems()
+            currentOverlay.addItems(
+                locations.filter { !it.visited }.filterIndexed{index, poi -> index==0 }.map { POIItem(it) }
             )
             mapView.invalidate() // Ensures the map is updated on screen
         }
@@ -492,7 +508,7 @@ class MapFragment : LocationListener {
             myLocation.setDirectionIcon(
                 ContextCompat.getDrawable(
                     context,
-                    org.osmdroid.library.R.drawable.round_navigation_white_48
+                    R.drawable.redpointer
                 )!!.toBitmap(150, 150)
             )
 
@@ -500,6 +516,12 @@ class MapFragment : LocationListener {
             mapView.mapOrientation = 0f
             mapView.setMapCenterOffset(0, 0)
             myLocation.isDrawAccuracyEnabled = true
+            myLocation.setDirectionIcon(
+                ContextCompat.getDrawable(
+                    context,
+                    R.drawable.redpointer
+                )!!.toBitmap(100, 100)
+            )
         }
         //myLocation.enableFollowLocation()
       if (System.currentTimeMillis() - lastrouterequest > 1800) {
