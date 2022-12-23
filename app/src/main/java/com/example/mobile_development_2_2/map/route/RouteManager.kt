@@ -144,9 +144,13 @@ class RouteManager {
             }
         }
 
+        goToNextGeofence()
+
+    }
+
+    fun goToNextGeofence(){
         //get next poi in route
         var routeFinished = true
-
         for (poi in selectedRoute.POIs) {
             Log.d(LOG_TAG, "checking poi status")
             if (!poi.visited) {

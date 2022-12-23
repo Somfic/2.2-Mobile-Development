@@ -137,11 +137,14 @@ class MapFragment : LocationListener {
                             currentDestination = RouteManager.getRouteManager(context).getSelectedPOI().location
                             Log.d("f", "" + route.started.value)
                             route.started.value
+
                             var lat: Double = route.POIs[0].location.latitude
                             var lng: Double = route.POIs[0].location.longitude
                             if (!route.hasProgress()){
                                 Log.d("MainActivity", "Starting route")
                                 RouteManager.getRouteManager(context).setGeofenceLocation(lat, lng)
+                            } else {
+                                RouteManager.getRouteManager(null).goToNextGeofence()
                             }
 
                         },
@@ -183,8 +186,8 @@ class MapFragment : LocationListener {
                 Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Start) {
                     Button(
                         onClick = {
-                            RouteManager.getRouteManager(context).setRouteState(false);
-
+                            RouteManager.getRouteManager(context).setRouteState(false)
+                            RouteManager.getRouteManager(null).setGeofenceLocation(0.0, 0.0)
                                   },
                         modifier = Modifier
                             .padding(top = 20.dp, start = 30.dp),
