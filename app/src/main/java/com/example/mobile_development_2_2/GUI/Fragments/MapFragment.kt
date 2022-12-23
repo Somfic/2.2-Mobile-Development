@@ -76,7 +76,7 @@ class MapFragment : LocationListener {
      var feature = FolderOverlay()
     lateinit var route: Route
     lateinit var currentDestination: GeoPoint
-    lateinit var lastLocation: GeoPoint
+    var lastLocation: GeoPoint = GeoPoint(0.0, 0.0)
 
 
     @OptIn(ExperimentalPermissionsApi::class)
@@ -404,21 +404,27 @@ class MapFragment : LocationListener {
 //               val client = Client("192.168.5.1",8000)
 //               client.sendGeoLocation(GeoPoint(start.latitude,start.longitude))
                Log.d(LOG_TAG, "requesting route")
-
-               route = RouteRequest.getRoute(start, end,null)
-               kmldocument.parseGeoJSON(route)
                val klmstyle = Style(
                    null,Color.Red.hashCode(),20f,Color.White.hashCode())
 
+                    route = RouteRequest.getRoute(start, end,null)
+
+                    kmldocument.parseGeoJSON(route)
 
 
 
 
-                if(feature != null){
-//                  feature.closeAllInfoWindows()
 
-                    mapView.overlays.remove(feature)
-                }
+
+
+
+
+
+              if (feature != null) {
+                  mapView.overlays.remove(feature)
+
+              }
+               lastLocation = start
 
                feature = kmldocument.mKmlRoot.buildOverlay(mapView,klmstyle,null,kmldocument) as FolderOverlay;
                var count = 0

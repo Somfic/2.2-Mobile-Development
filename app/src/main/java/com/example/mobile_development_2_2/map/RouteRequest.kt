@@ -17,12 +17,20 @@ class RouteRequest {
 
     companion object {
         val LOG_TAG = "RouteRequest"
+        var apikeys = arrayOf(  "5b3ce3597851110001cf6248b735223061bc413a910d3479e9b2ce91",
+                                "5b3ce3597851110001cf62482fbd8d2e62ee41aab8811bbd5ae52f6a",
+                                "5b3ce3597851110001cf62488c22c42514ed4d91876ac149c5e56b15",
+                                "5b3ce3597851110001cf6248907d6528bd58464f813ae78086085f48",
+                                "5b3ce3597851110001cf62489aa6cbff57bc434dab2b62f3bd5b7861"
 
-        suspend fun getRoute(origin: GeoPoint, destination: GeoPoint, apikey_: String?): String {
+        )
+
+        suspend fun getRoute(origin: GeoPoint, destination: GeoPoint, number: Int?): String {
+            var u_number = 0
             Log.d(LOG_TAG, "Getting route")
-            var apikey : String = "5b3ce3597851110001cf62489aa6cbff57bc434dab2b62f3bd5b7861"
-            if (apikey_ != null) {
-                apikey = apikey_
+
+            if (number != null) {
+                u_number = number
             }
 
             val url: URL =
@@ -31,7 +39,7 @@ class RouteRequest {
             conn.requestMethod = "POST"
             conn.setRequestProperty(
                 "Authorization",
-                apikey
+                apikeys[u_number]
             )
             conn.setRequestProperty(
                 "Accept",
@@ -54,7 +62,7 @@ class RouteRequest {
                 Log.e(LOG_TAG, "Error: $responseCode")
                  var apikey__ = "5b3ce3597851110001cf62482fbd8d2e62ee41aab8811bbd5ae52f6a"
                 delay(1000)
-                return getRoute(origin, destination,apikey__)
+                return getRoute(origin, destination,u_number+1)
 
             }
             Log.d(LOG_TAG,"Response Code: $responseCode")
