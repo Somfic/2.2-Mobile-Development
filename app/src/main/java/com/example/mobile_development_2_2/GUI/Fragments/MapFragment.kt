@@ -68,7 +68,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 class MapFragment : LocationListener {
 
-
+    val LOG_TAG = "MapFragment"
     lateinit var myLocation: MyLocationNewOverlay
     lateinit var mapView: MapView
     lateinit var context: Context
@@ -187,7 +187,7 @@ class MapFragment : LocationListener {
                     Button(
                         onClick = {
                             RouteManager.getRouteManager(context).setRouteState(false)
-                            RouteManager.getRouteManager(null).setGeofenceLocation(0.0, 0.0)
+                            RouteManager.getRouteManager(null).removeGeofence()
                                   },
                         modifier = Modifier
                             .padding(top = 20.dp, start = 30.dp),
@@ -403,6 +403,8 @@ class MapFragment : LocationListener {
            GlobalScope.launch {
 //               val client = Client("192.168.5.1",8000)
 //               client.sendGeoLocation(GeoPoint(start.latitude,start.longitude))
+               Log.d(LOG_TAG, "requesting route")
+
                route = RouteRequest.getRoute(start, end,null)
                kmldocument.parseGeoJSON(route)
                val klmstyle = Style(
