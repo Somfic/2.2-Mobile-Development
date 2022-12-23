@@ -3,6 +3,7 @@ package com.example.mobile_development_2_2.gui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -59,6 +60,7 @@ class MainActivity : ComponentActivity() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
     lateinit var osmViewModel: OSMViewModel
     var map = MapFragment()
+    private val TAG = "MainActivity"
 
     private val isPipSupported by lazy {
         packageManager.hasSystemFeature(
@@ -107,13 +109,24 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
     override fun onUserLeaveHint() {
         if (!isPipSupported)
             return
         super.onUserLeaveHint()
         enterPictureInPictureMode()
+
     }
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration
+    ) {
+        if(isInPictureInPictureMode) {
+            
+        } else {
+
+        }
+    }
+
 
 
     @SuppressLint("MissingSuperCall")
@@ -195,7 +208,9 @@ class MainActivity : ComponentActivity() {
             NavHost(
                 navController = navController,
                 startDestination = Fragments.Home.name,
-                modifier = Modifier.padding(innerpadding).background(MaterialTheme.colors.background, RectangleShape)
+                modifier = Modifier
+                    .padding(innerpadding)
+                    .background(MaterialTheme.colors.background, RectangleShape)
             ) {
                 composable(route = Fragments.Home.name) {
                     HomeScreen(
@@ -357,7 +372,8 @@ class MainActivity : ComponentActivity() {
                 )
                 .background(
                     MaterialTheme.colors.background
-                ).height(70.dp),
+                )
+                .height(70.dp),
         ) {
             items.forEach { item ->
                 var onClick = onHomeButtonClicked

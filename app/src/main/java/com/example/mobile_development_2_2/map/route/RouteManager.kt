@@ -26,6 +26,7 @@ class RouteManager {
     lateinit var selectedRoute: Route
     lateinit var targetPOI: POI
     lateinit var previousTargetPOI: POI
+    private val TAG = "RouteManager"
 
     private constructor(context: Context?) {
         Log.d(LOG_TAG, "constructor")
@@ -194,6 +195,12 @@ class RouteManager {
                     }
             }
         }
+    }
+
+
+    fun removeGeofence() {
+        Log.d(TAG, "removeGeofence")
+        geofenceHelper?.getPendingIntent()?.let { geofencingClient?.removeGeofences(it)  }
     }
 
 

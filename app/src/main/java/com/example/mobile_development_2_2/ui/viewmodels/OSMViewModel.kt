@@ -29,10 +29,6 @@ import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 
 class OSMViewModel(getLocationProvider: GetLocationProvider, context : Context) : ViewModel() {
 
-
-    private var geofencingClient: GeofencingClient = LocationServices.getGeofencingClient(context)
-    private var geofenceHelper: GeofenceHelper = GeofenceHelper(context)
-    var currentLocation : Location? = null
     private val lastLocations = getLocationProvider().shareIn(
         scope = viewModelScope,
         replay = 1,
