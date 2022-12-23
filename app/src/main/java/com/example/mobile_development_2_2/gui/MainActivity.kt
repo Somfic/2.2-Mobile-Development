@@ -144,11 +144,19 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalPermissionsApi::class)
     @Composable
     fun MainScreen(
         openDialog: MutableState<Boolean>,
         navController: NavHostController = rememberNavController()
     ) {
+        val premissions = rememberMultiplePermissionsState(
+            listOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            )
+        )
         // Get current back stack entry
         val backStackEntry by navController.currentBackStackEntryAsState()
 
@@ -184,7 +192,7 @@ class MainActivity : ComponentActivity() {
                     onMapButtonClicked = {
                         navController.backQueue.clear()
                         navController.navigate(Fragments.Route.name)
-
+                        premissions.launchMultiplePermissionRequest()
                         Log.d("123", "map")
                     }
                 )
@@ -327,7 +335,7 @@ class MainActivity : ComponentActivity() {
         TopBar(true, {})
     }*/
 
-    @OptIn(ExperimentalPermissionsApi::class)
+
     @Composable
     fun BottomNavigationBar(
         onHomeButtonClicked: () -> Unit,
@@ -339,12 +347,7 @@ class MainActivity : ComponentActivity() {
             NavigationItem.Map,
             NavigationItem.POIs,
         )
-        val premissions = rememberMultiplePermissionsState(
-            listOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-            )
-        )
+
         BottomNavigation(
             backgroundColor = MaterialTheme.colors.primary,
             contentColor = MaterialTheme.colors.onPrimary,
@@ -379,8 +382,7 @@ class MainActivity : ComponentActivity() {
                             painterResource(id = item.icon),
                             contentDescription = item.title,
                             modifier = Modifier.size(40.dp)
-                        )
-                    },
+                        ) },
                     label = { Text(text = item.title) },
                     selectedContentColor = MaterialTheme.colors.primary,
                     unselectedContentColor = MaterialTheme.colors.surface,
@@ -388,7 +390,7 @@ class MainActivity : ComponentActivity() {
                     selected = false,
                     onClick = onClick,
                     modifier = Modifier
-                    //premissions.launchMultiplePermissionRequest()
+
                 )
             }
         }
