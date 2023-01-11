@@ -25,7 +25,8 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="true"
             android:label="@string/project_name"
-            android:theme="@style/Theme.MobileDevelopment2_2">
+            android:theme="@style/Theme.MobileDevelopment2_2"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
