@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import java.io.File
+import java.nio.charset.Charset
 import java.util.*
 
 class Lang {
@@ -53,6 +55,45 @@ class Lang {
 
         fun onColorblindChange(callback: () -> Unit) {
             colorblindCallbacks.add(callback)
+        }
+
+        fun saveSettings(){
+            Log.d("Lang.kt", "saving settings")
+
+            val resDir = context?.getDir("CHLAM", Context.MODE_PRIVATE)
+            File(resDir, "settings.txt").createNewFile()
+
+            File(resDir, "settings.txt").printWriter().use { out ->
+                out.println(colorblind)
+                out.println(language.first)
+                out.println(language.second)
+            }
+        }
+
+        var loaded = false
+
+        fun loadSettings(){
+            Log.d("Lang.kt", "Loading settings")
+
+            val resDir = context?.getDir("CHLAM", Context.MODE_PRIVATE)
+            if(File(resDir, "settings.txt").exists() && !loaded){
+                try {
+                    File(resDir, "settings.txt").reader(Charset.defaultCharset()).use { re ->
+                        val lines = re.readLines()
+                        setColor(lines[0] == "true")
+                        setLang(Pair(lines[1], lines[2]))
+                    }
+                }
+                catch (e:Exception){
+                    e.message?.let { Log.e("Lang.kt", it) }
+                }
+
+            }
+
+            loaded = true
+
+
+
         }
     }
 }

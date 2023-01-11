@@ -84,6 +84,7 @@ class MainActivity : ComponentActivity() {
         Lang.setContext(this)
         Lang.onLanguageChanged { recreate() }
         Lang.onColorblindChange {  }
+        Lang.loadSettings()
 
         RouteManager.getRouteManager(this)
 
@@ -531,6 +532,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onStop() {
         RouteManager.getRouteManager(null).saveRoutesProgress()
+        Lang.saveSettings()
 
         super.onStop()
     }
