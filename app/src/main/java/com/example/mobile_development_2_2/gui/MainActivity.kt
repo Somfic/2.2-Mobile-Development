@@ -95,6 +95,9 @@ class MainActivity : ComponentActivity() {
             val openDialog = remember {
                 mutableStateOf(false)
             }
+            val openMapDialog = remember {
+                mutableStateOf(false)
+            }
 
             PopupHelper.SetState(openDialog)
 
@@ -102,7 +105,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    MainScreen(openDialog)
+                    MainScreen(openDialog, openMapDialog)
 
 
                 }
@@ -161,6 +164,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun MainScreen(
         openDialog: MutableState<Boolean>,
+        openMapDialog: MutableState<Boolean>,
         navController: NavHostController = rememberNavController()
     ) {
         val premissions = rememberMultiplePermissionsState(
@@ -236,7 +240,7 @@ class MainActivity : ComponentActivity() {
                         routes = RouteManager.getRouteManager(baseContext).GetRoutes(),
                         onRouteClicked = {
                             Log.d("route", RouteManager.getRouteManager(baseContext).getSelectedRoute().name)
-                            navController.navigate(Fragments.Map.name)
+                            openMapDialog.value = true
 
 
                         },
@@ -289,6 +293,18 @@ class MainActivity : ComponentActivity() {
 
             if (openDialog.value) {
                 popUp("e", "e", openDialog) { navController.navigate(Fragments.POI.name) }
+            }
+
+            if (openMapDialog.value) {
+                mapPopUp(
+                    openMapDialog ,
+                {
+                    navController.navigate(Fragments.Map.name)
+                },
+                {
+                    RouteManager.getRouteManager(null).getSelectedRoute().resetProgress()
+                    navController.navigate(Fragments.Map.name)
+                })
             }
         }
 
@@ -445,7 +461,7 @@ class MainActivity : ComponentActivity() {
                         onYesButtonClicked()
                     }
                 ) {
-                    Text(text = "Yes", color = Color.Blue)
+                    Text(text = Lang.get(R.string.confirm), color = Color.Blue)
                 }
             },
             dismissButton = {
@@ -454,13 +470,64 @@ class MainActivity : ComponentActivity() {
                         openDialog.value = false
                     }
                 ) {
-                    Text(text = "No", color = Color.Blue)
+                    Text(text = Lang.get(R.string.cancel), color = Color.Blue)
                 }
             },
             backgroundColor = Color.White,
             contentColor = Color.Black
         )
 
+    }
+
+    @Composable
+    fun mapPopUp(
+        openMapDialog: MutableState<Boolean>,
+        onContinueButtonClicked: () -> Unit,
+        onResetButtonClicked: () -> Unit
+    ) {
+
+        Log.d("main", "opening map popup")
+
+        AlertDialog(
+            onDismissRequest = { !openMapDialog.value },
+            title = { Text(text = RouteManager.getRouteManager(baseContext).previousTargetPOI.name, color = Color.Black) },
+            text = {
+                Text(
+                    text = Lang.get(R.string.mapPopup),
+                    color = Color.Black
+                )
+            },
+
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        openMapDialog.value = false
+                        onContinueButtonClicked()
+                    }
+                ) {
+                    Text(text = Lang.get(R.string.popupcontinue), color = Color.Blue)
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        openMapDialog.value = false
+                        onResetButtonClicked()
+                    }
+                ) {
+                    Text(text = Lang.get(R.string.popupreset), color = Color.Blue)
+                }
+            },
+            backgroundColor = Color.White,
+            contentColor = Color.Black
+        )
+
+    }
+
+    override fun onStop() {
+        RouteManager.getRouteManager(null).saveRoutesProgress()
+
+        super.onStop()
     }
 }
 

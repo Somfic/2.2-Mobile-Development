@@ -12,5 +12,10 @@ data class POI (
     var imgMap : String = "ic_map.png",
     var visited : Boolean =false,
     var length: Double
-)
+){
+    fun load(line: String){
+        visited = line == "true"
+    }
+
+}
 

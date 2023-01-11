@@ -16,6 +16,8 @@ import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
+import java.io.File
+import java.nio.charset.Charset
 
 class RouteManager {
     val LOG_TAG = "RouteManager"
@@ -32,6 +34,16 @@ class RouteManager {
         Log.d(LOG_TAG, "constructor")
         this.context = context
         routes = GenerateRoutes()
+
+
+        loadRoutesProgress()
+
+        routes.forEach {
+            it.totalPoisVisited = mutableStateOf(it.totalPoisVisited())
+            it.currentLength = mutableStateOf(it.getTotalLength())
+            it.finished = mutableStateOf(it.totalPoisVisited.value == it.POIs.size)
+        }
+
         selectedRoute = routes.get(0)
         previousTargetPOI = routes.get(0).POIs.get(0)
     }
@@ -186,6 +198,10 @@ class RouteManager {
                             LOG_TAG,
                             "Geofence added " + geofencingRequest.geofences[0].latitude + " " + geofencingRequest.geofences[0].longitude
                         )
+                        Log.d(
+                            LOG_TAG,
+                            "Geofence test " + geofenceHelper?.getGeofence(geofencingRequest.geofences[0].latitude, geofencingRequest.geofences[0].longitude)
+                        )
                     }
                     ?.addOnFailureListener { e ->
                         Log.d(
@@ -201,6 +217,42 @@ class RouteManager {
     fun removeGeofence() {
         Log.d(TAG, "removeGeofence")
         geofenceHelper?.getPendingIntent()?.let { geofencingClient?.removeGeofences(it)  }
+    }
+
+    fun saveRoutesProgress(){
+        val resDir = context?.getDir("CHLAM", Context.MODE_PRIVATE)
+        File(resDir, "routesProgress.txt").createNewFile()
+
+        File(resDir, "routesProgress.txt").printWriter().use { out ->
+            routes.forEach {
+                it.POIs.forEach{
+                    out.println(it.visited.toString())
+                }
+            }
+        }
+    }
+
+    fun loadRoutesProgress(){
+        val resDir = context?.getDir("CHLAM", Context.MODE_PRIVATE)
+        if(File(resDir, "routesProgress.txt").exists()){
+            File(resDir, "routesProgress.txt").reader(Charset.defaultCharset()).use { re ->
+                val lines = re.readLines()
+                var i = 0
+                routes.forEach {
+                    it.POIs.forEach{
+                        if(lines.size > i){
+                            Log.d(LOG_TAG, lines[i])
+                            it.load(lines[i])
+                        }
+
+                        i++
+                    }
+                }
+            }
+        }
+
+
+
     }
 
 

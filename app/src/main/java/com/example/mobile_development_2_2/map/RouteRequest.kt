@@ -50,7 +50,7 @@ class RouteRequest {
 //
 //
             val payload: String = """{"coordinates":[[${origin.longitude},${origin.latitude}],[${destination.longitude},${destination.latitude}]]}"""
-            Log.d(LOG_TAG, payload)
+            //Log.d(LOG_TAG, payload)
             val dataOutputStream = DataOutputStream(conn.outputStream)
             dataOutputStream.writeBytes(payload)
             dataOutputStream.flush()
@@ -78,7 +78,7 @@ class RouteRequest {
                 response.append(inputLine)
             }
             bufferedReader.close()
-            Log.d(LOG_TAG, ""+response)
+            //Log.d(LOG_TAG, ""+response)
             return (response.toString())
         }
     }

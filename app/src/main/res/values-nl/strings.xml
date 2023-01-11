@@ -45,6 +45,11 @@
     <string name="HelpItem8Description">Als u moeite heeft met kleuren kunt u naar instellingen recht boven. Daar kunt u op het knopje naast kleurenblinde modus klikken om de app zwart-wit te maken.</string>
 
     <string name="notification">Gearriveerd bij</string>
+    <string name="mapPopup">U heeft al progressie bij deze routen. Wilt u verder gaan of de route resetten?</string>
+    <string name="confirm">Ja</string>
+    <string name="cancel">Nee</string>
+    <string name="popupcontinue">Doorgaan</string>
+    <string name="popupreset">Resetten</string>
 
     <string name="poiNoDescription">Geen beschrijving beschikbaar</string>
 

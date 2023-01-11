@@ -47,6 +47,27 @@ data class Route(
         }
     }
 
+    fun resetProgress(){
+        for(poi in POIs ){
+            poi.visited = false
+        }
+        currentLength.value = 0.0
+        finished.value = false
+        totalPoisVisited.value = 0
+
+    }
+
+    fun totalPoisVisited(): Int{
+        var i = 0
+        POIs.forEach {
+            if (it.visited) {
+                i++
+            }
+        }
+
+        return i
+    }
+
     fun getTotalLength(): Double{
         var length = 0.0
 
