@@ -30,6 +30,7 @@ import com.example.mobile_development_2_2.map.route.Route
 import com.example.mobile_development_2_2.map.route.RouteManager
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlin.math.round
 
 
 @Composable
@@ -93,7 +94,7 @@ fun MessageRow(route: Route, onRouteClicked: () -> Unit, onPOIClicked: () -> Uni
         )
 
         Text(
-            text = Lang.get(R.string.route_distance) + ": ${route.getTotalLength()} km",
+            text = Lang.get(R.string.route_distance) + ": ${round(route.getTotalLength()*100)/100} km",
             textAlign = TextAlign.Start,
             modifier = Modifier
                 .padding(bottom = 80.dp, top = 80.dp, start = 12.dp)

@@ -64,6 +64,7 @@ import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import kotlin.math.round
 
 
 class MapFragment : LocationListener {
@@ -221,7 +222,7 @@ class MapFragment : LocationListener {
 
                         )
                         Text(
-                            text ="" + route.currentLength.value + " / " + route.getTotalLength() + " km",
+                            text ="${round(route.currentLength.value*100)/100} / ${round(route.getTotalLength()*100)/100} km",
                             textAlign = TextAlign.Center,
                             modifier = Modifier.wrapContentHeight(Alignment.Bottom)
                                 .padding(bottom = 8.dp),
