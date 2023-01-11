@@ -240,7 +240,12 @@ class MainActivity : ComponentActivity() {
                         routes = RouteManager.getRouteManager(baseContext).GetRoutes(),
                         onRouteClicked = {
                             Log.d("route", RouteManager.getRouteManager(baseContext).getSelectedRoute().name)
-                            openMapDialog.value = true
+                            if(RouteManager.getRouteManager(null).getSelectedRoute().hasProgress()){
+                                openMapDialog.value = true
+                            } else{
+                                navController.navigate(Fragments.Map.name)
+                            }
+
 
 
                         },
