@@ -44,10 +44,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
                 val poi = RouteManager.getRouteManager(null).get_CurrentPoi()
                 var description = poi.shortDescription
 
-                if(description == "poiNoDescription")
-                    description = ""
-
-                notificationHelper.sendHighPriorityNotification(RouteManager.getRouteManager(null).getStringByName("notification") + " " + poi.name, description, MainActivity::class.java)
+                notificationHelper.sendHighPriorityNotification(RouteManager.getRouteManager(null).getStringByName("notification") + " " + poi.name, "", MainActivity::class.java)
                 RouteManager.getRouteManager(null).triggeredGeofence()
                 RouteManager.getRouteManager(null).selectedRoute.totalPoisVisited.value++
 
